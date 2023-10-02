@@ -214,7 +214,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Already have an account?'),
+                Text('Already have an account?', style: TextStyle(color: Colors.black),),
                 TextButton(
                   onPressed: () {
                     // Navegar a la pantalla de inicio de sesión
@@ -260,10 +260,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return true;
   }
 
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: SignUpScreen(),
-  ));
 }

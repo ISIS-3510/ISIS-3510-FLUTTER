@@ -58,7 +58,7 @@ flutter:
     - assets/headerLogin.png
     - assets/footerLogin.png
     - assets/headerSingUp.png
-
+    - assets/headerSingUp.png
 
 
   # The following line ensures that the Material Icons font is
