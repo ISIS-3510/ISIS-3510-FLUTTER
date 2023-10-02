@@ -10,8 +10,9 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   bool btnTap = false;
   TextEditingController emailController = TextEditingController();
+  bool isValidEmailText = true;
+
   TextEditingController passwordController = TextEditingController();
-  bool isValidEmaiText = true;
   bool isValidPasswordText = true;
 
   @override
@@ -39,11 +40,15 @@ class _LoginViewState extends State<LoginView> {
                       decoration: InputDecoration(
                         labelText: 'Institutional Email',
                         border: OutlineInputBorder(),
+                        errorText: isValidEmailText ? null : 'Invalid Email',
+                      ),
+                      style: TextStyle(
+                        color: Colors.black
                       ),
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (newValue) {
                         setState(() {
-                          isValidEmaiText = isValidEmail(newValue);
+                          isValidEmailText = isValidEmail(newValue);
                         });
                       },
                     ),
@@ -58,6 +63,9 @@ class _LoginViewState extends State<LoginView> {
                       decoration: InputDecoration(
                         labelText: 'Password',
                         border: OutlineInputBorder(),
+                      ),
+                      style: TextStyle(
+                        color: Colors.black
                       ),
                       obscureText: true, // Para contraseñas
                       onChanged: (newValue) {
@@ -150,8 +158,8 @@ class _LoginViewState extends State<LoginView> {
   }
 
   bool isValidEmail(String email) {
-    // Implementa tu lógica de validación de correo electrónico aquí
-    return true;
+    RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+    return emailRegExp.hasMatch(email);
   }
 
   bool isValidPassword(String password) {

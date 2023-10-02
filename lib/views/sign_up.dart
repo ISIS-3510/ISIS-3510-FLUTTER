@@ -73,7 +73,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     labelText: 'Name',
                     border: OutlineInputBorder(),
+                    errorText: isValidNameText ? null : 'Invalid Name',
                   ),
+                  style: TextStyle(
+                        color: Colors.black
+                      ),
                   keyboardType: TextInputType.name,
                   onChanged: (newValue) {
                     setState(() {
@@ -92,7 +96,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     labelText: 'Username',
                     border: OutlineInputBorder(),
+                    errorText: isValidUserNameText ? null : 'Invalid Username',
                   ),
+                  style: TextStyle(
+                        color: Colors.black
+                      ),
                   keyboardType: TextInputType.name,
                   onChanged: (newValue) {
                     setState(() {
@@ -111,7 +119,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     labelText: 'Phone',
                     border: OutlineInputBorder(),
+                    errorText: isValidPhoneText ? null : 'Invalid Phone',
+
                   ),
+                  style: TextStyle(
+                        color: Colors.black
+                      ),
                   keyboardType: TextInputType.phone,
                   onChanged: (newValue) {
                     setState(() {
@@ -128,9 +141,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: TextField(
                   controller: emailController,
                   decoration: InputDecoration(
-                    labelText: 'Email                                @uniandes.edu.co',
+                    labelText: 'Email                                           @uniandes.edu.co',
                     border: OutlineInputBorder(),
+                    errorText: isValidEmailText ? null : 'Invalid Email',
+
                   ),
+                  style: TextStyle(
+                        color: Colors.black
+                      ),
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (newValue) {
                     setState(() {
@@ -149,7 +167,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     border: OutlineInputBorder(),
+                    errorText: isValidPasswordText ? null : 'Invalid Password',
+
                   ),
+                  
+                  style: TextStyle(
+                        color: Colors.black
+                      ),
+                  obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
                   onChanged: (newValue) {
                     setState(() {
@@ -168,11 +193,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   decoration: InputDecoration(
                     labelText: 'Confirm Password',
                     border: OutlineInputBorder(),
+                    errorText: isValidConfirmPasswordText ? null : 'Passwords do not match',
                   ),
+                  style: TextStyle(
+                        color: Colors.black
+                      ),
+                  obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
                   onChanged: (newValue) {
                     setState(() {
-                      isValidConfirmPasswordText = isValidConfirmPassword(newValue);
+                      isValidConfirmPasswordText = isValidConfirmPassword(newValue, passwordController.text);
                     });
                   },
                 ),
@@ -231,33 +261,56 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   bool isValidName(String name) {
-    // Implementa tu lógica de validación de correo electrónico aquí
-    return true;
+    bool rta = false;
+    if(name.trim().isNotEmpty){
+      rta = true;
+    }
+    return rta;
   }
 
   bool isValidUserName(String userName) {
-    // Implementa tu lógica de validación de correo electrónico aquí
-    return true;
+    bool rta = false;
+
+    if(userName.trim().isNotEmpty){
+      rta = true;
+    }
+
+    return rta;
   }
 
   bool isValidPhone(String phone) {
-    // Implementa tu lógica de validación de correo electrónico aquí
-    return true;
+    bool rta = false;
+
+    if(phone.length == 10){
+      rta = true;
+    }
+    return rta;
   }
 
   bool isValidEmail(String email) {
-    // Implementa tu lógica de validación de correo electrónico aquí
-    return true;
+    RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+    return emailRegExp.hasMatch(email);
   }
 
   bool isValidPassword(String password) {
-    // Implementa tu lógica de validación de correo electrónico aquí
+    if (password.length < 8) {
+      return false;
+    }
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      return false;
+    }
+    if (!password.contains(RegExp(r'[0-9]'))) {
+      return false;
+    }
+    if (!password.contains(RegExp(r'[!@#\$%^&*()_+{}\[\]:;<>,.?~\\-]'))) {
+      return false;
+    }
     return true;
   }
 
-  bool isValidConfirmPassword(String confirmPassword) {
-    // Implementa tu lógica de validación de correo electrónico aquí
-    return true;
+  bool isValidConfirmPassword(String confirmPassword, String password) {
+
+    return confirmPassword == password;
   }
 
 }
