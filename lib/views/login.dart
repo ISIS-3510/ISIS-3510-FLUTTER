@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:unishop/views/sign_up.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -7,10 +9,10 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   bool btnTap = false;
-  TextEditingController groupthirtyfiveTextController = TextEditingController();
-  TextEditingController groupthirtytwoTextController = TextEditingController();
-  bool isValidGroupthirtyfiveText = true;
-  bool isValidGroupthirtytwoText = true;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool isValidEmaiText = true;
+  bool isValidPasswordText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class _LoginViewState extends State<LoginView> {
                   child: Container(
                     margin: EdgeInsets.only(top: 300.0, left: 30, right: 30),
                     child: TextField(
-                      controller: groupthirtyfiveTextController,
+                      controller: emailController,
                       decoration: InputDecoration(
                         labelText: 'Institutional Email',
                         border: OutlineInputBorder(),
@@ -41,7 +43,7 @@ class _LoginViewState extends State<LoginView> {
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (newValue) {
                         setState(() {
-                          isValidGroupthirtyfiveText = isValidEmail(newValue);
+                          isValidEmaiText = isValidEmail(newValue);
                         });
                       },
                     ),
@@ -52,7 +54,7 @@ class _LoginViewState extends State<LoginView> {
                   child: Container(
                     margin: EdgeInsets.only(left: 30, right: 30),
                     child: TextField(
-                      controller: groupthirtytwoTextController,
+                      controller: passwordController,
                       decoration: InputDecoration(
                         labelText: 'Password',
                         border: OutlineInputBorder(),
@@ -60,7 +62,7 @@ class _LoginViewState extends State<LoginView> {
                       obscureText: true, // Para contraseñas
                       onChanged: (newValue) {
                         setState(() {
-                          isValidGroupthirtytwoText = isValidPassword(newValue);
+                          isValidPasswordText = isValidPassword(newValue);
                         });
                       },
                     ),
@@ -120,6 +122,17 @@ class _LoginViewState extends State<LoginView> {
                             fontWeight: FontWeight.bold,
                             decoration: TextDecoration.underline,
                           ),
+                          // Agrega un GestureDetector para manejar el toque en "Create Account"
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              // Navega a la pantalla de registro cuando se toca "Create Account"
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignUpScreen(),
+                                ),
+                              );
+                            },
                         ),
                       ],
                     ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NewPost extends StatelessWidget {
-  const NewPost ({super.key});
+class NewPostView extends StatelessWidget {
+  const NewPostView ({super.key});
 
   Widget build (BuildContext context) {
     return Scaffold(
