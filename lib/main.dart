@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unishop/views/login.dart';
 //import 'package:unishop/views/new_post.dart';
@@ -8,6 +9,7 @@ final colorScheme = ColorScheme.fromSeed(
   seedColor: Color.fromARGB(255, 255, 198, 0),
   background: Colors.white,
 );
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
