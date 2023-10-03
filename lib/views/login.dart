@@ -8,7 +8,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  bool btnTap = false;
+
   TextEditingController emailController = TextEditingController();
   bool isValidEmailText = true;
 
