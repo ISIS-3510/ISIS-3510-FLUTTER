@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -14,21 +13,52 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
-      ),
-      body: Center(
-        child: Text(
-          'Welcome to the Home Page',
-          style: TextStyle(fontSize: 24),
+        automaticallyImplyLeading: false,
+        title: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          margin: EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 0), // Add top margin here
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Row(
+            children: [
+              // Use SvgPicture.asset to display the SVG icon
+              Padding(
+                padding: EdgeInsets.only(left: 25.0), // Add left padding here
+                child: SvgPicture.asset(
+                  'assets/Favorite.svg', // Replace with your SVG file path
+                  width: 12, // Set the width of the SVG icon
+                  height: 12, // Set the height of the SVG icon
+                  colorFilter: ColorFilter.mode(Colors.black,
+                      BlendMode.srcIn), // Set the color of the SVG icon
+                ),
+              ),
+              SizedBox(width: 10.0),
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search Products',
+                    border: InputBorder.none,
+                  ),
+                  style: TextStyle(fontSize: 12.0),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+      body: Container(), // Empty container to remove the body content
+      // Define the bottom navigation bar here.
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed, // To display all items, even if there are more than 3.
+        type: BottomNavigationBarType
+            .fixed, // To display all items, even if there are more than 3.
         selectedItemColor: Colors.orange, // Color for the selected item.
         unselectedItemColor: Colors.grey,
-        selectedLabelStyle: TextStyle(color: Colors.orange), // Color for unselected items.
-        
+        selectedLabelStyle:
+            TextStyle(color: Colors.orange), // Color for unselected items.
+
         onTap: (index) {
           // Handle item tap here.
           setState(() {
@@ -64,47 +94,43 @@ class _HomeViewState extends State<HomeView> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset('assets/Home.svg', width: 30, height: 30),
             label: 'Home',
-            activeIcon: SvgPicture.asset(
-                  'assets/Home.svg',
-                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
-                  width: 30, height: 30
-              ),
+            activeIcon: SvgPicture.asset('assets/Home.svg',
+                colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                width: 30,
+                height: 30),
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/Favorite.svg', width: 30, height: 30),
+            icon:
+                SvgPicture.asset('assets/Favorite.svg', width: 30, height: 30),
             label: 'Favorite',
-            activeIcon: SvgPicture.asset(
-                  'assets/Favorite.svg',
-                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
-                  width: 30, height: 30
-              ),
+            activeIcon: SvgPicture.asset('assets/Favorite.svg',
+                colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                width: 30,
+                height: 30),
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset('assets/Map.svg', width: 30, height: 30),
             label: 'Map',
-            activeIcon: SvgPicture.asset(
-                  'assets/Map.svg',
-                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
-                  width: 30, height: 30
-              ),
+            activeIcon: SvgPicture.asset('assets/Map.svg',
+                colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                width: 30,
+                height: 30),
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset('assets/History.svg', width: 30, height: 30),
             label: 'History',
-            activeIcon: SvgPicture.asset(
-                  'assets/History.svg',
-                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
-                  width: 30, height: 30
-              ),
+            activeIcon: SvgPicture.asset('assets/History.svg',
+                colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                width: 30,
+                height: 30),
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset('assets/Chat.svg', width: 30, height: 30),
             label: 'Chat',
-            activeIcon: SvgPicture.asset(
-                  'assets/Chat.svg',
-                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
-                  width: 30, height: 30
-              ),
+            activeIcon: SvgPicture.asset('assets/Chat.svg',
+                colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                width: 30,
+                height: 30),
           ),
         ],
       ),
