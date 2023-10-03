@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:unishop/views/login.dart';
+import 'package:unishop/views/user_posts.dart';
+//import 'package:unishop/views/login.dart';
 //import 'package:unishop/views/new_post.dart';
 
 final colorScheme = ColorScheme.fromSeed(
@@ -28,13 +29,18 @@ void main() {
         fontSize: 20,
         color: Color.fromARGB(255, 152, 162, 172)
       ),
-      labelLarge: GoogleFonts.archivo(
+      labelLarge: GoogleFonts.outfit(
         fontWeight: FontWeight.w400,
         fontSize: 18,
         color: Colors.black
       ),
+      labelSmall: GoogleFonts.archivo(
+        fontWeight: FontWeight.w400,
+        fontSize: 20,
+        color: Colors.black
+      ),
       ),
     ),
-    home: LoginView(),
+    home: UserPostsView(),
   ));
 }
