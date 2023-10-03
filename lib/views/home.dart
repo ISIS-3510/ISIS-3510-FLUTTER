@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HomeView extends StatefulWidget {
   @override
@@ -8,6 +10,25 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int _currentIndex = 0; // To keep track of the selected item in the footer.
+    Future<dynamic> fetchData() async {
+    final url = Uri.parse('https://creative-mole-46.hasura.app/api/rest/post/all');
+    // Define the headers
+    final headers = {
+      'x-hasura-admin-secret': 'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
+    };
+    final response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to fetch data: ${response.statusCode}');
+    }
+  }
+
+  @override
+  void initstate(){
+    super.initState();
+    fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +44,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           child: Row(
             children: [
-              // Use SvgPicture.asset to display the SVG icon
+              //Use SvgPicture.asset to display the SVG icon
               Padding(
                 padding: EdgeInsets.only(left: 25.0), // Add left padding here
                 child: SvgPicture.asset(
@@ -49,7 +70,7 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       body: Container(), // Empty container to remove the body content
-      // Define the bottom navigation bar here.
+   //   Define the bottom navigation bar here.
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType
@@ -60,37 +81,37 @@ class _HomeViewState extends State<HomeView> {
             TextStyle(color: Colors.orange), // Color for unselected items.
 
         onTap: (index) {
-          // Handle item tap here.
+          //Handle item tap here.
           setState(() {
             _currentIndex = index;
           });
 
-          // Perform navigation based on the tapped item.
+          //Perform navigation based on the tapped item.
           switch (index) {
             case 0:
-              // Navigate to the Home page.
+              //Navigate to the Home page.
               // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
               break;
             case 1:
-              // Navigate to the Favorites page.
+              //Navigate to the Favorites page.
               // Navigator.push(context, MaterialPageRoute(builder: (context) => FavoritesScreen()));
               break;
             case 2:
-              // Navigate to the Map page.
+              //Navigate to the Map page.
               // Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()));
               break;
             case 3:
-              // Navigate to the History page.
+              //Navigate to the History page.
               // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen()));
               break;
             case 4:
-              // Navigate to the Chat page.
+              //Navigate to the Chat page.
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
               break;
           }
         },
         items: [
-          // Define the items in the footer.
+          //Define the items in the footer.
           BottomNavigationBarItem(
             icon: SvgPicture.asset('assets/Home.svg', width: 30, height: 30),
             label: 'Home',
