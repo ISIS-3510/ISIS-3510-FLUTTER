@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:unishop/views/sign_up.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -211,6 +212,15 @@ class _LoginViewState extends State<LoginView> {
         );
 
         if (matchingUser != null) {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('user_degree', matchingUser['degree']);
+          prefs.setString('user_email', matchingUser['email']);
+          prefs.setString('user_id', matchingUser['id']);
+          prefs.setString('user_name', matchingUser['name']);
+          prefs.setString('user_password', matchingUser['password']);
+          prefs.setString('user_phone', matchingUser['phone']);
+          prefs.setString('user_username', matchingUser['username']);
+
           // Authentication successful, show a success alert
           showAlert('Success', 'Authentication successful', Colors.green);
         } else {
