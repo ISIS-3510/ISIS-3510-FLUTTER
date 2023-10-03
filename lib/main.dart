@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:unishop/views/user_posts.dart';
-//import 'package:unishop/views/login.dart';
+import 'package:unishop/views/login.dart';
+//import 'package:unishop/views/user_posts.dart';
 //import 'package:unishop/views/new_post.dart';
 
 final colorScheme = ColorScheme.fromSeed(
@@ -41,6 +41,6 @@ void main() {
       ),
       ),
     ),
-    home: UserPostsView(),
+    home: LoginView(),
   ));
 }
