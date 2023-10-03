@@ -35,6 +35,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   google_fonts: ^6.1.0
+  flutter_svg: ^2.0.0 # Use the latest version of flutter_svg
+
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +61,13 @@ flutter:
     - assets/footerLogin.png
     - assets/headerSingUp.png
     - assets/headerSingUp.png
+    - assets/Chat.svg
+    - assets/Favorite.svg
+    - assets/History.svg
+    - assets/Home.svg
+    - assets/Map.svg
+  
+
 
 
   # The following line ensures that the Material Icons font is
