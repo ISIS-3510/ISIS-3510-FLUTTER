@@ -365,26 +365,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return confirmPassword == password;
   }
 
-  void showAlert(String title,String message, Color backgroundColor) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          backgroundColor: backgroundColor, // Establece el color de fondo
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Cierra la alerta
-              },
+  void showAlert(String title, String message, Color backgroundColor) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Container(
+              width: 100,
+              height: 30,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Text(message),
+                    // Aquí puedes agregar más widgets si es necesario
+                  ],
+                ),
+              ),
             ),
-          ],
-        );
-      },
-    );
-  }
+            backgroundColor: backgroundColor,
+            actions: <Widget>[
+              TextButton(
+                child: Text(
+                  'OK',
+                  style: TextStyle(color: Colors.white), // Cambia el color del texto a blanco
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
 
   Future<void> signUp() async {
     final url = Uri.parse('https://creative-mole-46.hasura.app/api/rest/users/signup');
@@ -424,8 +439,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } else if (response.statusCode == 400) {
       // Registro no exitoso debido a duplicación de username (u otro error)
       final jsonResponse = json.decode(response.body);
-      showAlert("REG ERRR", jsonResponse, Colors.black);
-
+      showAlert("ERROR", 'The username, email and phone must be unique!', Colors.black);
       final errors = jsonResponse['errors'];
       final errorMessage = errors[0]['message'];
       print("Error en el registro: $errorMessage");

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:unishop/views/sign_up.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginView extends StatefulWidget {
   @override
@@ -91,9 +93,7 @@ class _LoginViewState extends State<LoginView> {
                 Container(
                   margin: EdgeInsets.only(top: 20.0), // Margen a la derecha de 20.0 unidades
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Aquí puedes definir la función que se ejecutará al presionar el botón
-                    },
+                    onPressed: _handleLogin,
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xFFFFC600), 
                       fixedSize: Size(330, 50), // Establece el color de fondo del botón a FFC600
@@ -166,4 +166,65 @@ class _LoginViewState extends State<LoginView> {
     // Implementa tu lógica de validación de contraseña aquí
     return true;
   }
+
+  void showAlert(String title,String message, Color backgroundColor) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          backgroundColor: backgroundColor, // Establece el color de fondo
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra la alerta
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleLogin() async {
+    final apiUrl = 'https://creative-mole-46.hasura.app/api/rest/users/all';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-hasura-admin-secret': 'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
+      },);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final users = data['users'];
+
+        // Check if there is a user with the provided email and password
+        final matchingUser = users.firstWhere(
+          (user) =>
+              user['email'] == emailController.text &&
+              user['password'] == passwordController.text,
+          orElse: () => null,
+        );
+
+        if (matchingUser != null) {
+          // Authentication successful, show a success alert
+          showAlert('Success', 'Authentication successful', Colors.green);
+        } else {
+          // Authentication failed, show an error alert
+          showAlert('Error', 'Invalid email or password', Colors.red);
+        }
+      } else {
+        // Handle other HTTP status codes as needed
+        showAlert('Error', 'Failed to fetch data', Colors.red);
+      }
+    } catch (e) {
+      // Handle any network or parsing errors
+      showAlert('Error', 'An error occurred: $e', Colors.red);
+    }
+  }
+
 }
