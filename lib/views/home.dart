@@ -39,6 +39,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int _currentIndex = 0; // To keep track of the selected item in the footer.
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -229,6 +230,9 @@ class _HomeViewState extends State<HomeView> {
 
 class ProductCatalog extends StatelessWidget {
   final List<Product> products;
+   bool _isValidImageUrl(String imageUrl) {
+    return imageUrl.startsWith('h'.trim());
+  }
 
   ProductCatalog({required this.products});
 
@@ -253,12 +257,20 @@ class ProductCatalog extends StatelessWidget {
               height: 00,
               child: Column(
                 children: [
-                  Image.network(
-                    product.imageUrls.first,
-                    fit: BoxFit.cover,
-                    height: 100,
-                    width: double.infinity,
-                  ),
+                  if (_isValidImageUrl(product.imageUrls.first))
+                    Image.network(
+                      product.imageUrls.first,
+                      fit: BoxFit.cover,
+                      height: 100,
+                      width: double.infinity,
+                    )
+                  else
+                    Image.asset(
+                      'assets/NotFound.png', // Replace with the path to your placeholder image
+                      fit: BoxFit.cover,
+                      height: 100,
+                      width: double.infinity,
+                    ),
                   ListTile(
                     title: Text(product.name),
                     subtitle: Text(
