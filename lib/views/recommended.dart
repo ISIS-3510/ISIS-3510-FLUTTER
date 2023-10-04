@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unishop/models/degree_relations.dart';
 
-void main() {
-  runApp(MyApp());
-}
 
 class Product {
   final String id;
@@ -34,13 +33,16 @@ class Product {
   });
 }
 
-class MyApp extends StatelessWidget {
+class RecommendedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Recomendados'),
+          leading: BackButton(
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text('Recommended'),
           backgroundColor: Color(0xFFFFC600),
         ),
         body:
@@ -95,8 +97,14 @@ class MyApp extends StatelessWidget {
           userName: item['user']['username'],
         );
       }).toList();
-
-      return products;
+      final prefs = await SharedPreferences.getInstance();
+      final recommendedProducts = <Product>[];
+      for (final product in products) {
+        if (product.degree == prefs.getString('user_degree') || DegreeRelations().degreeRelations[prefs.getString('user_degree')]!.contains(product.degree) ) {
+          recommendedProducts.add(product);
+        }
+      }
+      return recommendedProducts;
     } else {
       throw Exception('Error al cargar los productos');
     }
