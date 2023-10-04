@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/models/degree_relations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 
 class Product {
@@ -38,12 +39,42 @@ class RecommendedView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: () => Navigator.of(context).pop(),
+         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            margin:
+                EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 0), // Add top margin here
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Row(
+              children: [
+                //Use SvgPicture.asset to display the SVG icon
+                Padding(
+                  padding: EdgeInsets.only(left: 25.0), // Add left padding here
+                  child: SvgPicture.asset(
+                    'assets/Favorite.svg', // Replace with your SVG file path
+                    width: 12, // Set the width of the SVG icon
+                    height: 12, // Set the height of the SVG icon
+                    colorFilter: ColorFilter.mode(Colors.black,
+                        BlendMode.srcIn), // Set the color of the SVG icon
+                  ),
+                ),
+                SizedBox(width: 10.0),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search Products',
+                      border: InputBorder.none,
+                    ),
+                    style: TextStyle(fontSize: 12.0),
+                  ),
+                ),
+              ],
+            ),
           ),
-          title: Text('Recommended'),
-          backgroundColor: Color(0xFFFFC600),
         ),
         body:
           Padding(
@@ -115,6 +146,10 @@ class ProductCatalog extends StatelessWidget {
   final List<Product> products;
 
   ProductCatalog({required this.products});
+  bool _isValidImageUrl(String imageUrl) {
+    return imageUrl.startsWith('h'.trim());
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -136,18 +171,20 @@ class ProductCatalog extends StatelessWidget {
               height: 00,
               child: Column(
                 children: [
-                  Image.network(
-                    product.imageUrls.first,
-                    fit: BoxFit.cover,
-                    height: 100,
-                    width: double.infinity,
-                  ),
-                  ListTile(
-                    title: Text(product.name),
-                    subtitle: Text(product.description,
-                      maxLines: 1, // Limita a dos líneas de texto
-                      overflow: TextOverflow.ellipsis,),
-                  ),
+                  if (_isValidImageUrl(product.imageUrls.first))
+                    Image.network(
+                      product.imageUrls.first,
+                      fit: BoxFit.cover,
+                      height: 100,
+                      width: double.infinity,
+                    )
+                  else
+                    Image.asset(
+                      'assets/NotFound.png', // Replace with the path to your placeholder image
+                      fit: BoxFit.cover,
+                      height: 100,
+                      width: double.infinity,
+                    ),
                   // Padding(
                   //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
                   //   child: Text(
