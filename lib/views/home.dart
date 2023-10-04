@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:unishop/views/recommended.dart';
 import 'dart:convert';
 
 import 'package:unishop/views/user_posts.dart';
@@ -96,7 +97,7 @@ class _HomeViewState extends State<HomeView> {
               break;
             case 1:
               //Navigate to the Favorites page.
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => FavoritesScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => RecommendedView()));
               break;
             case 2:
               //Navigate to the Map page.
