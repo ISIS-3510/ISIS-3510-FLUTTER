@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/models/product.dart';
 import 'package:unishop/widgets/image_input.dart';
 import 'dart:io';
@@ -38,9 +37,6 @@ class _NewPostViewState extends State<NewPostView> {
 
     final imageBytes = _selectedImage!.readAsBytesSync();
     String imageTextBytes = String.fromCharCodes(imageBytes);
-
-    final prefs = await SharedPreferences.getInstance();
-
     final url = Uri.https('creative-mole-46.hasura.app',
         'api/rest/post/create');
     final response = await http.post(
@@ -61,7 +57,7 @@ class _NewPostViewState extends State<NewPostView> {
             "recycled": _enteredIsRecycled,
             "subject": enteredSubject,
             "urlsImages": imageTextBytes,
-            "userId": prefs.getString('user_id')
+            "userId": "b7e0f74e-debe-4dcc-8283-9d6a97e76166"
           }
         },
       ),
@@ -69,10 +65,13 @@ class _NewPostViewState extends State<NewPostView> {
 
     final Map<String, dynamic> resData = json.decode(response.body);
 
+    print(resData);
+
     if (!context.mounted) {
       return;
     }
 
+    print(resData);
     Navigator.of(context).pop(
       Product(
         title: enteredTitle,
