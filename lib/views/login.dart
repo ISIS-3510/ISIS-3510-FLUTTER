@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:unishop/views/sign_up.dart';
+import 'package:unishop/views/home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -223,6 +224,13 @@ class _LoginViewState extends State<LoginView> {
 
           // Authentication successful, show a success alert
           showAlert('Success', 'Authentication successful', Colors.green);
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeView(),
+            ),
+          );
         } else {
           // Authentication failed, show an error alert
           showAlert('Error', 'Invalid email or password', Colors.red);

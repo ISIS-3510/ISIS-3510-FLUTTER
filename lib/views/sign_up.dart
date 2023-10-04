@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:unishop/views/home.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -430,9 +431,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // Registro exitoso
       showAlert("Good", "Account Created!", Color(0xFFFFC600));
 
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeView(),
+        ),
+      );
+
       final jsonResponse = json.decode(response.body);
       final userData = jsonResponse['data']['insert_users_one'];
       print("Registro exitoso: ${userData['name']}");
+
+      
 
     //Navigator.of(context).pushNamed("/feed");
 
