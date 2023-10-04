@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/models/product.dart';
 import 'package:unishop/views/new_post.dart';
 //import 'dart:typed_data'; useful for Image.memory
@@ -24,7 +25,8 @@ class _UserPostsViewState extends State<UserPostsView> {
   }
 
   void _loadProducts() async {
-    final queryParameters = {'id': 'b7e0f74e-debe-4dcc-8283-9d6a97e76166'};
+    final prefs = await SharedPreferences.getInstance();
+    final queryParameters = {'id': prefs.getString('user_id')};
     final url = Uri.https(
         'creative-mole-46.hasura.app', 'api/rest/post/user', queryParameters);
 
@@ -41,7 +43,6 @@ class _UserPostsViewState extends State<UserPostsView> {
     if (response.body == 'null') {
       return;
     }
-    print(response.body);
     final Map<String, dynamic> listData = json.decode(response.body);
     final List<Product> loadedProducts = [];
     for (final items in listData.entries) {
@@ -67,7 +68,6 @@ class _UserPostsViewState extends State<UserPostsView> {
 
     setState(() {
       _products = loadedProducts;
-      print(loadedProducts.length);
     });
   }
 

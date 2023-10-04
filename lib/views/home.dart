@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:unishop/views/user_posts.dart';
+
 class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -102,7 +104,7 @@ class _HomeViewState extends State<HomeView> {
               break;
             case 3:
               //Navigate to the History page.
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => UserPostsView()));
               break;
             case 4:
               //Navigate to the Chat page.
