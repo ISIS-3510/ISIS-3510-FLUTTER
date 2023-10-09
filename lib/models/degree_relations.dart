@@ -1,5 +1,5 @@
 class DegreeRelations {
-  DegreeRelations ({required this.degreeRelations});
+  DegreeRelations ();
 
   Map<String,List<String>> degreeRelations = {
     "ALL": ["ISIS", "IELE", "MATE", "ADMIN", "IIND", "ARQUI", "ARTE", "DISE", "DERE", "HIST"],
