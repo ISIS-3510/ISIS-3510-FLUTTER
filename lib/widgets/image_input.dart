@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+
+import 'package:unishop/dao/dao.dart';
 
 class ImageInput extends StatefulWidget {
   const ImageInput({super.key, required this.onPickImage});
 
-  final void Function (File image) onPickImage;
+  final void Function (String image) onPickImage;
 
   @override
   State<ImageInput> createState() {
@@ -14,7 +15,7 @@ class ImageInput extends StatefulWidget {
 }
 
 class _ImageInputState extends State<ImageInput> {
-  File? _selectedImagen;
+  String? _selectedImagen;
 
   void _takePicture() async {
     final imagePicker = ImagePicker();
@@ -23,8 +24,11 @@ class _ImageInputState extends State<ImageInput> {
     if (pickedImage == null) {
       return;
     }
+
+    final imageUrl = await daoSaveImage(pickedImage);
+
     setState(() {
-      _selectedImagen = File(pickedImage.path);
+      _selectedImagen = imageUrl;
     });
 
     widget.onPickImage(_selectedImagen!);
@@ -41,7 +45,7 @@ class _ImageInputState extends State<ImageInput> {
     if (_selectedImagen != null) {
       content = GestureDetector(
         onTap: _takePicture,
-        child: Image.file(
+        child: Image.network(
           _selectedImagen!,
           fit: BoxFit.cover,
           width: double.infinity,

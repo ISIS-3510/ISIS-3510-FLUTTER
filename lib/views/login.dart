@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:unishop/repositories/users_repository.dart';
 import 'package:unishop/views/sign_up.dart';
 import 'package:unishop/views/home.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatefulWidget {
@@ -52,7 +51,7 @@ class _LoginViewState extends State<LoginView> {
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (newValue) {
                         setState(() {
-                          isValidEmailText = isValidEmail(newValue);
+                          isValidEmailText = UsersRepository.isValidEmail(newValue);
                         });
                       },
                     ),
@@ -74,7 +73,7 @@ class _LoginViewState extends State<LoginView> {
                       obscureText: true, // Para contraseñas
                       onChanged: (newValue) {
                         setState(() {
-                          isValidPasswordText = isValidPassword(newValue);
+                          isValidPasswordText = UsersRepository.isValidPassword(newValue);
                         });
                       },
                     ),
@@ -159,16 +158,6 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  bool isValidEmail(String email) {
-    RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
-    return emailRegExp.hasMatch(email);
-  }
-
-  bool isValidPassword(String password) {
-    // Implementa tu lógica de validación de contraseña aquí
-    return true;
-  }
-
   void showAlert(String title,String message, Color backgroundColor) {
     showDialog(
       context: context,
@@ -191,28 +180,11 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _handleLogin() async {
-    final apiUrl = 'https://creative-mole-46.hasura.app/api/rest/users/all';
-
     try {
-      final response = await http.get(Uri.parse(apiUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'x-hasura-admin-secret': 'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
-      },);
+      final response = await UsersRepository.logIn();
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final users = data['users'];
-
-        // Check if there is a user with the provided email and password
-        final matchingUser = users.firstWhere(
-          (user) =>
-              user['email'] == emailController.text &&
-              user['password'] == passwordController.text,
-          orElse: () => null,
-        );
-
-        if (matchingUser != null) {
+        final matchingUser = await UsersRepository.loginVerifier(emailController, passwordController, response);        
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('user_degree', matchingUser['degree']);
           prefs.setString('user_email', matchingUser['email']);
@@ -231,17 +203,13 @@ class _LoginViewState extends State<LoginView> {
               builder: (context) => HomeView(),
             ),
           );
-        } else {
-          // Authentication failed, show an error alert
-          showAlert('Error', 'Invalid email or password', Colors.red);
-        }
       } else {
         // Handle other HTTP status codes as needed
         showAlert('Error', 'Failed to fetch data', Colors.red);
       }
     } catch (e) {
       // Handle any network or parsing errors
-      showAlert('Error', 'An error occurred: $e', Colors.red);
+      showAlert('Error', 'An error occurredaaaa: $e', Colors.red);
     }
   }
 

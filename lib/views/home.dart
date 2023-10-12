@@ -1,36 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:unishop/models/product.dart';
+import 'package:unishop/repositories/posts_repository.dart';
+import 'package:unishop/views/recommended.dart';
 import 'package:unishop/views/user_posts.dart';
 
-class Product {
-  final String id;
-  final String degree;
-  final String description;
-  final bool isNew;
-  final String price;
-  final bool recycled;
-  final String subject;
-  final List<String> imageUrls;
-  final String date;
-  final String name;
-  final String userName;
-
-  Product({
-    required this.id,
-    required this.degree,
-    required this.description,
-    required this.isNew,
-    required this.price,
-    required this.recycled,
-    required this.subject,
-    required this.imageUrls,
-    required this.date,
-    required this.name,
-    required this.userName,
-  });
-}
 
 class HomeView extends StatefulWidget {
   @override
@@ -119,11 +93,11 @@ class _HomeViewState extends State<HomeView> {
             switch (index) {
               case 0:
                 //Navigate to the Home page.
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeView()));
                 break;
               case 1:
                 //Navigate to the Favorites page.
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => FavoritesScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => RecommendedView()));
                 break;
               case 2:
                 //Navigate to the Map page.
@@ -191,40 +165,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<List<Product>> fetchProducts() async {
-    final url =
-        Uri.parse('https://creative-mole-46.hasura.app/api/rest/post/all');
-    final headers = {
-      'content-type': 'application/json',
-      'x-hasura-admin-secret':
-          'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
-    };
-
-    final response = await http.get(url, headers: headers);
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      final List<dynamic> postList = jsonData['post'];
-
-      final List<Product> products = postList.map((item) {
-        final imageUrls = (item['urlsImages'] as String).split(';');
-        return Product(
-          id: item['id'],
-          degree: item['degree'],
-          description: item['description'],
-          isNew: item['new'],
-          price: item['price'],
-          recycled: item['recycled'],
-          subject: item['subject'],
-          imageUrls: imageUrls,
-          date: item['date'],
-          name: item['name'],
-          userName: item['user']['username'],
-        );
-      }).toList();
-
-      return products;
-    } else {
-      throw Exception('Error al cargar los productos');
-    }
+    return PostsRepository.getListProducts();
   }
 }
 
@@ -257,9 +198,9 @@ class ProductCatalog extends StatelessWidget {
               height: 00,
               child: Column(
                 children: [
-                  if (_isValidImageUrl(product.imageUrls.first))
+                  if (_isValidImageUrl(product.image.first))
                     Image.network(
-                      product.imageUrls.first,
+                      product.image.first,
                       fit: BoxFit.cover,
                       height: 100,
                       width: double.infinity,
@@ -272,7 +213,7 @@ class ProductCatalog extends StatelessWidget {
                       width: double.infinity,
                     ),
                   ListTile(
-                    title: Text(product.name),
+                    title: Text(product.title),
                     subtitle: Text(
                       product.description,
                       maxLines: 1, // Limita a dos líneas de texto
