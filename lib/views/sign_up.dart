@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:unishop/views/home.dart';
+import 'package:unishop/dao/dao.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -403,29 +404,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
 
   Future<void> signUp() async {
-    final url = Uri.parse('https://creative-mole-46.hasura.app/api/rest/users/signup');
 
-    final Map<String, dynamic> requestBody = {
-      "object": {
-        "email": emailController.text,
-        "name": nameController.text,
-        "password": passwordController.text,
-        "phone": phoneController.text,
-        "username": userNameController.text,
-        "degree": degreeController.text,
-      }
-    };
-
-    final headers = {
-      "content-type": "application/json",
-      "x-hasura-admin-secret": "mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ",
-    };
-
-    final response = await http.post(
-      url,
-      headers: headers,
-      body: jsonEncode(requestBody),
-    );
+    final response = await daoSignUp(emailController.text, nameController.text,passwordController.text,
+    phoneController.text, userNameController.text, degreeController.text);
 
     if (response.statusCode == 200) {
       // Registro exitoso
