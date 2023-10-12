@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:unishop/models/product.dart';
 import 'package:unishop/widgets/image_input.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:unishop/dao/dao.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({super.key});
@@ -14,8 +14,6 @@ class NewPostView extends StatefulWidget {
     return _NewPostViewState();
   }
 }
-
-
 
 class _NewPostViewState extends State<NewPostView> {
   File? _selectedImage;
@@ -33,36 +31,17 @@ class _NewPostViewState extends State<NewPostView> {
     final enteredPrice = _priceController.text;
     final enteredDegree = _degreeController.text;
     var enteredSubject = _subjectController.text;
-
-
     final imageBytes = _selectedImage!.readAsBytesSync();
     String imageTextBytes = String.fromCharCodes(imageBytes);
-    final url = Uri.https('creative-mole-46.hasura.app',
-        'api/rest/post/create');
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-hasura-admin-secret': 'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
-      },
-      body: json.encode(
-        {
-          "object":{
-            "date": DateTime.now().toIso8601String(),
-            "degree": enteredDegree,
-            "description": enteredDescription,
-            "name": enteredTitle,
-            "new": _enteredIsNew,
-            "price": double.tryParse(enteredPrice),
-            "recycled": _enteredIsRecycled,
-            "subject": enteredSubject,
-            "urlsImages": imageTextBytes,
-            "userId": "b7e0f74e-debe-4dcc-8283-9d6a97e76166"
-          }
-        },
-      ),
-    );
-
+    final response = await daoCreatePost(
+        enteredDegree,
+        enteredDescription,
+        enteredTitle,
+        _enteredIsNew,
+        enteredPrice,
+        _enteredIsRecycled,
+        enteredSubject,
+        imageTextBytes);
     final Map<String, dynamic> resData = json.decode(response.body);
 
     print(resData);
@@ -86,7 +65,6 @@ class _NewPostViewState extends State<NewPostView> {
     );
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,9 +94,11 @@ class _NewPostViewState extends State<NewPostView> {
               keyboardType: TextInputType.text,
             ),
             const SizedBox(height: 10),
-            ImageInput(onPickImage: (image) {
-              _selectedImage = image;
-            },),
+            ImageInput(
+              onPickImage: (image) {
+                _selectedImage = image;
+              },
+            ),
             const SizedBox(height: 10),
             TextField(
               controller: _descriptionController,

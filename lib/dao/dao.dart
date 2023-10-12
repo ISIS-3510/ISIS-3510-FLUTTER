@@ -68,7 +68,7 @@ dynamic daoCreatePost(
     String enteredPrice,
     Bool enteredIsRecycled,
     String enteredSubject,
-    String imageTextBytes) async {
+    dynamic imageTextBytes) async {
   final url = Uri.https('creative-mole-46.hasura.app', 'api/rest/post/create');
   final headers = {
     'content-type': 'application/json',
