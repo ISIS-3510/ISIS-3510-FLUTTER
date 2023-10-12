@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-getProducts() async {
+dynamic daoGetProducts() async {
   final url =
       Uri.parse('https://creative-mole-46.hasura.app/api/rest/post/all');
   final headers = {
@@ -15,7 +15,7 @@ getProducts() async {
   return json.decode(response.body);
 }
 
-login() async {
+dynamic daoLogIn() async {
   final url =
       Uri.parse('https://creative-mole-46.hasura.app/api/rest/users/all');
   final headers = {
@@ -30,7 +30,7 @@ login() async {
   return json.decode(response.body);
 }
 
-signUp(String email, String name, String password, String phone,
+dynamic daoSignUp(String email, String name, String password, String phone,
     String username, String degree) async {
   final url =
       Uri.parse('https://creative-mole-46.hasura.app/api/rest/users/signup');
@@ -60,7 +60,7 @@ signUp(String email, String name, String password, String phone,
   return json.decode(response.body);
 }
 
-createPost(
+dynamic daoCreatePost(
     String enteredDegree,
     String enteredDescription,
     String enteredTitle,
@@ -97,7 +97,7 @@ createPost(
   return json.decode(response.body);
 }
 
-loadProducts(Map<String, String> queryParameters) async {
+dynamic daoLoadProducts(Map<String, String> queryParameters) async {
   final url = Uri.https(
         'creative-mole-46.hasura.app', 'api/rest/post/user', queryParameters);
 
