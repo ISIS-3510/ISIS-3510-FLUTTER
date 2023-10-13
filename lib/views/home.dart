@@ -20,7 +20,9 @@ class _HomeViewState extends State<HomeView> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          toolbarHeight: 80,
           automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
           title: Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             margin:

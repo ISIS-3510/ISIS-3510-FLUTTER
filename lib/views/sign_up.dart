@@ -11,25 +11,25 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
-  bool isValidNameText = false;
+  bool isValidNameText = true;
 
   TextEditingController userNameController = TextEditingController();
-  bool isValidUserNameText = false;
+  bool isValidUserNameText = true;
 
   TextEditingController degreeController = TextEditingController();
-  bool isValidDegreeText = false;
+  bool isValidDegreeText = true;
 
   TextEditingController phoneController = TextEditingController();
-  bool isValidPhoneText = false;
+  bool isValidPhoneText = true;
 
   TextEditingController emailController = TextEditingController();
-  bool isValidEmailText = false;
+  bool isValidEmailText = true;
 
   TextEditingController passwordController = TextEditingController();
-  bool isValidPasswordText = false;
+  bool isValidPasswordText = true;
 
   TextEditingController confirmPasswordController = TextEditingController();
-  bool isValidConfirmPasswordText = false;
+  bool isValidConfirmPasswordText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Container(
                 margin: EdgeInsets.only(right: 40.0, top: 10, left: 40),
                 child: Text(
-                  "by clicking on Sing Up you agree to the privacy policy and data consent.",
+                  "by clicking on Sign Up you agree to the privacy policy and data consent.",
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: "Outfit",
@@ -271,7 +271,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fixedSize: Size(330, 50),
                   ),
                   child: Text(
-                    "Sing Up",
+                    "Sign Up",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
@@ -293,7 +293,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       // Navegar a la pantalla de inicio de sesión
                       Navigator.of(context).pop();
                     },
-                    child: Text('Sing In',
+                    child: Text('Sign In',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 0, 0, 0),
