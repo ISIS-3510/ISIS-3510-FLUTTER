@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:unishop/models/product.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unishop/repositories/posts_repository.dart';
 import 'package:unishop/widgets/image_input.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:unishop/dao/dao.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({super.key});
@@ -16,7 +13,7 @@ class NewPostView extends StatefulWidget {
 }
 
 class _NewPostViewState extends State<NewPostView> {
-  File? _selectedImage;
+  String _selectedImage = '';
   var _titleController = TextEditingController();
   var _descriptionController = TextEditingController();
   var _priceController = TextEditingController();
@@ -31,38 +28,15 @@ class _NewPostViewState extends State<NewPostView> {
     final enteredPrice = _priceController.text;
     final enteredDegree = _degreeController.text;
     var enteredSubject = _subjectController.text;
-    final imageBytes = _selectedImage!.readAsBytesSync();
-    String imageTextBytes = String.fromCharCodes(imageBytes);
-    final response = await daoCreatePost(
-        enteredDegree,
-        enteredDescription,
-        enteredTitle,
-        _enteredIsNew,
-        enteredPrice,
-        _enteredIsRecycled,
-        enteredSubject,
-        imageTextBytes);
-    final Map<String, dynamic> resData = json.decode(response.body);
+    final prefs = await SharedPreferences.getInstance();
+    final userId =prefs.getString('user_id');
 
-    print(resData);
+    PostsRepository.createPost(enteredDegree, enteredDescription, enteredTitle, _enteredIsNew, enteredPrice, _enteredIsRecycled, enteredSubject, _selectedImage, userId.toString());
 
     if (!context.mounted) {
       return;
     }
-
-    print(resData);
-    Navigator.of(context).pop(
-      Product(
-        title: enteredTitle,
-        description: enteredDescription,
-        price: double.tryParse(enteredPrice)!,
-        isNew: _enteredIsNew,
-        isRecycled: _enteredIsRecycled,
-        degree: enteredDegree,
-        subject: enteredSubject,
-        image: imageTextBytes,
-      ),
-    );
+    Navigator.of(context).pop();
   }
 
   @override

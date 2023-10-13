@@ -17,5 +17,5 @@ class Product {
   final bool isRecycled;
   final String degree;
   final String subject;
-  final String image;
+  final List<String> image;
 }
