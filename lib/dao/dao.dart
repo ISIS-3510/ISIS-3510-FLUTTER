@@ -57,17 +57,17 @@ dynamic daoSignUp(String email, String name, String password, String phone,
     headers: headers,
     body: jsonEncode(requestBody),
   );
-  return json.decode(response.body);
+  return response;
 }
 
 dynamic daoCreatePost(
-    String enteredDegree,
-    String enteredDescription,
+    String? enteredDegree,
+    String? enteredDescription,
     String enteredTitle,
-    Bool enteredIsNew,
+    bool enteredIsNew,
     String enteredPrice,
-    Bool enteredIsRecycled,
-    String enteredSubject,
+    bool enteredIsRecycled,
+    String? enteredSubject,
     dynamic imageTextBytes) async {
   final url = Uri.https('creative-mole-46.hasura.app', 'api/rest/post/create');
   final headers = {
@@ -78,34 +78,35 @@ dynamic daoCreatePost(
   final Map<String, dynamic> requestBody = {
     "object": {
       "date": DateTime.now().toIso8601String(),
-      "degree": enteredDegree,
-      "description": enteredDescription,
+      "degree": enteredDegree ?? "",
+      "description": enteredDescription ?? "",
       "name": enteredTitle,
       "new": enteredIsNew,
       "price": double.tryParse(enteredPrice),
       "recycled": enteredIsRecycled,
-      "subject": enteredSubject,
-      "urlsImages": imageTextBytes,
+      "subject": enteredSubject ?? "",
+      "urlsImages": imageTextBytes ?? "",
       "userId": "b7e0f74e-debe-4dcc-8283-9d6a97e76166"
     }
   };
+
   final response = await http.post(
     url,
     headers: headers,
     body: jsonEncode(requestBody),
   );
-  return json.decode(response.body);
+  return response;
 }
 
 dynamic daoLoadProducts(Map<String, String> queryParameters) async {
   final url = Uri.https(
-        'creative-mole-46.hasura.app', 'api/rest/post/user', queryParameters);
+      'creative-mole-46.hasura.app', 'api/rest/post/user', queryParameters);
 
-    final headers= {
-      'Content-Type': 'application/json',
-      'x-hasura-admin-secret':
-          'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
-    };
-    final response=await http.get(url, headers: headers);
-    return json.decode(response.body);
+  final headers = {
+    'Content-Type': 'application/json',
+    'x-hasura-admin-secret':
+        'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
+  };
+  final response = await http.get(url, headers: headers);
+  return json.decode(response.body);
 }
