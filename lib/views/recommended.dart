@@ -11,7 +11,7 @@ class RecommendedView extends StatefulWidget {
 }
 
 class _RecommendedViewState extends State<RecommendedView> {
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
