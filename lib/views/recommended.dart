@@ -11,49 +11,104 @@ class RecommendedView extends StatefulWidget {
 }
 
 class _RecommendedViewState extends State<RecommendedView> {
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            margin:
-                EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 0), // Add top margin here
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10.0),
+        appBar: AppBar(
+  toolbarHeight: 120,
+  automaticallyImplyLeading: false,
+  backgroundColor: Colors.white,
+  title: Column(
+    children: [
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.0),
+        margin: EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 0),
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 25.0),
+              child: SvgPicture.asset(
+                'assets/Favorite.svg',
+                width: 12,
+                height: 12,
+                colorFilter: ColorFilter.mode(
+                  Colors.black,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
-            child: Row(
-              children: [
-                //Use SvgPicture.asset to display the SVG icon
-                Padding(
-                  padding: EdgeInsets.only(left: 25.0), // Add left padding here
-                  child: SvgPicture.asset(
-                    'assets/Favorite.svg', // Replace with your SVG file path
-                    width: 12, // Set the width of the SVG icon
-                    height: 12, // Set the height of the SVG icon
-                    colorFilter: ColorFilter.mode(Colors.black,
-                        BlendMode.srcIn), // Set the color of the SVG icon
-                  ),
+            SizedBox(width: 10.0),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search Products',
+                  border: InputBorder.none,
                 ),
-                SizedBox(width: 10.0),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search Products',
-                      border: InputBorder.none,
-                    ),
-                    style: TextStyle(fontSize: 12.0),
-                  ),
-                ),
-              ],
+                style: TextStyle(fontSize: 12.0),
+              ),
+            ),
+          ],
+        ),
+      ),
+      SizedBox(height: 10),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 1,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey[300],
+              ),
+              onPressed: redAllProducts,
+              child: Text(
+                'All Products',
+                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+              ),
             ),
           ),
-        ),
+          SizedBox(width: 5),
+          Expanded(
+            flex: 1,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.orange[300],
+              ),
+              onPressed: redRecommended,
+              child: Text(
+                'Recommended',
+                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+              ),
+            ),
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            flex: 1,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey[300],
+              ),
+              onPressed: () {
+                // Acción cuando se presiona "Bargains"
+              },
+              child: Text(
+                'Bargains',
+                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+              ),
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+),
         floatingActionButton: FloatingActionButton(
         onPressed: () {Navigator.push(context,
                     MaterialPageRoute(builder: (context) => UserPostsView()));},
@@ -171,22 +226,41 @@ class _RecommendedViewState extends State<RecommendedView> {
   Future<List<Product>> fetchProducts() async {
     return PostsRepository.getRecommendations();
   }
+
+  void redRecommended(){
+    Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RecommendedView(),
+            ),
+          );
+  }
+
+  void redAllProducts(){
+    Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeView(),
+            ),
+          );
+  }
+
 }
 
 class ProductCatalog extends StatelessWidget {
   final List<Product> products;
 
   ProductCatalog({required this.products});
+
   bool _isValidImageUrl(String imageUrl) {
     return imageUrl.startsWith('h'.trim());
   }
-
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Dos productos por fila
+        crossAxisCount: 2,
         crossAxisSpacing: 8.0,
         mainAxisSpacing: 8.0,
       ),
@@ -196,39 +270,29 @@ class ProductCatalog extends StatelessWidget {
         return Card(
           elevation: 5,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Ajusta el radio según tus preferencias
+            borderRadius: BorderRadius.circular(10.0),
           ),
-            child: SizedBox(
-              height: 00,
-              child: Column(
-                children: [
-                  if (_isValidImageUrl(product.image.first))
-                    Image.network(
-                      product.image.first,
-                      fit: BoxFit.cover,
-                      height: 100,
-                      width: double.infinity,
-                    )
-                  else
-                    Image.asset(
-                      'assets/NotFound.png', // Replace with the path to your placeholder image
-                      fit: BoxFit.cover,
-                      height: 100,
-                      width: double.infinity,
-                    ),
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-                  //   child: Text(
-                  //     product.price,
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 16,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            )
+          child: SizedBox(
+            height: 00,
+            child: Column(
+              children: [
+                if (_isValidImageUrl(product.image.first))
+                  Image.network(
+                    product.image.first,
+                    fit: BoxFit.cover,
+                    height: 100,
+                    width: double.infinity,
+                  )
+                else
+                  Image.asset(
+                    'assets/NotFound.png',
+                    fit: BoxFit.cover,
+                    height: 100,
+                    width: double.infinity,
+                  ),
+              ],
+            ),
+          ),
         );
       },
     );
