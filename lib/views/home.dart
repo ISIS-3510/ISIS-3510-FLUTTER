@@ -20,43 +20,106 @@ class _HomeViewState extends State<HomeView> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 80,
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          title: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            margin:
-                EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 0), // Add top margin here
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10.0),
+  toolbarHeight: 120,
+  automaticallyImplyLeading: false,
+  backgroundColor: Colors.white,
+  title: Column(
+    children: [
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.0),
+        margin: EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 0),
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 25.0),
+              child: SvgPicture.asset(
+                'assets/Favorite.svg',
+                width: 12,
+                height: 12,
+                colorFilter: ColorFilter.mode(
+                  Colors.black,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
-            child: Row(
-              children: [
-                //Use SvgPicture.asset to display the SVG icon
-                Padding(
-                  padding: EdgeInsets.only(left: 25.0), // Add left padding here
-                  child: SvgPicture.asset(
-                    'assets/Favorite.svg', // Replace with your SVG file path
-                    width: 12, // Set the width of the SVG icon
-                    height: 12, // Set the height of the SVG icon
-                    colorFilter: ColorFilter.mode(Colors.black,
-                        BlendMode.srcIn), // Set the color of the SVG icon
-                  ),
+            SizedBox(width: 10.0),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search Products',
+                  border: InputBorder.none,
                 ),
-                SizedBox(width: 10.0),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search Products',
-                      border: InputBorder.none,
-                    ),
-                    style: TextStyle(fontSize: 12.0),
-                  ),
-                ),
-              ],
+                style: TextStyle(fontSize: 12.0),
+              ),
+            ),
+          ],
+        ),
+      ),
+      SizedBox(height: 10),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 1,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.orange[300],
+              ),
+              onPressed: redAllProducts,
+              child: Text(
+                'All Products',
+                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+              ),
             ),
           ),
+          SizedBox(width: 5),
+          Expanded(
+            flex: 1,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey[300],
+              ),
+              onPressed: redRecommended,
+              child: Text(
+                'Recommended',
+                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+              ),
+            ),
+          ),
+          SizedBox(width: 5),
+          Expanded(
+            flex: 1,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey[300],
+              ),
+              onPressed: () {
+                // Acción cuando se presiona "Bargains"
+              },
+              child: Text(
+                'Bargains',
+                style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
+              ),
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+)
+,
+
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserPostsView()));},
+        tooltip: 'Increment',
+        backgroundColor: Colors.black,
+        elevation: 4.0,
+        child:  Icon(Icons.add)
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -107,9 +170,9 @@ class _HomeViewState extends State<HomeView> {
                 break;
               case 3:
                 //Navigate to the History page.
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserPostsView()));
-                break;
+                //Navigator.push(context,
+                    //MaterialPageRoute(builder: (context) => UserPostsView()));
+                //break;
               case 4:
                 //Navigate to the Chat page.
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
@@ -136,12 +199,8 @@ class _HomeViewState extends State<HomeView> {
                   height: 30),
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/Map.svg', width: 30, height: 30),
-              label: 'Map',
-              activeIcon: SvgPicture.asset('assets/Map.svg',
-                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
-                  width: 30,
-                  height: 30),
+              icon: Icon(Icons.map_outlined, color: Color.fromRGBO(0, 0, 0, 0),),
+              label: 'Create',
             ),
             BottomNavigationBarItem(
               icon:
@@ -162,12 +221,31 @@ class _HomeViewState extends State<HomeView> {
             ),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
       ),
     );
   }
 
   Future<List<Product>> fetchProducts() async {
     return PostsRepository.getListProducts();
+  }
+
+  void redRecommended(){
+    Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RecommendedView(),
+            ),
+          );
+  }
+
+  void redAllProducts(){
+    Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeView(),
+            ),
+          );
   }
 }
 

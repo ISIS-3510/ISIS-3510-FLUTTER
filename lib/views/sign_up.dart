@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:unishop/repositories/users_repository.dart';
 import 'dart:convert';
 import 'package:unishop/views/home.dart';
-import 'package:unishop/dao/dao.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
