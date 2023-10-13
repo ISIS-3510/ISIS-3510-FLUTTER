@@ -8,6 +8,7 @@ class Product {
     required this.degree,
     required this.subject,
     required this.image,
+    this.user,
   });
 
   final String title;
@@ -18,4 +19,12 @@ class Product {
   final String degree;
   final String subject;
   final List<String> image;
+  final Map<String, dynamic>? user;
+
+  String getUsername() {
+    if(user == null) {
+      return "Anónimo";
+    }
+    return user!['username'];
+  }
 }

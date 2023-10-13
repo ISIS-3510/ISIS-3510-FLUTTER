@@ -6,9 +6,9 @@ import 'package:unishop/models/degree_relations.dart';
 import 'package:unishop/models/product.dart';
 
 class PostsRepository {
-  static Future<List<Product>> getListProducts() async{
+  static Future<List<Product>> getListProducts() async {
     Response data = await daoGetProducts();
-    final jsonData =  json.decode(data.body);
+    final jsonData = json.decode(data.body);
     if (data.statusCode == 200) {
       final List<dynamic> postList = jsonData['post'];
       final List<Product> products = postList.map((item) {
@@ -17,14 +17,16 @@ class PostsRepository {
           degree: item['degree'],
           description: item['description'],
           isNew: item['new'],
-          price: double.parse(item['price'].toString()
-                .substring(1)
-                .replaceAll('.', '')
-                .replaceAll(',', '')),
+          price: double.parse(item['price']
+              .toString()
+              .substring(1)
+              .replaceAll('.', '')
+              .replaceAll(',', '')),
           isRecycled: item['recycled'],
           subject: item['subject'],
           image: imageUrls,
           title: item['name'],
+          user: item['user'],
         );
       }).toList();
       return products;
@@ -58,34 +60,27 @@ class PostsRepository {
       String enteredSubject,
       String image,
       String userId) {
-    daoCreatePost(
-      enteredDegree,
-      enteredDescription,
-      enteredTitle,
-      enteredIsNew,
-      enteredPrice,
-      enteredIsRecycled,
-      enteredSubject,
-      image,
-      userId);
+    daoCreatePost(enteredDegree, enteredDescription, enteredTitle, enteredIsNew,
+        enteredPrice, enteredIsRecycled, enteredSubject, image, userId);
     List<String> images = [image];
     Product createdProduct = Product(
-        title: enteredTitle,
-        description: enteredDescription,
-        price: double.tryParse(enteredPrice)!,
-        isNew: enteredIsNew,
-        isRecycled: enteredIsRecycled,
-        degree: enteredDegree,
-        subject: enteredSubject,
-        image: images,
-      );
+      title: enteredTitle,
+      description: enteredDescription,
+      price: double.tryParse(enteredPrice)!,
+      isNew: enteredIsNew,
+      isRecycled: enteredIsRecycled,
+      degree: enteredDegree,
+      subject: enteredSubject,
+      image: images
+    );
     return createdProduct;
   }
 
-  static Future<List<Product>> loadProducts () async {
+  static Future<List<Product>> loadProducts() async {
     final prefs = await SharedPreferences.getInstance();
     final queryParameters = {'id': prefs.getString('user_id')};
-    final Map<String, dynamic> listData = await daoLoadProducts(queryParameters);
+    final Map<String, dynamic> listData =
+        await daoLoadProducts(queryParameters);
     final List<Product> loadedProducts = [];
     for (final items in listData.entries) {
       for (final item in items.value) {
@@ -110,4 +105,3 @@ class PostsRepository {
     return loadedProducts;
   }
 }
-
