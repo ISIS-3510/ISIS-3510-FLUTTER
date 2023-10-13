@@ -2,8 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unishop/models/product.dart';
 import 'package:unishop/repositories/posts_repository.dart';
+import 'package:unishop/views/home.dart';
+import 'package:unishop/views/user_posts.dart';
 
-class RecommendedView extends StatelessWidget {
+class RecommendedView extends StatefulWidget {
+  @override
+  State<RecommendedView> createState() => _RecommendedViewState();
+}
+
+class _RecommendedViewState extends State<RecommendedView> {
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,6 +54,14 @@ class RecommendedView extends StatelessWidget {
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserPostsView()));},
+        tooltip: 'Increment',
+        backgroundColor: Colors.black,
+        elevation: 4.0,
+        child:  Icon(Icons.add)
+        ),
         body:
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -63,8 +80,90 @@ class RecommendedView extends StatelessWidget {
                 }
               },
             ),
-          )
-         
+          ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          type: BottomNavigationBarType
+              .fixed, // To display all items, even if there are more than 3.
+          selectedItemColor: Colors.orange, // Color for the selected item.
+          unselectedItemColor: Colors.grey,
+          selectedLabelStyle:
+              TextStyle(color: Colors.orange), // Color for unselected items.
+
+          onTap: (index) {
+            //Handle item tap here.
+            setState(() {
+              _currentIndex = index;
+            });
+
+            //Perform navigation based on the tapped item.
+            switch (index) {
+              case 0:
+                //Navigate to the Home page.
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeView()));
+                break;
+              case 1:
+                //Navigate to the Favorites page.
+                Navigator.push(context, MaterialPageRoute(builder: (context) => RecommendedView()));
+                break;
+              case 2:
+                //Navigate to the Map page.
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()));
+                break;
+              case 3:
+                //Navigate to the History page.
+                //Navigator.push(context,
+                    //MaterialPageRoute(builder: (context) => UserPostsView()));
+                //break;
+              case 4:
+                //Navigate to the Chat page.
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+                break;
+            }
+          },
+          items: [
+            //Define the items in the footer.
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/Home.svg', width: 30, height: 30),
+              label: 'Home',
+              activeIcon: SvgPicture.asset('assets/Home.svg',
+                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                  width: 30,
+                  height: 30),
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/Favorite.svg',
+                  width: 30, height: 30),
+              label: 'Favorite',
+              activeIcon: SvgPicture.asset('assets/Favorite.svg',
+                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                  width: 30,
+                  height: 30),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.map_outlined, color: Color.fromRGBO(0, 0, 0, 0),),
+              label: 'Create',
+            ),
+            BottomNavigationBarItem(
+              icon:
+                  SvgPicture.asset('assets/History.svg', width: 30, height: 30),
+              label: 'History',
+              activeIcon: SvgPicture.asset('assets/History.svg',
+                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                  width: 30,
+                  height: 30),
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset('assets/Chat.svg', width: 30, height: 30),
+              label: 'Chat',
+              activeIcon: SvgPicture.asset('assets/Chat.svg',
+                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                  width: 30,
+                  height: 30),
+            ),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked 
       ),
     );
   }

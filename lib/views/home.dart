@@ -56,6 +56,14 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserPostsView()));},
+        tooltip: 'Increment',
+        backgroundColor: Colors.black,
+        elevation: 4.0,
+        child:  Icon(Icons.add)
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: FutureBuilder<List<Product>>(
@@ -105,9 +113,9 @@ class _HomeViewState extends State<HomeView> {
                 break;
               case 3:
                 //Navigate to the History page.
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserPostsView()));
-                break;
+                //Navigator.push(context,
+                    //MaterialPageRoute(builder: (context) => UserPostsView()));
+                //break;
               case 4:
                 //Navigate to the Chat page.
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
@@ -134,12 +142,8 @@ class _HomeViewState extends State<HomeView> {
                   height: 30),
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('assets/Map.svg', width: 30, height: 30),
-              label: 'Map',
-              activeIcon: SvgPicture.asset('assets/Map.svg',
-                  colorFilter: ColorFilter.mode(Colors.orange, BlendMode.srcIn),
-                  width: 30,
-                  height: 30),
+              icon: Icon(Icons.map_outlined, color: Color.fromRGBO(0, 0, 0, 0),),
+              label: 'Create',
             ),
             BottomNavigationBarItem(
               icon:
@@ -160,6 +164,7 @@ class _HomeViewState extends State<HomeView> {
             ),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
       ),
     );
   }
