@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:decimal/decimal.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/dao/dao.dart';
@@ -17,10 +18,9 @@ class PostsRepository {
           degree: item['degree'],
           description: item['description'],
           isNew: item['new'],
-          price: double.parse(item['price']
+          price: Decimal.parse(item['price']
               .toString()
               .substring(1)
-              .replaceAll('.', '')
               .replaceAll(',', '')),
           isRecycled: item['recycled'],
           subject: item['subject'],
@@ -50,6 +50,16 @@ class PostsRepository {
     return recommendedProducts;
   }
 
+  static Future<List<Product>> getBargains() async {
+    List<Product> products = await getListProducts();
+    List<Product> bargainProducts = <Product>[];
+    for (final product in products) {
+        bargainProducts.add(product);
+        bargainProducts.sort((a, b) => a.price.compareTo(b.price));
+    }
+    return bargainProducts;
+  }
+
   static Product createPost(
       String enteredDegree,
       String enteredDescription,
@@ -66,7 +76,7 @@ class PostsRepository {
     Product createdProduct = Product(
       title: enteredTitle,
       description: enteredDescription,
-      price: double.tryParse(enteredPrice)!,
+      price: Decimal.tryParse(enteredPrice)!,
       isNew: enteredIsNew,
       isRecycled: enteredIsRecycled,
       degree: enteredDegree,
@@ -77,6 +87,7 @@ class PostsRepository {
   }
 
   static Future<List<Product>> loadProducts() async {
+    print('hola');
     final prefs = await SharedPreferences.getInstance();
     final queryParameters = {'id': prefs.getString('user_id')};
     final Map<String, dynamic> listData =
@@ -88,11 +99,11 @@ class PostsRepository {
           Product(
             title: item['name'],
             description: item['description'],
-            price: double.parse(item['price']
+            price: Decimal.parse(item['price']
                 .toString()
                 .substring(1)
-                .replaceAll('.', '')
-                .replaceAll(',', '')),
+                .replaceAll(',', ''),
+                ),
             isNew: item['new'],
             isRecycled: item['recycled'],
             degree: item['degree'],

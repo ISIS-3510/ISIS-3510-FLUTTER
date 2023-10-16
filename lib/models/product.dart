@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 class Product {
   const Product({
     required this.title,
@@ -13,7 +15,7 @@ class Product {
 
   final String title;
   final String description;
-  final double price;
+  final Decimal price;
   final bool isNew;
   final bool isRecycled;
   final String degree;

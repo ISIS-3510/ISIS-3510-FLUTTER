@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:unishop/models/product.dart';
 import 'package:unishop/repositories/posts_repository.dart';
 import 'package:unishop/views/new_post.dart';
-//import 'dart:typed_data'; useful for Image.memory
 
 class UserPostsView extends StatefulWidget {
   const UserPostsView({super.key});
@@ -26,6 +25,7 @@ class _UserPostsViewState extends State<UserPostsView> {
     final loadedProducts = await PostsRepository.loadProducts();
     setState(() {
       _products = loadedProducts;
+      _loading = false;
     });
   }
 
@@ -45,30 +45,38 @@ class _UserPostsViewState extends State<UserPostsView> {
     });
   }
 
+  bool _loading = true;
+
   @override
   Widget build(BuildContext context) {
     Widget content = Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Uh oh ... nothing here!',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Text(
-            'Try adding a post',
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground,
-                ),
-          ),
-        ],
+      child: CircularProgressIndicator(
+        color: Colors.black,
       ),
     );
 
-    if (_products.isNotEmpty) {
+    if (_products.isEmpty && !_loading) {
+      content = Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Uh oh ... nothing here!',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Text(
+              'Try adding a post',
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                  ),
+            ),
+          ],
+        ),
+      );
+    } else if (_products.isNotEmpty) {
       content = ListView.builder(
         itemCount: _products.length,
         itemBuilder: (ctx, index) => Card(
@@ -80,7 +88,6 @@ class _UserPostsViewState extends State<UserPostsView> {
           elevation: 2,
           child: Column(
             children: [
-              //Image.memory(Uint8List.fromList(_products[index].image.codeUnits)), Will be used once image is stored as bytes
               Image.network(_products[index].image.first),
               const SizedBox(
                 height: 50,
@@ -105,7 +112,14 @@ class _UserPostsViewState extends State<UserPostsView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Publications'),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        title: Text(
+          'Your Publications',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: _addProduct,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unishop/models/product.dart';
 import 'package:unishop/repositories/posts_repository.dart';
 import 'package:unishop/widgets/image_input.dart';
 
@@ -31,12 +32,14 @@ class _NewPostViewState extends State<NewPostView> {
     final prefs = await SharedPreferences.getInstance();
     final userId =prefs.getString('user_id');
 
-    PostsRepository.createPost(enteredDegree, enteredDescription, enteredTitle, _enteredIsNew, enteredPrice, _enteredIsRecycled, enteredSubject, _selectedImage, userId.toString());
+    Product post = PostsRepository.createPost(enteredDegree, enteredDescription, enteredTitle, _enteredIsNew, enteredPrice, _enteredIsRecycled, enteredSubject, _selectedImage, userId.toString());
 
     if (!context.mounted) {
       return;
     }
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(
+      post
+    );
   }
 
   @override

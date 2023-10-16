@@ -6,12 +6,12 @@ import 'package:unishop/widgets/footer.dart';
 import 'package:unishop/widgets/header.dart';
 import 'package:unishop/widgets/product_catalog.dart';
 
-class RecommendedView extends StatefulWidget {
+class BargainView extends StatefulWidget {
   @override
-  State<RecommendedView> createState() => _RecommendedViewState();
+  State<BargainView> createState() => _BargainViewState();
 }
 
-class _RecommendedViewState extends State<RecommendedView> {
+class _BargainViewState extends State<BargainView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,7 +20,7 @@ class _RecommendedViewState extends State<RecommendedView> {
             toolbarHeight: 120,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
-            title: Header(currentIndex: 2),
+            title: Header(currentIndex: 3),
           ),
           floatingActionButton: FloatingButton(),
           body: Padding(
@@ -41,14 +41,13 @@ class _RecommendedViewState extends State<RecommendedView> {
               },
             ),
           ),
-          bottomNavigationBar: Footer(currentIndex:1),
+          bottomNavigationBar: Footer(currentIndex: 0),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked),
     );
   }
 
   Future<List<Product>> fetchProducts() async {
-    return PostsRepository.getRecommendations();
+    return PostsRepository.getBargains();
   }
 }
-
