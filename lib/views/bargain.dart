@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unishop/models/product.dart';
 import 'package:unishop/repositories/posts_repository.dart';
-import 'package:unishop/views/bargain.dart';
 import 'package:unishop/views/home.dart';
+import 'package:unishop/views/recommended.dart';
 import 'package:unishop/views/user_posts.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class RecommendedView extends StatefulWidget {
+class BargainView extends StatefulWidget {
   @override
-  State<RecommendedView> createState() => _RecommendedViewState();
+  State<BargainView> createState() => _BargainViewState();
 }
 
-class _RecommendedViewState extends State<RecommendedView> {
+class _BargainViewState extends State<BargainView> {
   int _currentIndex = 1;
 
   @override
@@ -84,9 +84,9 @@ class _RecommendedViewState extends State<RecommendedView> {
                       flex: 1,
                       child: TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: Colors.orange[300],
+                          backgroundColor: Colors.grey[300],
                         ),
-                        onPressed: redBargain,
+                        onPressed: redRecommended,
                         child: Text(
                           'Recommended',
                           style: TextStyle(
@@ -100,7 +100,7 @@ class _RecommendedViewState extends State<RecommendedView> {
                       flex: 1,
                       child: TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: Colors.grey[300],
+                          backgroundColor: Colors.orange[300],
                         ),
                         onPressed: redBargain,
                         child: Text(
@@ -244,7 +244,7 @@ class _RecommendedViewState extends State<RecommendedView> {
   }
 
   Future<List<Product>> fetchProducts() async {
-    return PostsRepository.getRecommendations();
+    return PostsRepository.getBargains();
   }
 
   void redBargain() {

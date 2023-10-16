@@ -1,9 +1,8 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unishop/models/product.dart';
 import 'package:unishop/repositories/posts_repository.dart';
+import 'package:unishop/views/bargain.dart';
 import 'package:unishop/views/recommended.dart';
 import 'package:unishop/views/user_posts.dart';
 import 'package:intl/intl.dart';
@@ -100,9 +99,7 @@ class _HomeViewState extends State<HomeView> {
               style: TextButton.styleFrom(
                 backgroundColor: Colors.grey[300],
               ),
-              onPressed: () {
-                // Acción cuando se presiona "Bargains"
-              },
+              onPressed: redBargain,
               child: Text(
                 'Bargains',
                 style: TextStyle(color: Colors.black), // Cambia el color del texto a negro
@@ -246,6 +243,15 @@ class _HomeViewState extends State<HomeView> {
     return PostsRepository.getListProducts();
   }
 
+  void redBargain() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BargainView(),
+      ),
+    );
+  }
+
   void redRecommended(){
     Navigator.pushReplacement(
             context,
@@ -272,7 +278,7 @@ class ProductCatalog extends StatelessWidget {
   }
 
   String formatMoney(String money) {
-    if (money == null || money.isEmpty) {
+    if (money.isEmpty) {
       return money;
     }
 

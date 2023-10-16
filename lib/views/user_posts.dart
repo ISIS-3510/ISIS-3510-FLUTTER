@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:unishop/models/product.dart';
 import 'package:unishop/repositories/posts_repository.dart';
 import 'package:unishop/views/new_post.dart';
-//import 'dart:typed_data'; useful for Image.memory
 
 class UserPostsView extends StatefulWidget {
   const UserPostsView({super.key});
@@ -80,7 +79,6 @@ class _UserPostsViewState extends State<UserPostsView> {
           elevation: 2,
           child: Column(
             children: [
-              //Image.memory(Uint8List.fromList(_products[index].image.codeUnits)), Will be used once image is stored as bytes
               Image.network(_products[index].image.first),
               const SizedBox(
                 height: 50,

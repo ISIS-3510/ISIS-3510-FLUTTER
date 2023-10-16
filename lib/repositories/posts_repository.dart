@@ -50,6 +50,16 @@ class PostsRepository {
     return recommendedProducts;
   }
 
+  static Future<List<Product>> getBargains() async {
+    List<Product> products = await getListProducts();
+    List<Product> bargainProducts = <Product>[];
+    for (final product in products) {
+        bargainProducts.add(product);
+        bargainProducts.sort((a, b) => a.price.compareTo(b.price));
+    }
+    return bargainProducts;
+  }
+
   static Product createPost(
       String enteredDegree,
       String enteredDescription,
