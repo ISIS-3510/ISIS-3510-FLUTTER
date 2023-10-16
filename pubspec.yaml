@@ -47,6 +47,7 @@ dependencies:
   flutter_riverpod: ^2.4.3
   firebase_storage: ^11.2.8
   firebase_core: ^2.17.0
+  decimal: ^2.3.3
 
 
 dev_dependencies:

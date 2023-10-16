@@ -27,7 +27,6 @@ dynamic daoLogIn() async {
     url,
     headers: headers,
   );
-  //print(response.body);
   return response;
 }
 
@@ -97,7 +96,6 @@ dynamic daoCreatePost(
     headers: headers,
     body: jsonEncode(requestBody),
   );
-  print(response.body);
   return json.decode(response.body);
 }
 

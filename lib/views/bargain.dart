@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+import 'package:decimal/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unishop/models/product.dart';
@@ -285,13 +287,11 @@ class ProductCatalog extends StatelessWidget {
     if (money.isEmpty) {
       return money;
     }
-
-    final format = NumberFormat("#,##0", "en_US");
+    final format = NumberFormat.decimalPattern("en_US");
     try {
-      var moneyAmount = double.parse(money);
+      var moneyAmount = DecimalIntl(Decimal.parse(money));
       return format.format(moneyAmount);
     } catch (e) {
-      // Handle the case where the input is not a valid number.
       return money;
     }
   }
