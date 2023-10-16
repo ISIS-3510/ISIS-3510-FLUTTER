@@ -73,11 +73,11 @@ flutter:
     - assets/footerLogin.png
     - assets/headerSingUp.png
     - assets/headerSingUp.png
-    - assets/Chat.svg
+    - assets/Profile.svg
     - assets/Favorite.svg
-    - assets/History.svg
+    - assets/Search.svg
+    - assets/Posts.svg
     - assets/Home.svg
-    - assets/Map.svg
     - assets/NotFound.png
   
 
