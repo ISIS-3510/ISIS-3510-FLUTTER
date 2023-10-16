@@ -1,8 +1,6 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/models/product.dart';
+import 'package:unishop/repositories/posts_repository.dart';
 import 'package:unishop/views/new_post.dart';
 //import 'dart:typed_data'; useful for Image.memory
 
@@ -24,48 +22,8 @@ class _UserPostsViewState extends State<UserPostsView> {
     _loadProducts();
   }
 
-  void _loadProducts() async {
-    final prefs = await SharedPreferences.getInstance();
-    final queryParameters = {'id': prefs.getString('user_id')};
-    final url = Uri.https(
-        'creative-mole-46.hasura.app', 'api/rest/post/user', queryParameters);
-
-    final response = await http.get(url, headers: {
-      'Content-Type': 'application/json',
-      'x-hasura-admin-secret':
-          'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
-    });
-
-    if (response.statusCode >= 400) {
-      throw Exception('Failed to fetch products. Please try again later.');
-    }
-
-    if (response.body == 'null') {
-      return;
-    }
-    final Map<String, dynamic> listData = json.decode(response.body);
-    final List<Product> loadedProducts = [];
-    for (final items in listData.entries) {
-      for (final item in items.value) {
-        loadedProducts.add(
-          Product(
-            title: item['name'],
-            description: item['description'],
-            price: double.parse(item['price']
-                .toString()
-                .substring(1)
-                .replaceAll('.', '')
-                .replaceAll(',', '')),
-            isNew: item['new'],
-            isRecycled: item['recycled'],
-            degree: item['degree'],
-            subject: item['subject'],
-            image: item['urlsImages'],
-          ),
-        );
-      }
-    }
-
+  Future<void> _loadProducts() async {
+    final loadedProducts = await PostsRepository.loadProducts();
     setState(() {
       _products = loadedProducts;
     });
@@ -123,7 +81,7 @@ class _UserPostsViewState extends State<UserPostsView> {
           child: Column(
             children: [
               //Image.memory(Uint8List.fromList(_products[index].image.codeUnits)), Will be used once image is stored as bytes
-              Image.network(_products[index].image),
+              Image.network(_products[index].image.first),
               const SizedBox(
                 height: 50,
               ),

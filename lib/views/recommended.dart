@@ -1,83 +1,132 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unishop/models/degree_relations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:unishop/models/product.dart';
+import 'package:unishop/repositories/posts_repository.dart';
+import 'package:unishop/views/home.dart';
+import 'package:unishop/views/user_posts.dart';
+import 'package:intl/intl.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
-class Product {
-  final String id;
-  final String degree;
-  final String description;
-  final bool isNew;
-  final String price;
-  final bool recycled;
-  final String subject;
-  final List<String> imageUrls;
-  final String date;
-  final String name;
-  final String userName;
-
-  Product({
-    required this.id,
-    required this.degree,
-    required this.description,
-    required this.isNew,
-    required this.price,
-    required this.recycled,
-    required this.subject,
-    required this.imageUrls,
-    required this.date,
-    required this.name,
-    required this.userName,
-  });
+class RecommendedView extends StatefulWidget {
+  @override
+  State<RecommendedView> createState() => _RecommendedViewState();
 }
 
-class RecommendedView extends StatelessWidget {
+class _RecommendedViewState extends State<RecommendedView> {
+  int _currentIndex = 1;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            margin:
-                EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 0), // Add top margin here
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Row(
+          appBar: AppBar(
+            toolbarHeight: 120,
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            title: Column(
               children: [
-                //Use SvgPicture.asset to display the SVG icon
-                Padding(
-                  padding: EdgeInsets.only(left: 25.0), // Add left padding here
-                  child: SvgPicture.asset(
-                    'assets/Favorite.svg', // Replace with your SVG file path
-                    width: 12, // Set the width of the SVG icon
-                    height: 12, // Set the height of the SVG icon
-                    colorFilter: ColorFilter.mode(Colors.black,
-                        BlendMode.srcIn), // Set the color of the SVG icon
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  margin: EdgeInsets.fromLTRB(8.0, 10.0, 8.0, 0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 25.0),
+                        child: SvgPicture.asset(
+                          'assets/Favorite.svg',
+                          width: 12,
+                          height: 12,
+                          colorFilter: ColorFilter.mode(
+                            Colors.black,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10.0),
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Search Products',
+                            border: InputBorder.none,
+                          ),
+                          style: TextStyle(fontSize: 12.0),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(width: 10.0),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search Products',
-                      border: InputBorder.none,
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.grey[300],
+                        ),
+                        onPressed: redAllProducts,
+                        child: Text(
+                          'All Products',
+                          style: TextStyle(
+                              color: Colors
+                                  .black), // Cambia el color del texto a negro
+                        ),
+                      ),
                     ),
-                    style: TextStyle(fontSize: 12.0),
-                  ),
+                    SizedBox(width: 5),
+                    Expanded(
+                      flex: 1,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.orange[300],
+                        ),
+                        onPressed: redRecommended,
+                        child: Text(
+                          'Recommended',
+                          style: TextStyle(
+                              color: Colors
+                                  .black), // Cambia el color del texto a negro
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Expanded(
+                      flex: 1,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.grey[300],
+                        ),
+                        onPressed: () {
+                          // Acción cuando se presiona "Bargains"
+                        },
+                        child: Text(
+                          'Bargains',
+                          style: TextStyle(
+                              color: Colors
+                                  .black), // Cambia el color del texto a negro
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-        ),
-        body:
-          Padding(
+          floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserPostsView()));
+              },
+              tooltip: 'Increment',
+              backgroundColor: Colors.black,
+              elevation: 4.0,
+              child: Icon(Icons.add)),
+          body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: FutureBuilder<List<Product>>(
               future: fetchProducts(),
@@ -94,110 +143,267 @@ class RecommendedView extends StatelessWidget {
                 }
               },
             ),
-          )
-         
-      ),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            type: BottomNavigationBarType
+                .fixed, // To display all items, even if there are more than 3.
+            selectedItemColor: Colors.orange, // Color for the selected item.
+            unselectedItemColor: Colors.grey,
+            selectedLabelStyle:
+                TextStyle(color: Colors.orange), // Color for unselected items.
+
+            onTap: (index) {
+              //Handle item tap here.
+              setState(() {
+                _currentIndex = index;
+              });
+
+              //Perform navigation based on the tapped item.
+              switch (index) {
+                case 0:
+                  //Navigate to the Home page.
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomeView()));
+                  break;
+                case 1:
+                  //Navigate to the Favorites page.
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RecommendedView()));
+                  break;
+                case 2:
+                  //Navigate to the Map page.
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()));
+                  break;
+                case 3:
+                //Navigate to the History page.
+                //Navigator.push(context,
+                //MaterialPageRoute(builder: (context) => UserPostsView()));
+                //break;
+                case 4:
+                  //Navigate to the Chat page.
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+                  break;
+              }
+            },
+            items: [
+              //Define the items in the footer.
+              BottomNavigationBarItem(
+                icon:
+                    SvgPicture.asset('assets/Home.svg', width: 30, height: 30),
+                label: 'Home',
+                activeIcon: SvgPicture.asset('assets/Home.svg',
+                    colorFilter:
+                        ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                    width: 30,
+                    height: 30),
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/Favorite.svg',
+                    width: 30, height: 30),
+                label: 'Favorite',
+                activeIcon: SvgPicture.asset('assets/Favorite.svg',
+                    colorFilter:
+                        ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                    width: 30,
+                    height: 30),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.map_outlined,
+                  color: Color.fromRGBO(0, 0, 0, 0),
+                ),
+                label: 'Create',
+              ),
+              BottomNavigationBarItem(
+                icon: SvgPicture.asset('assets/History.svg',
+                    width: 30, height: 30),
+                label: 'History',
+                activeIcon: SvgPicture.asset('assets/History.svg',
+                    colorFilter:
+                        ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                    width: 30,
+                    height: 30),
+              ),
+              BottomNavigationBarItem(
+                icon:
+                    SvgPicture.asset('assets/Chat.svg', width: 30, height: 30),
+                label: 'Chat',
+                activeIcon: SvgPicture.asset('assets/Chat.svg',
+                    colorFilter:
+                        ColorFilter.mode(Colors.orange, BlendMode.srcIn),
+                    width: 30,
+                    height: 30),
+              ),
+            ],
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked),
     );
   }
 
   Future<List<Product>> fetchProducts() async {
-    final url = Uri.parse('https://creative-mole-46.hasura.app/api/rest/post/all');
-    final headers = {
-      'content-type': 'application/json',
-      'x-hasura-admin-secret': 'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
-    };
+    return PostsRepository.getRecommendations();
+  }
 
-    final response = await http.get(url, headers: headers);
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body);
-      final List<dynamic> postList = jsonData['post'];
+  void redRecommended() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RecommendedView(),
+      ),
+    );
+  }
 
-      final List<Product> products = postList.map((item) {
-        final imageUrls = (item['urlsImages'] as String).split(';');
-        return Product(
-          id: item['id'],
-          degree: item['degree'],
-          description: item['description'],
-          isNew: item['new'],
-          price: item['price'],
-          recycled: item['recycled'],
-          subject: item['subject'],
-          imageUrls: imageUrls,
-          date: item['date'],
-          name: item['name'],
-          userName: item['user']['username'],
-        );
-      }).toList();
-      final prefs = await SharedPreferences.getInstance();
-      final recommendedProducts = <Product>[];
-      for (final product in products) {
-        if (product.degree == prefs.getString('user_degree') || DegreeRelations().degreeRelations[prefs.getString('user_degree')]!.contains(product.degree) ) {
-          recommendedProducts.add(product);
-        }
-      }
-      return recommendedProducts;
-    } else {
-      throw Exception('Error al cargar los productos');
-    }
+  void redAllProducts() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomeView(),
+      ),
+    );
   }
 }
 
 class ProductCatalog extends StatelessWidget {
   final List<Product> products;
-
-  ProductCatalog({required this.products});
   bool _isValidImageUrl(String imageUrl) {
     return imageUrl.startsWith('h'.trim());
   }
 
+  String formatMoney(String money) {
+    if (money == null || money.isEmpty) {
+      return money;
+    }
+
+    final format = NumberFormat("#,##0", "en_US");
+    try {
+      var moneyAmount = double.parse(money);
+      return format.format(moneyAmount);
+    } catch (e) {
+      // Handle the case where the input is not a valid number.
+      return money;
+    }
+  }
+
+  ProductCatalog({required this.products});
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Dos productos por fila
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
+        crossAxisCount: 2,
+        crossAxisSpacing: 0.0,
+        mainAxisSpacing: 0.0,
+        childAspectRatio: 0.7,
       ),
       itemCount: products.length,
       itemBuilder: (BuildContext context, int index) {
         final product = products[index];
-        return Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Ajusta el radio según tus preferencias
-          ),
-            child: SizedBox(
-              height: 00,
-              child: Column(
-                children: [
-                  if (_isValidImageUrl(product.imageUrls.first))
-                    Image.network(
-                      product.imageUrls.first,
-                      fit: BoxFit.cover,
-                      height: 100,
-                      width: double.infinity,
+        return Container(
+          color: Colors.white, // Set the background color of the container
+          child: Card(
+            elevation: 5,
+            color: Colors.white, // Set the background color of the card
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    if (_isValidImageUrl(product.image.first))
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top:
+                                10.0), // Adjust the top padding value as needed
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Image.network(
+                            product.image.first,
+                            fit: BoxFit.cover,
+                            height: 150,
+                            width: 150,
+                          ),
+                        ),
+                      )
+                    else
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top:
+                                10.0), // Adjust the top padding value as needed
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Image.asset(
+                            'assets/NotFound.png',
+                            fit: BoxFit.cover,
+                            height: 150,
+                            width: 150,
+                          ),
+                        ),
+                      ),
+                    ListTile(
+                      title: Text(
+                        product.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Padding(
+                        padding: EdgeInsets.only(
+                            top:
+                                13.0), // Adjust the top padding value as needed
+                        child: Text(
+                          "\$ ${formatMoney(product.price.toString())}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.5,
+                          ),
+                        ),
+                      ),
                     )
-                  else
-                    Image.asset(
-                      'assets/NotFound.png', // Replace with the path to your placeholder image
-                      fit: BoxFit.cover,
-                      height: 100,
-                      width: double.infinity,
+                  ],
+                ),
+                Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      icon: FaIcon(
+                        FontAwesomeIcons.heart,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                      onPressed: () {
+                        // Handle the icon tap here
+                      },
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 16.0,
+                      left: 17.0), // Adjust the top padding value as needed
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      product.getUsername(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Color.fromARGB(141, 89, 89, 89),
+                        fontSize: 13,
+                      ),
                     ),
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-                  //   child: Text(
-                  //     product.price,
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 16,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            )
+                  ),
+                )
+              ],
+            ),
+          ),
         );
       },
     );
