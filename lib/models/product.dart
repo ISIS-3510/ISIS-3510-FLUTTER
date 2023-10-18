@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 class Product {
   const Product({
     required this.title,
@@ -8,14 +10,23 @@ class Product {
     required this.degree,
     required this.subject,
     required this.image,
+    this.user,
   });
 
   final String title;
   final String description;
-  final double price;
+  final Decimal price;
   final bool isNew;
   final bool isRecycled;
   final String degree;
   final String subject;
-  final String image;
+  final List<String> image;
+  final Map<String, dynamic>? user;
+
+  String getUsername() {
+    if(user == null) {
+      return "Anónimo";
+    }
+    return user!['username'];
+  }
 }

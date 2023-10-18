@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "497569276486",
+    "firebase_url": "https://image-repository-53ee3-default-rtdb.firebaseio.com",
+    "project_id": "image-repository-53ee3",
+    "storage_bucket": "image-repository-53ee3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497569276486:android:98bfcac41e7b3701882047",
+        "android_client_info": {
+          "package_name": "com.example.unishop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqE2-moGk0B73AzrA09e1nnaHH0lrn0Qc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

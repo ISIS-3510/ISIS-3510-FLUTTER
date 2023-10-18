@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:unishop/repositories/users_repository.dart';
 import 'dart:convert';
 import 'package:unishop/views/home.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
@@ -10,27 +10,26 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-
   TextEditingController nameController = TextEditingController();
-  bool isValidNameText = false;
+  bool isValidNameText = true;
 
   TextEditingController userNameController = TextEditingController();
-  bool isValidUserNameText = false;
+  bool isValidUserNameText = true;
 
   TextEditingController degreeController = TextEditingController();
-  bool isValidDegreeText = false;
+  bool isValidDegreeText = true;
 
   TextEditingController phoneController = TextEditingController();
-  bool isValidPhoneText = false;
+  bool isValidPhoneText = true;
 
   TextEditingController emailController = TextEditingController();
-  bool isValidEmailText = false;
+  bool isValidEmailText = true;
 
   TextEditingController passwordController = TextEditingController();
-  bool isValidPasswordText = false;
+  bool isValidPasswordText = true;
 
   TextEditingController confirmPasswordController = TextEditingController();
-  bool isValidConfirmPasswordText = false;
+  bool isValidConfirmPasswordText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +48,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 160,
               ),
               Container(
-                margin: EdgeInsets.only(right: 115.0, top: 10,),
+                margin: EdgeInsets.only(
+                  right: 115.0,
+                  top: 10,
+                ),
                 child: Text(
                   "Welcome to Unishop",
                   style: TextStyle(
@@ -83,13 +85,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       border: OutlineInputBorder(),
                       errorText: isValidNameText ? null : 'Invalid Name',
                     ),
-                    style: TextStyle(
-                      color: Colors.black
-                    ),
+                    style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.name,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidNameText = isValidName(newValue);
+                        isValidNameText = UsersRepository.isValidName(newValue);
                       });
                     },
                   ),
@@ -104,15 +104,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     decoration: InputDecoration(
                       labelText: 'Username',
                       border: OutlineInputBorder(),
-                      errorText: isValidUserNameText ? null : 'Invalid Username',
+                      errorText:
+                          isValidUserNameText ? null : 'Invalid Username',
                     ),
-                    style: TextStyle(
-                          color: Colors.black
-                        ),
+                    style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.name,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidUserNameText = isValidUserName(newValue);
+                        isValidUserNameText =
+                            UsersRepository.isValidUserName(newValue);
                       });
                     },
                   ),
@@ -129,13 +129,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       border: OutlineInputBorder(),
                       errorText: isValidDegreeText ? null : 'Invalid Degree',
                     ),
-                    style: TextStyle(
-                          color: Colors.black
-                        ),
+                    style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.name,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidDegreeText = isValidDegree(newValue);
+                        isValidDegreeText =
+                            UsersRepository.isValidDegree(newValue);
                       });
                     },
                   ),
@@ -151,15 +150,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       labelText: 'Phone',
                       border: OutlineInputBorder(),
                       errorText: isValidPhoneText ? null : 'Invalid Phone',
-
                     ),
-                    style: TextStyle(
-                          color: Colors.black
-                        ),
+                    style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.phone,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidPhoneText = isValidPhone(newValue);
+                        isValidPhoneText =
+                            UsersRepository.isValidPhone(newValue);
                       });
                     },
                   ),
@@ -172,18 +169,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: TextField(
                     controller: emailController,
                     decoration: InputDecoration(
-                      labelText: 'Email                                           @uniandes.edu.co',
+                      labelText:
+                          'Email                                           @uniandes.edu.co',
                       border: OutlineInputBorder(),
                       errorText: isValidEmailText ? null : 'Invalid Email',
-
                     ),
-                    style: TextStyle(
-                          color: Colors.black
-                        ),
+                    style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidEmailText = isValidEmail(newValue);
+                        isValidEmailText =
+                            UsersRepository.isValidEmail(newValue);
                       });
                     },
                   ),
@@ -198,18 +194,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(),
-                      errorText: isValidPasswordText ? null : 'Invalid Password',
-
+                      errorText:
+                          isValidPasswordText ? null : 'Invalid Password',
                     ),
-                    
-                    style: TextStyle(
-                          color: Colors.black
-                        ),
+                    style: TextStyle(color: Colors.black),
                     obscureText: true,
                     keyboardType: TextInputType.visiblePassword,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidPasswordText = isValidPassword(newValue);
+                        isValidPasswordText =
+                            UsersRepository.isValidPassword(newValue);
                       });
                     },
                   ),
@@ -224,16 +218,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     decoration: InputDecoration(
                       labelText: 'Confirm Password',
                       border: OutlineInputBorder(),
-                      errorText: isValidConfirmPasswordText ? null : 'Passwords do not match',
+                      errorText: isValidConfirmPasswordText
+                          ? null
+                          : 'Passwords do not match',
                     ),
-                    style: TextStyle(
-                          color: Colors.black
-                        ),
+                    style: TextStyle(color: Colors.black),
                     obscureText: true,
                     keyboardType: TextInputType.visiblePassword,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidConfirmPasswordText = isValidConfirmPassword(newValue, passwordController.text);
+                        isValidConfirmPasswordText =
+                            UsersRepository.isValidConfirmPassword(
+                                newValue, passwordController.text);
                       });
                     },
                   ),
@@ -241,7 +237,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               Container(
                 margin: EdgeInsets.only(right: 40.0, top: 10, left: 40),
-                child: Text("by clicking on Sing Up you agree to the privacy policy and data consent.",
+                child: Text(
+                  "by clicking on Sign Up you agree to the privacy policy and data consent.",
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: "Outfit",
@@ -265,7 +262,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       // Realizar la acción de signUp
                       signUp();
                     } else {
-                      showAlert("Error", "Complete the fields correctly!", Colors.red);
+                      showAlert("Error", "Complete the fields correctly!",
+                          Colors.red);
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -273,7 +271,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fixedSize: Size(330, 50),
                   ),
                   child: Text(
-                    "Sing Up",
+                    "Sign Up",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
@@ -286,13 +284,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('Already have an account?', style: TextStyle(color: Colors.black),),
+                  Text(
+                    'Already have an account?',
+                    style: TextStyle(color: Colors.black),
+                  ),
                   TextButton(
                     onPressed: () {
                       // Navegar a la pantalla de inicio de sesión
                       Navigator.of(context).pop();
                     },
-                    child: Text('Sing In', style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 0, 0, 0),)),
+                    child: Text('Sign In',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        )),
                   ),
                 ],
               ),
@@ -303,129 +308,50 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  bool isValidName(String name) {
-    bool rta = false;
-    if(name.trim().isNotEmpty){
-      rta = true;
-    }
-    return rta;
-  }
-
-  bool isValidUserName(String userName) {
-    bool rta = false;
-
-    if(userName.trim().isNotEmpty){
-      rta = true;
-    }
-
-    return rta;
-  }
-
-  bool isValidDegree(String degree) {
-    bool rta = false;
-
-    if(degree.trim().isNotEmpty){
-      rta = true;
-    }
-
-    return rta;
-  }
-
-  bool isValidPhone(String phone) {
-    bool rta = false;
-
-    if(phone.length == 10){
-      rta = true;
-    }
-    return rta;
-  }
-
-  bool isValidEmail(String email) {
-    RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
-    return emailRegExp.hasMatch(email);
-  }
-
-  bool isValidPassword(String password) {
-    if (password.length < 8) {
-      return false;
-    }
-    if (!password.contains(RegExp(r'[A-Z]'))) {
-      return false;
-    }
-    if (!password.contains(RegExp(r'[0-9]'))) {
-      return false;
-    }
-    if (!password.contains(RegExp(r'[!@#\$%^&*()_+{}\[\]:;<>,.?~\\-]'))) {
-      return false;
-    }
-    return true;
-  }
-
-  bool isValidConfirmPassword(String confirmPassword, String password) {
-
-    return confirmPassword == password;
-  }
-
   void showAlert(String title, String message, Color backgroundColor) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Container(
-              width: 100,
-              height: 30,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Text(message),
-                    // Aquí puedes agregar más widgets si es necesario
-                  ],
-                ),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Container(
+            width: 100,
+            height: 30,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Text(message),
+                  // Aquí puedes agregar más widgets si es necesario
+                ],
               ),
             ),
-            backgroundColor: backgroundColor,
-            actions: <Widget>[
-              TextButton(
-                child: Text(
-                  'OK',
-                  style: TextStyle(color: Colors.white), // Cambia el color del texto a blanco
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+          ),
+          backgroundColor: backgroundColor,
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'OK',
+                style: TextStyle(
+                    color: Colors.white), // Cambia el color del texto a blanco
               ),
-            ],
-          );
-        },
-      );
-    }
-
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<void> signUp() async {
-    final url = Uri.parse('https://creative-mole-46.hasura.app/api/rest/users/signup');
-
-    final Map<String, dynamic> requestBody = {
-      "object": {
-        "email": emailController.text,
-        "name": nameController.text,
-        "password": passwordController.text,
-        "phone": phoneController.text,
-        "username": userNameController.text,
-        "degree": degreeController.text,
-      }
-    };
-
-    final headers = {
-      "content-type": "application/json",
-      "x-hasura-admin-secret": "mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ",
-    };
-
-    final response = await http.post(
-      url,
-      headers: headers,
-      body: jsonEncode(requestBody),
-    );
+    final response = await UsersRepository.signUp(
+        emailController.text,
+        nameController.text,
+        passwordController.text,
+        phoneController.text,
+        userNameController.text,
+        degreeController.text);
 
     if (response.statusCode == 200) {
       // Registro exitoso
@@ -442,14 +368,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       final userData = jsonResponse['data']['insert_users_one'];
       print("Registro exitoso: ${userData['name']}");
 
-      
-
-    //Navigator.of(context).pushNamed("/feed");
-
+      //Navigator.of(context).pushNamed("/feed");
     } else if (response.statusCode == 400) {
       // Registro no exitoso debido a duplicación de username (u otro error)
       final jsonResponse = json.decode(response.body);
-      showAlert("ERROR", 'The username, email and phone must be unique!', Colors.black);
+      showAlert("ERROR", 'The username, email and phone must be unique!',
+          Colors.black);
       final errors = jsonResponse['errors'];
       final errorMessage = errors[0]['message'];
       print("Error en el registro: $errorMessage");
@@ -461,5 +385,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
       print("Respuesta del servidor: ${response.body}");
     }
   }
-
 }
