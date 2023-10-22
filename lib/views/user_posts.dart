@@ -1,4 +1,7 @@
+import 'package:decimal/decimal.dart';
+import 'package:decimal/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:unishop/models/product.dart';
 import 'package:unishop/repositories/posts_repository.dart';
 import 'package:unishop/views/new_post.dart';
@@ -47,6 +50,19 @@ class _UserPostsViewState extends State<UserPostsView> {
 
   bool _loading = true;
 
+  String formatMoney(String money) {
+    if (money.isEmpty) {
+      return money;
+    }
+    final format = NumberFormat.decimalPattern("en_US");
+    try {
+      var moneyAmount = DecimalIntl(Decimal.parse(money));
+      return format.format(moneyAmount);
+    } catch (e) {
+      return money;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content = Center(
@@ -78,31 +94,63 @@ class _UserPostsViewState extends State<UserPostsView> {
       );
     } else if (_products.isNotEmpty) {
       content = ListView.builder(
+        padding: EdgeInsets.all(8),
         itemCount: _products.length,
         itemBuilder: (ctx, index) => Card(
           margin: const EdgeInsets.all(8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
+            side: BorderSide(color: Color.fromARGB(20, 17, 19, 21))
           ),
           clipBehavior: Clip.hardEdge,
-          elevation: 2,
+          elevation: 5,
           child: Column(
             children: [
               Image.network(_products[index].image.first),
-              const SizedBox(
-                height: 50,
+              Container(
+                color: Color.fromARGB(255, 217, 217, 217),
+                height: 25,
               ),
-              Row(
-                children: [
-                  Text(
-                    _products[index].title,
-                    style: Theme.of(context).textTheme.titleLarge,
-                    textAlign: TextAlign.left,
-                  ),
-                ],
+              Container(
+                color: Color.fromARGB(255, 217, 217, 217),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                      child: Text(
+                        _products[index].title,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(
-                height: 50,
+              Container(
+                color: Color.fromARGB(255, 217, 217, 217),
+                height: 15,
+              ),
+              Container(
+                color: Color.fromARGB(255, 217, 217, 217),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                      child: Text(
+                        "\$ ${formatMoney(_products[index].price.toString())}",
+                        style: Theme.of(context).textTheme.titleLarge,
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                color: Color.fromARGB(255, 217, 217, 217),
+                height: 25,
               ),
             ],
           ),
@@ -116,9 +164,7 @@ class _UserPostsViewState extends State<UserPostsView> {
         foregroundColor: Colors.black,
         title: Text(
           'Your Publications',
-          style: TextStyle(
-            color: Colors.black,
-          ),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         actions: [
           IconButton(
