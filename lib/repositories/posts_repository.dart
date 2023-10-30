@@ -87,7 +87,6 @@ class PostsRepository {
   }
 
   static Future<List<Product>> loadProducts() async {
-    print('hola');
     final prefs = await SharedPreferences.getInstance();
     final queryParameters = {'id': prefs.getString('user_id')};
     final Map<String, dynamic> listData =
@@ -109,6 +108,7 @@ class PostsRepository {
             degree: item['degree'],
             subject: item['subject'],
             image: [item['urlsImages']],
+            user: item['user'],
           ),
         );
       }
