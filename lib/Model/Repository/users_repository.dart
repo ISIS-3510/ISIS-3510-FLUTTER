@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:unishop/dao/dao.dart';
+import 'package:unishop/Model/DAO/dao.dart';
 
 class UsersRepository {
   static Future<Response> signUp (String email, String name, String password, String phone,

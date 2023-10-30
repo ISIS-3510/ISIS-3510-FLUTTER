@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:unishop/dao/dao.dart';
+import 'package:unishop/Model/DAO/dao.dart';
 
 class ImageInput extends StatefulWidget {
   const ImageInput({super.key, required this.onPickImage});

@@ -2,8 +2,8 @@ import 'package:decimal/decimal.dart';
 import 'package:decimal/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:unishop/models/product.dart';
-import 'package:unishop/repositories/posts_repository.dart';
+import 'package:unishop/Model/DTO/product_dto.dart';
+import 'package:unishop/Model/Repository/posts_repository.dart';
 import 'package:unishop/views/new_post.dart';
 
 class UserPostsView extends StatefulWidget {
@@ -16,7 +16,7 @@ class UserPostsView extends StatefulWidget {
 }
 
 class _UserPostsViewState extends State<UserPostsView> {
-  List<Product> _products = [];
+  List<ProductDTO> _products = [];
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _UserPostsViewState extends State<UserPostsView> {
   }
 
   void _addProduct() async {
-    final newProduct = await Navigator.of(context).push<Product>(
+    final newProduct = await Navigator.of(context).push<ProductDTO>(
       MaterialPageRoute(
         builder: (ctx) => const NewPostView(),
       ),

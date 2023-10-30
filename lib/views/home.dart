@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:unishop/models/product.dart';
-import 'package:unishop/repositories/posts_repository.dart';
+import 'package:unishop/Model/DTO/product_dto.dart';
+import 'package:unishop/Model/Repository/posts_repository.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'package:unishop/widgets/footer.dart';
 import 'package:unishop/widgets/header.dart';
@@ -26,7 +26,7 @@ class _HomeViewState extends State<HomeView> {
         floatingActionButton: FloatingButton(),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: FutureBuilder<List<Product>>(
+          child: FutureBuilder<List<ProductDTO>>(
             future: fetchProducts(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -48,7 +48,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Future<List<Product>> fetchProducts() async {
+  Future<List<ProductDTO>> fetchProducts() async {
     return PostsRepository.getListProducts();
   }
 }

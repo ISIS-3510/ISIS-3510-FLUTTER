@@ -1,9 +1,9 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unishop/models/degree_relations.dart';
-import 'package:unishop/models/product.dart';
-import 'package:unishop/repositories/posts_repository.dart';
+import 'package:unishop/Model/degree_relations.dart';
+import 'package:unishop/Model/DTO/product_dto.dart';
+import 'package:unishop/Model/Repository/posts_repository.dart';
 import 'package:unishop/widgets/image_input.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 
@@ -52,7 +52,7 @@ class _NewPostViewState extends State<NewPostView> {
     final userId =prefs.getString('user_id');
 
     if (_formKey.currentState!.validate() && _selectedImage.isNotEmpty) {
-      Product post = PostsRepository.createPost(enteredDegree.trim(), enteredDescription.trim(), enteredTitle.trim(), _enteredIsNew, enteredPrice, _enteredIsRecycled, enteredSubject.trim(), _selectedImage, userId.toString());
+      ProductDTO post = PostsRepository.createPost(enteredDegree.trim(), enteredDescription.trim(), enteredTitle.trim(), _enteredIsNew, enteredPrice, _enteredIsRecycled, enteredSubject.trim(), _selectedImage, userId.toString());
       
       if (!context.mounted) {
         return;

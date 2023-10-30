@@ -2,19 +2,19 @@ import 'dart:convert';
 import 'package:decimal/decimal.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unishop/dao/dao.dart';
-import 'package:unishop/models/degree_relations.dart';
-import 'package:unishop/models/product.dart';
+import 'package:unishop/Model/DAO/dao.dart';
+import 'package:unishop/Model/degree_relations.dart';
+import 'package:unishop/Model/DTO/product_dto.dart';
 
 class PostsRepository {
-  static Future<List<Product>> getListProducts() async {
+  static Future<List<ProductDTO>> getListProducts() async {
     Response data = await daoGetProducts();
     final jsonData = json.decode(data.body);
     if (data.statusCode == 200) {
       final List<dynamic> postList = jsonData['post'];
-      final List<Product> products = postList.map((item) {
+      final List<ProductDTO> products = postList.map((item) {
         final imageUrls = (item['urlsImages'] as String).split(';');
-        return Product(
+        return ProductDTO(
           degree: item['degree'],
           description: item['description'],
           isNew: item['new'],
@@ -35,9 +35,9 @@ class PostsRepository {
     }
   }
 
-  static Future<List<Product>> getRecommendations() async {
-    List<Product> products = await getListProducts();
-    final recommendedProducts = <Product>[];
+  static Future<List<ProductDTO>> getRecommendations() async {
+    List<ProductDTO> products = await getListProducts();
+    final recommendedProducts = <ProductDTO>[];
     final prefs = await SharedPreferences.getInstance();
     for (final product in products) {
       if (product.degree == prefs.getString('user_degree') ||
@@ -50,9 +50,9 @@ class PostsRepository {
     return recommendedProducts;
   }
 
-  static Future<List<Product>> getBargains() async {
-    List<Product> products = await getListProducts();
-    List<Product> bargainProducts = <Product>[];
+  static Future<List<ProductDTO>> getBargains() async {
+    List<ProductDTO> products = await getListProducts();
+    List<ProductDTO> bargainProducts = <ProductDTO>[];
     for (final product in products) {
         bargainProducts.add(product);
         bargainProducts.sort((a, b) => a.price.compareTo(b.price));
@@ -60,7 +60,7 @@ class PostsRepository {
     return bargainProducts;
   }
 
-  static Product createPost(
+  static ProductDTO createPost(
       String enteredDegree,
       String enteredDescription,
       String enteredTitle,
@@ -73,7 +73,7 @@ class PostsRepository {
     daoCreatePost(enteredDegree, enteredDescription, enteredTitle, enteredIsNew,
         enteredPrice, enteredIsRecycled, enteredSubject, image, userId);
     List<String> images = [image];
-    Product createdProduct = Product(
+    ProductDTO createdProduct = ProductDTO(
       title: enteredTitle,
       description: enteredDescription,
       price: Decimal.tryParse(enteredPrice)!,
@@ -86,16 +86,16 @@ class PostsRepository {
     return createdProduct;
   }
 
-  static Future<List<Product>> loadProducts() async {
+  static Future<List<ProductDTO>> loadProducts() async {
     final prefs = await SharedPreferences.getInstance();
     final queryParameters = {'id': prefs.getString('user_id')};
     final Map<String, dynamic> listData =
         await daoLoadProducts(queryParameters);
-    final List<Product> loadedProducts = [];
+    final List<ProductDTO> loadedProducts = [];
     for (final items in listData.entries) {
       for (final item in items.value) {
         loadedProducts.add(
-          Product(
+          ProductDTO(
             title: item['name'],
             description: item['description'],
             price: Decimal.parse(item['price']
