@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
-import 'package:unishop/Model/Repository/posts_repository.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'package:unishop/widgets/footer.dart';
 import 'package:unishop/widgets/header.dart';
 import 'package:unishop/widgets/product_catalog.dart';
+import 'package:unishop/Controller/bargain_Controller.dart';
 
 class BargainView extends StatefulWidget {
   @override
@@ -48,6 +48,7 @@ class _BargainViewState extends State<BargainView> {
   }
 
   Future<List<ProductDTO>> fetchProducts() async {
-    return PostsRepository.getBargains();
+    BargainController controller = BargainController();
+    return controller.getBargains();
   }
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
-import 'package:unishop/Model/Repository/posts_repository.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'package:unishop/widgets/footer.dart';
 import 'package:unishop/widgets/header.dart';
 import 'package:unishop/widgets/product_catalog.dart';
-
+import 'package:unishop/Controller/recommended_controller.dart';
 class RecommendedView extends StatefulWidget {
   @override
   State<RecommendedView> createState() => _RecommendedViewState();
@@ -48,7 +47,8 @@ class _RecommendedViewState extends State<RecommendedView> {
   }
 
   Future<List<ProductDTO>> fetchProducts() async {
-    return PostsRepository.getRecommendations();
+    RecomendedController controller= RecomendedController();
+    return controller.getRecommendations();
   }
 }
 

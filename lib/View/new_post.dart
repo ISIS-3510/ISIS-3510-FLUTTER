@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/Model/degree_relations.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
-import 'package:unishop/Model/Repository/posts_repository.dart';
 import 'package:unishop/widgets/image_input.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
+import 'package:unishop/Controller/new_post_controller.dart';
 
 class NewPostView extends StatefulWidget {
   const NewPostView({super.key});
@@ -17,6 +17,7 @@ class NewPostView extends StatefulWidget {
 }
 
 class _NewPostViewState extends State<NewPostView> {
+  NewPostController controller = NewPostController();
   final _formKey = GlobalKey<FormState>();
   String _selectedImage = '';
   var _titleController = TextEditingController();
@@ -52,7 +53,7 @@ class _NewPostViewState extends State<NewPostView> {
     final userId =prefs.getString('user_id');
 
     if (_formKey.currentState!.validate() && _selectedImage.isNotEmpty) {
-      ProductDTO post = PostsRepository.createPost(enteredDegree.trim(), enteredDescription.trim(), enteredTitle.trim(), _enteredIsNew, enteredPrice, _enteredIsRecycled, enteredSubject.trim(), _selectedImage, userId.toString());
+      ProductDTO post = controller.createPost(enteredDegree.trim(), enteredDescription.trim(), enteredTitle.trim(), _enteredIsNew, enteredPrice, _enteredIsRecycled, enteredSubject.trim(), _selectedImage, userId.toString());
       
       if (!context.mounted) {
         return;
