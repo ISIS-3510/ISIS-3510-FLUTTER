@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:unishop/View/login.dart';
 import 'dart:async';
 import 'package:unishop/widgets/footer.dart';
 
@@ -147,7 +148,23 @@ class _ProfileState extends State<Profile> {
               '* You must allow UniShop to access your location',
               style: TextStyle(fontSize: 12),
             ),
-            // You can choose to not display sensitive information like password.
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: GestureDetector(
+                onTap: showAlert, // Call the logout function here
+                child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(20.0),
+                child: Text(
+                  'Log out',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+            ),
           ],
         ),
       ),
@@ -156,10 +173,36 @@ class _ProfileState extends State<Profile> {
               FloatingActionButtonLocation.centerDocked
     );
   }
-}
 
-void main() {
-  runApp(MaterialApp(
-    home: Profile(),
-  ));
+  void showAlert() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Log out"),
+          content: Text("Are you sure you want to log out?"),
+          backgroundColor: Colors.white, // Establece el color de fondo
+          actions: <Widget>[
+            TextButton(
+              child: Text('Log out', style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                // Aquí puedes agregar la lógica para cerrar la sesión
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginView())); // Cierra la alerta
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra la alerta
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }

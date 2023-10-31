@@ -37,10 +37,10 @@ class _FooterState extends State<Footer> {
                   break;
                 case 1:
                   //Navigate to the Favorites page.
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RecommendedView()));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => RecommendedView()));
                   break;
                 case 2:
                   //Navigate to the Map page.
