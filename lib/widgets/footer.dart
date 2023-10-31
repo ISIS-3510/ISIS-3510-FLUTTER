@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unishop/View/home.dart';
 import 'package:unishop/View/recommended.dart';
+import 'package:unishop/View/profile.dart';
+
 
 class Footer extends StatefulWidget {
   const Footer({super.key, required this.currentIndex});
@@ -50,9 +52,12 @@ class _FooterState extends State<Footer> {
                 //MaterialPageRoute(builder: (context) => UserPostsView()));
                 //break;
                 case 4:
-                  //Navigate to the Chat page.
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
-                  break;
+                  //Navigate to the profile page.
+                   Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Profile()));
+                  // break;
               }
             },
             items: [

@@ -1,8 +1,10 @@
-import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
+import 'package:unishop/widgets/footer.dart';
+
 
 class Profile extends StatefulWidget {
   @override
@@ -149,6 +151,9 @@ class _ProfileState extends State<Profile> {
           ],
         ),
       ),
+      bottomNavigationBar: Footer(currentIndex: 4),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked
     );
   }
 }

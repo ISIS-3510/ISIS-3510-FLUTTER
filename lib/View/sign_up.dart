@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:unishop/View/home.dart';
 import 'package:unishop/Controller/sign_up_controller.dart';
+import 'package:unishop/View/login.dart';
+
 //import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -140,6 +142,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       setState(() {
                         dropdownValue = newValue!;
                         isValidDegreeText = controller.isValidDegree(newValue);
+                        print("Selected value: $dropdownValue");
                       });
                     },
                     items: <String>[
@@ -192,7 +195,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: TextField(
                     controller: emailController,
                     decoration: InputDecoration(
-                      labelText: 'Email',
+                      labelText: 'Uniandes Email',
                       border: OutlineInputBorder(),
                       errorText: isValidEmailText ? null : 'Invalid Email',
                     ),
@@ -278,6 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onPressed: () {
                     if (isValidNameText &&
                         isValidUserNameText &&
+                        isValidDegreeText &&
                         isValidPhoneText &&
                         isValidEmailText &&
                         isValidPasswordText &&
@@ -374,7 +378,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         passwordController.text,
         phoneController.text,
         userNameController.text,
-        degreeController.text);
+        dropdownValue);
+
+
 
     if (response.statusCode == 200) {
       // Registro exitoso
@@ -383,7 +389,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeView(),
+          builder: (context) => LoginView(),
         ),
       );
 
