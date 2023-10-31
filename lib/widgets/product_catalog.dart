@@ -3,10 +3,10 @@ import 'package:decimal/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:unishop/models/product.dart';
+import 'package:unishop/Model/DTO/product_dto.dart';
 
 class ProductCatalog extends StatelessWidget {
-  final List<Product> products;
+  final List<ProductDTO> products;
   bool _isValidImageUrl(String imageUrl) {
     return imageUrl.startsWith('h'.trim());
   }

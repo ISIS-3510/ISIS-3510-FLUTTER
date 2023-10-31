@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:unishop/views/user_posts.dart';
+import 'package:unishop/View/user_posts.dart';
 
 class FloatingButton extends StatelessWidget{
   @override

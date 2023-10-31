@@ -1,19 +1,22 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:unishop/dao/dao.dart';
+import 'package:unishop/Model/DAO/dao.dart';
 
 class UsersRepository {
-  static Future<Response> signUp (String email, String name, String password, String phone,
-    String username, String degree) async {
-      return await daoSignUp(email, name, password, phone, username, degree);
+  static Future<Response> signUp(String email, String name, String password,
+      String phone, String username, String degree) async {
+    return await daoSignUp(email, name, password, phone, username, degree);
   }
 
-  static Future<Response> logIn () async {
+  static Future<Response> logIn() async {
     return await daoLogIn();
   }
 
-  static Future<Map<String, dynamic>> loginVerifier (TextEditingController emailController, TextEditingController passwordController, Response response) async{
+  static Future<Map<String, dynamic>> loginVerifier(
+      TextEditingController emailController,
+      TextEditingController passwordController,
+      Response response) async {
     final data = json.decode(response.body);
     final users = data['users'];
 
@@ -23,14 +26,13 @@ class UsersRepository {
           user['email'] == emailController.text &&
           user['password'] == passwordController.text,
       orElse: () => null,
-    ); 
+    );
     return matchingUser;
   }
-    
 
   static bool isValidName(String name) {
     bool rta = false;
-    if(name.trim().isNotEmpty){
+    if (name.trim().isNotEmpty) {
       rta = true;
     }
     return rta;
@@ -39,7 +41,7 @@ class UsersRepository {
   static bool isValidUserName(String userName) {
     bool rta = false;
 
-    if(userName.trim().isNotEmpty){
+    if (userName.trim().isNotEmpty) {
       rta = true;
     }
 
@@ -49,7 +51,7 @@ class UsersRepository {
   static bool isValidDegree(String degree) {
     bool rta = false;
 
-    if(degree.trim().isNotEmpty){
+    if (degree.trim().isNotEmpty) {
       rta = true;
     }
 
@@ -59,14 +61,15 @@ class UsersRepository {
   static bool isValidPhone(String phone) {
     bool rta = false;
 
-    if(phone.length == 10){
+    if (phone.length == 10) {
       rta = true;
     }
     return rta;
   }
 
   static bool isValidEmail(String email) {
-    RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+    RegExp emailRegExp =
+        RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
     return emailRegExp.hasMatch(email);
   }
 
@@ -87,7 +90,6 @@ class UsersRepository {
   }
 
   static bool isValidConfirmPassword(String confirmPassword, String password) {
-
     return confirmPassword == password;
   }
 }
