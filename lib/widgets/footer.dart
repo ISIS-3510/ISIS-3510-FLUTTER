@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:unishop/views/home.dart';
-import 'package:unishop/views/recommended.dart';
+import 'package:unishop/View/home.dart';
+import 'package:unishop/View/recommended.dart';
 
 class Footer extends StatefulWidget {
   const Footer({super.key, required this.currentIndex});

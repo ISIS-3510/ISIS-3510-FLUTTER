@@ -2,9 +2,9 @@ import 'package:decimal/decimal.dart';
 import 'package:decimal/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:unishop/models/product.dart';
-import 'package:unishop/repositories/posts_repository.dart';
-import 'package:unishop/views/new_post.dart';
+import 'package:unishop/Model/DTO/product_dto.dart';
+import 'package:unishop/View/new_post.dart';
+import 'package:unishop/Controller/user_posts_controller.dart';
 
 class UserPostsView extends StatefulWidget {
   const UserPostsView({super.key});
@@ -16,7 +16,8 @@ class UserPostsView extends StatefulWidget {
 }
 
 class _UserPostsViewState extends State<UserPostsView> {
-  List<Product> _products = [];
+  List<ProductDTO> _products = [];
+  UserPostController controller = UserPostController();
 
   @override
   void initState() {
@@ -25,7 +26,7 @@ class _UserPostsViewState extends State<UserPostsView> {
   }
 
   Future<void> _loadProducts() async {
-    final loadedProducts = await PostsRepository.loadProducts();
+    final loadedProducts = await controller.loadProducts();
     setState(() {
       _products = loadedProducts;
       _loading = false;
@@ -33,7 +34,7 @@ class _UserPostsViewState extends State<UserPostsView> {
   }
 
   void _addProduct() async {
-    final newProduct = await Navigator.of(context).push<Product>(
+    final newProduct = await Navigator.of(context).push<ProductDTO>(
       MaterialPageRoute(
         builder: (ctx) => const NewPostView(),
       ),
@@ -99,9 +100,8 @@ class _UserPostsViewState extends State<UserPostsView> {
         itemBuilder: (ctx, index) => Card(
           margin: const EdgeInsets.all(8),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: BorderSide(color: Color.fromARGB(20, 17, 19, 21))
-          ),
+              borderRadius: BorderRadius.circular(8),
+              side: BorderSide(color: Color.fromARGB(20, 17, 19, 21))),
           clipBehavior: Clip.hardEdge,
           elevation: 5,
           child: Column(
@@ -120,9 +120,9 @@ class _UserPostsViewState extends State<UserPostsView> {
                       child: Text(
                         _products[index].title,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w700,
-                        ),
+                              fontSize: 25,
+                              fontWeight: FontWeight.w700,
+                            ),
                         textAlign: TextAlign.left,
                       ),
                     ),

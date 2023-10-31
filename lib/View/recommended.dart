@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:unishop/models/product.dart';
-import 'package:unishop/repositories/posts_repository.dart';
+import 'package:unishop/Model/DTO/product_dto.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'package:unishop/widgets/footer.dart';
 import 'package:unishop/widgets/header.dart';
 import 'package:unishop/widgets/product_catalog.dart';
-
-class BargainView extends StatefulWidget {
+import 'package:unishop/Controller/recommended_controller.dart';
+class RecommendedView extends StatefulWidget {
   @override
-  State<BargainView> createState() => _BargainViewState();
+  State<RecommendedView> createState() => _RecommendedViewState();
 }
 
-class _BargainViewState extends State<BargainView> {
+class _RecommendedViewState extends State<RecommendedView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,12 +19,12 @@ class _BargainViewState extends State<BargainView> {
             toolbarHeight: 120,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
-            title: Header(currentIndex: 3),
+            title: Header(currentIndex: 2),
           ),
           floatingActionButton: FloatingButton(),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: FutureBuilder<List<Product>>(
+            child: FutureBuilder<List<ProductDTO>>(
               future: fetchProducts(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -41,13 +40,15 @@ class _BargainViewState extends State<BargainView> {
               },
             ),
           ),
-          bottomNavigationBar: Footer(currentIndex: 0),
+          bottomNavigationBar: Footer(currentIndex:1),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked),
     );
   }
 
-  Future<List<Product>> fetchProducts() async {
-    return PostsRepository.getBargains();
+  Future<List<ProductDTO>> fetchProducts() async {
+    RecomendedController controller= RecomendedController();
+    return controller.getRecommendations();
   }
 }
+

@@ -1,7 +1,7 @@
 import 'package:decimal/decimal.dart';
 
-class Product {
-  const Product({
+class ProductDTO{
+  const ProductDTO({
     required this.title,
     required this.description,
     required this.price,

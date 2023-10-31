@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:unishop/repositories/users_repository.dart';
 import 'dart:convert';
-import 'package:unishop/views/home.dart';
+import 'package:unishop/View/home.dart';
+import 'package:unishop/Controller/sign_up_controller.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -10,6 +10,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  SignUpController controller = SignUpController();
   TextEditingController nameController = TextEditingController();
   bool isValidNameText = true;
 
@@ -89,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     keyboardType: TextInputType.name,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidNameText = UsersRepository.isValidName(newValue);
+                        isValidNameText = controller.isValidName(newValue);
                       });
                     },
                   ),
@@ -112,7 +113,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onChanged: (newValue) {
                       setState(() {
                         isValidUserNameText =
-                            UsersRepository.isValidUserName(newValue);
+                            controller.isValidUserName(newValue);
                       });
                     },
                   ),
@@ -134,7 +135,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onChanged: (newValue) {
                       setState(() {
                         isValidDegreeText =
-                            UsersRepository.isValidDegree(newValue);
+                            controller.isValidDegree(newValue);
                       });
                     },
                   ),
@@ -156,7 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onChanged: (newValue) {
                       setState(() {
                         isValidPhoneText =
-                            UsersRepository.isValidPhone(newValue);
+                            controller.isValidPhone(newValue);
                       });
                     },
                   ),
@@ -179,7 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onChanged: (newValue) {
                       setState(() {
                         isValidEmailText =
-                            UsersRepository.isValidEmail(newValue);
+                            controller.isValidEmail(newValue);
                       });
                     },
                   ),
@@ -203,7 +204,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onChanged: (newValue) {
                       setState(() {
                         isValidPasswordText =
-                            UsersRepository.isValidPassword(newValue);
+                            controller.isValidPassword(newValue);
                       });
                     },
                   ),
@@ -228,7 +229,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onChanged: (newValue) {
                       setState(() {
                         isValidConfirmPasswordText =
-                            UsersRepository.isValidConfirmPassword(
+                            controller.isValidConfirmPassword(
                                 newValue, passwordController.text);
                       });
                     },
@@ -345,7 +346,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> signUp() async {
-    final response = await UsersRepository.signUp(
+    final response = await controller.signUp(
         emailController.text,
         nameController.text,
         passwordController.text,
