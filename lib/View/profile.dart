@@ -1,8 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:unishop/View/login.dart';
+import 'package:unishop/widgets/floating_button.dart';
 import 'dart:async';
 import 'package:unishop/widgets/footer.dart';
 
@@ -47,6 +46,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingButton(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
