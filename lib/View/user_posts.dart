@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
 import 'package:unishop/Model/Repository/posts_repository.dart';
-import 'package:unishop/views/new_post.dart';
+import 'package:unishop/View/new_post.dart';
 
 class UserPostsView extends StatefulWidget {
   const UserPostsView({super.key});

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:unishop/Model/DTO/user_dto.dart';
 
 dynamic daoGetProducts() async {
   final url =
@@ -32,19 +33,29 @@ dynamic daoLogIn() async {
 
 dynamic daoSignUp(String email, String name, String password, String phone,
     String username, String degree) async {
+  UserDTO user = UserDTO(
+      email: email,
+      name: name,
+      password: password,
+      phone: phone,
+      username: username,
+      degree: degree);
   final url =
       Uri.parse('https://creative-mole-46.hasura.app/api/rest/users/signup');
 
   final Map<String, dynamic> requestBody = {
-    "object": {
-      "email": email,
-      "name": name,
-      "password": password,
-      "phone": phone,
-      "username": username,
-      "degree": degree,
-    }
+    "object": user.toJson()
   };
+  // final Map<String, dynamic> requestBody = {
+  //   "object": {
+  //     "email": email,
+  //     "name": name,
+  //     "password": password,
+  //     "phone": phone,
+  //     "username": username,
+  //     "degree": degree,
+  //   }
+  // };
 
   final headers = {
     "content-type": "application/json",
@@ -85,7 +96,7 @@ dynamic daoCreatePost(
       "new": enteredIsNew,
       "price": double.tryParse(enteredPrice),
       "recycled": enteredIsRecycled,
-      "subject": enteredSubject??"",
+      "subject": enteredSubject ?? "",
       "urlsImages": image,
       "userId": userId,
     }
@@ -112,7 +123,7 @@ dynamic daoLoadProducts(Map<String, String?> queryParameters) async {
   return json.decode(response.body);
 }
 
-Future<String> daoSaveImage(file) async{
+Future<String> daoSaveImage(file) async {
   String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
   Reference referenceRoot = FirebaseStorage.instance.ref();
   Reference referenceImageToUpload = referenceRoot.child(uniqueFileName);

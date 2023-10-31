@@ -238,6 +238,7 @@ class _NewPostViewState extends State<NewPostView> {
                         });
                       },
                       activeTrackColor: Color.fromARGB(255, 255, 198, 0),
+                      activeColor: Colors.white,
                       inactiveTrackColor: Color.fromARGB(255, 255, 198, 0),
                       inactiveThumbColor: Colors.black,
                     ),

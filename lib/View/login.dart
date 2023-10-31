@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:unishop/Model/Repository/users_repository.dart';
-import 'package:unishop/views/sign_up.dart';
-import 'package:unishop/views/home.dart';
+import 'package:unishop/View/sign_up.dart';
+import 'package:unishop/View/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatefulWidget {
