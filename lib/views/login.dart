@@ -209,7 +209,7 @@ class _LoginViewState extends State<LoginView> {
       }
     } catch (e) {
       // Handle any network or parsing errors
-      showAlert('Error', 'An error occurredaaaa: $e', Colors.red);
+      showAlert('Error', 'Incorrect email or password', Colors.red);
     }
   }
 

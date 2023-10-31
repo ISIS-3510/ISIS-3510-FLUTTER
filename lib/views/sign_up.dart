@@ -17,7 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isValidUserNameText = true;
 
   TextEditingController degreeController = TextEditingController();
-  bool isValidDegreeText = true;
+  bool isValidDegreeText = false;
 
   TextEditingController phoneController = TextEditingController();
   bool isValidPhoneText = true;
@@ -30,6 +30,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   TextEditingController confirmPasswordController = TextEditingController();
   bool isValidConfirmPasswordText = true;
+
+  String dropdownValue = 'Select your degree';
 
   @override
   Widget build(BuildContext context) {
@@ -121,25 +123,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ),
                   margin: EdgeInsets.only(left: 35, right: 35),
-                  child: TextField(
-                    controller: degreeController,
-                    decoration: InputDecoration(
-                      labelText: 'Degree',
-                      border: OutlineInputBorder(),
-                      errorText: isValidDegreeText ? null : 'Invalid Degree',
-                    ),
-                    style: TextStyle(color: Colors.black),
-                    keyboardType: TextInputType.name,
-                    onChanged: (newValue) {
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    value: dropdownValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.black),
+                    onChanged: (String? newValue) {
                       setState(() {
-                        isValidDegreeText =
-                            UsersRepository.isValidDegree(newValue);
+                        dropdownValue = newValue!;
+                        isValidDegreeText = UsersRepository.isValidDegree(newValue);
                       });
                     },
+                    items: <String>['Select your degree', 'ISIS', 'MATE', 'ADMIN', 'IIND', 'ARQUI', 'ARTE', 'DISE']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(value),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Container(
@@ -170,7 +185,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     controller: emailController,
                     decoration: InputDecoration(
                       labelText:
-                          'Email                                           @uniandes.edu.co',
+                          'Email',
                       border: OutlineInputBorder(),
                       errorText: isValidEmailText ? null : 'Invalid Email',
                     ),
@@ -195,7 +210,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       labelText: 'Password',
                       border: OutlineInputBorder(),
                       errorText:
-                          isValidPasswordText ? null : 'Invalid Password',
+                          isValidPasswordText ? null : 'Password must have 8 characters, capital letter, number and special character.',
+                          errorStyle: TextStyle(fontSize: 8.9),
                     ),
                     style: TextStyle(color: Colors.black),
                     obscureText: true,
@@ -253,6 +269,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 margin: EdgeInsets.only(top: 20.0),
                 child: ElevatedButton(
                   onPressed: () {
+
                     if (isValidNameText &&
                         isValidUserNameText &&
                         isValidPhoneText &&
