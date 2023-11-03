@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:unishop/View/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:unishop/Controller/alert_controller.dart';
-import 'package:unishop/View/home.dart';
 import 'package:unishop/Model/DAO/dao.dart';
 
 

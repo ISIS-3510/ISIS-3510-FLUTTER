@@ -4,6 +4,7 @@ import 'package:unishop/View/sign_up.dart';
 import 'package:unishop/View/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/Controller/login_controller.dart';
+import 'package:connectivity/connectivity.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -182,7 +183,12 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _handleLogin() async {
-    try {
+
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+
+          try {
       final response = await controller.logIn();
 
       if (response.statusCode == 200) {
@@ -214,5 +220,13 @@ class _LoginViewState extends State<LoginView> {
       // Handle any network or parsing errors
       showAlert('Error', 'Incorrect email or password', Colors.red);
     }
+
+
+    } else {
+      showAlert('Error', 'No Internet Connection', Colors.red);
+      
+    }
+
+    
   }
 }

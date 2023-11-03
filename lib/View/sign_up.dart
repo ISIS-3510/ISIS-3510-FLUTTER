@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:unishop/View/home.dart';
 import 'package:unishop/Controller/sign_up_controller.dart';
 import 'package:unishop/View/login.dart';
+import 'package:connectivity/connectivity.dart';
+
 
 //import 'package:fluttertoast/fluttertoast.dart';
 
@@ -372,46 +374,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> signUp() async {
-    final response = await controller.signUp(
-        emailController.text,
-        nameController.text,
-        passwordController.text,
-        phoneController.text,
-        userNameController.text,
-        dropdownValue);
+
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+
+          final response = await controller.signUp(
+            emailController.text,
+            nameController.text,
+            passwordController.text,
+            phoneController.text,
+            userNameController.text,
+            dropdownValue);
+
+        if (response.statusCode == 200) {
+          // Registro exitoso
+          showAlert("Good", "Account Created!", Color(0xFFFFC600));
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginView(),
+            ),
+          );
+
+          final jsonResponse = json.decode(response.body);
+          final userData = jsonResponse['data']['insert_users_one'];
+          print("Registro exitoso: ${userData['name']}");
+
+          //Navigator.of(context).pushNamed("/feed");
+        } else if (response.statusCode == 400) {
+          // Registro no exitoso debido a duplicación de username (u otro error)
+          final jsonResponse = json.decode(response.body);
+          showAlert("ERROR", 'The username, email and phone must be unique!',
+              Colors.black);
+          final errors = jsonResponse['errors'];
+          final errorMessage = errors[0]['message'];
+          print("Error en el registro: $errorMessage");
+
+          // Puedes mostrar un mensaje de error o tomar otras medidas apropiadas
+        } else {
+          // Otra respuesta no esperada
+          print("Error en la solicitud. Código de estado: ${response.statusCode}");
+          print("Respuesta del servidor: ${response.body}");
+        }
+
+        }
+        else{
+
+      showAlert('Error', 'No Internet Connection', Colors.red);
 
 
+        }
 
-    if (response.statusCode == 200) {
-      // Registro exitoso
-      showAlert("Good", "Account Created!", Color(0xFFFFC600));
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginView(),
-        ),
-      );
-
-      final jsonResponse = json.decode(response.body);
-      final userData = jsonResponse['data']['insert_users_one'];
-      print("Registro exitoso: ${userData['name']}");
-
-      //Navigator.of(context).pushNamed("/feed");
-    } else if (response.statusCode == 400) {
-      // Registro no exitoso debido a duplicación de username (u otro error)
-      final jsonResponse = json.decode(response.body);
-      showAlert("ERROR", 'The username, email and phone must be unique!',
-          Colors.black);
-      final errors = jsonResponse['errors'];
-      final errorMessage = errors[0]['message'];
-      print("Error en el registro: $errorMessage");
-
-      // Puedes mostrar un mensaje de error o tomar otras medidas apropiadas
-    } else {
-      // Otra respuesta no esperada
-      print("Error en la solicitud. Código de estado: ${response.statusCode}");
-      print("Respuesta del servidor: ${response.body}");
-    }
   }
 }
