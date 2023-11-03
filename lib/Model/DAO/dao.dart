@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:unishop/Model/DTO/user_dto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 dynamic daoGetProducts() async {
@@ -186,7 +187,8 @@ dynamic daoSearchAlert() async {
       //Iterar sobre la lista de alertas
       for (var alert in alerts) {
 
-        print('Active: ${alert['active']}');
+        print('User: ${alert['user']['username']} Date: ${alert['date']}');
+        print('Curren date: $getCurrentDate()');
         var difSec = calculateAbsoluteDateDifferenceInSeconds(alert['date'], getCurrentDate());
         if(difSec < 300){
 
@@ -202,7 +204,13 @@ dynamic daoSearchAlert() async {
           print('-----------');
           print(difSec);
 
-          showNotificacion();
+          var username = alert['user']['username'];
+          var lat = alert['latitude'];
+          var log = alert['longitude'];
+
+          var msj = "it appears that $username is in danger in latitude: $lat longitude: $log";
+
+          showNotificacion("HELP!", msj);
 
         }
       }
@@ -259,11 +267,31 @@ Future<void> initNotifications() async {
   );
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  var status = await Permission.notification.status;
+    if (!status.isGranted) {
+      await Permission.notification.request();
+    }
+  
+  var areNotificationsEnabled =
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.areNotificationsEnabled();
+
+    if (areNotificationsEnabled != null && !areNotificationsEnabled) {
+      // Las notificaciones no están habilitadas
+      print('Las notificaciones locales no están habilitadas');
+    } else {
+      // Las notificaciones están habilitadas
+      print('Las notificaciones locales están habilitadas');
+    }
+
 }
 
 
 // Este es el método que muestra la notificación
-Future<void> showNotificacion() async {
+Future<void> showNotificacion(String titulo, String body) async {
   const AndroidNotificationDetails androidNotificationDetails =
       AndroidNotificationDetails(
     'your channel id',
@@ -278,7 +306,10 @@ Future<void> showNotificacion() async {
 
   await flutterLocalNotificationsPlugin.show(
       1,
-      'Titulo de notificacion',
-      'Esta es una notificación de prueba para mostrar en el canal. Los quiero mucho.',
+      titulo,
+      body,
       notificationDetails);
+
+  print("NOTIFICACIONNNN");
+
 }
