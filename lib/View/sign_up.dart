@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:unishop/View/home.dart';
 import 'package:unishop/Controller/sign_up_controller.dart';
+import 'package:unishop/View/login.dart';
+import 'package:connectivity/connectivity.dart';
+
+
 //import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -18,7 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isValidUserNameText = true;
 
   TextEditingController degreeController = TextEditingController();
-  bool isValidDegreeText = true;
+  bool isValidDegreeText = false;
 
   TextEditingController phoneController = TextEditingController();
   bool isValidPhoneText = true;
@@ -31,6 +35,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   TextEditingController confirmPasswordController = TextEditingController();
   bool isValidConfirmPasswordText = true;
+
+  String dropdownValue = 'Select your degree';
 
   @override
   Widget build(BuildContext context) {
@@ -122,25 +128,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ),
                   margin: EdgeInsets.only(left: 35, right: 35),
-                  child: TextField(
-                    controller: degreeController,
-                    decoration: InputDecoration(
-                      labelText: 'Degree',
-                      border: OutlineInputBorder(),
-                      errorText: isValidDegreeText ? null : 'Invalid Degree',
-                    ),
-                    style: TextStyle(color: Colors.black),
-                    keyboardType: TextInputType.name,
-                    onChanged: (newValue) {
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    value: dropdownValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.black),
+                    onChanged: (String? newValue) {
                       setState(() {
-                        isValidDegreeText =
-                            controller.isValidDegree(newValue);
+                        dropdownValue = newValue!;
+                        isValidDegreeText = controller.isValidDegree(newValue);
+                        print("Selected value: $dropdownValue");
                       });
                     },
+                    items: <String>[
+                      'Select your degree',
+                      'ISIS',
+                      'MATE',
+                      'ADMIN',
+                      'IIND',
+                      'ARQUI',
+                      'ARTE',
+                      'DISE'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(value),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Container(
@@ -156,8 +184,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     keyboardType: TextInputType.phone,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidPhoneText =
-                            controller.isValidPhone(newValue);
+                        isValidPhoneText = controller.isValidPhone(newValue);
                       });
                     },
                   ),
@@ -170,8 +197,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: TextField(
                     controller: emailController,
                     decoration: InputDecoration(
-                      labelText:
-                          'Email                                           @uniandes.edu.co',
+                      labelText: 'Uniandes Email',
                       border: OutlineInputBorder(),
                       errorText: isValidEmailText ? null : 'Invalid Email',
                     ),
@@ -179,8 +205,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (newValue) {
                       setState(() {
-                        isValidEmailText =
-                            controller.isValidEmail(newValue);
+                        isValidEmailText = controller.isValidEmail(newValue);
                       });
                     },
                   ),
@@ -195,8 +220,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(),
-                      errorText:
-                          isValidPasswordText ? null : 'Invalid Password',
+                      errorText: isValidPasswordText
+                          ? null
+                          : 'Password must have 8 characters, capital letter, number and special character.',
+                      errorStyle: TextStyle(fontSize: 8.9),
                     ),
                     style: TextStyle(color: Colors.black),
                     obscureText: true,
@@ -256,6 +283,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onPressed: () {
                     if (isValidNameText &&
                         isValidUserNameText &&
+                        isValidDegreeText &&
                         isValidPhoneText &&
                         isValidEmailText &&
                         isValidPasswordText &&
@@ -346,44 +374,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> signUp() async {
-    final response = await controller.signUp(
-        emailController.text,
-        nameController.text,
-        passwordController.text,
-        phoneController.text,
-        userNameController.text,
-        degreeController.text);
 
-    if (response.statusCode == 200) {
-      // Registro exitoso
-      showAlert("Good", "Account Created!", Color(0xFFFFC600));
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeView(),
-        ),
-      );
+          final response = await controller.signUp(
+            emailController.text,
+            nameController.text,
+            passwordController.text,
+            phoneController.text,
+            userNameController.text,
+            dropdownValue);
 
-      final jsonResponse = json.decode(response.body);
-      final userData = jsonResponse['data']['insert_users_one'];
-      print("Registro exitoso: ${userData['name']}");
+        if (response.statusCode == 200) {
+          // Registro exitoso
+          showAlert("Good", "Account Created!", Color(0xFFFFC600));
 
-      //Navigator.of(context).pushNamed("/feed");
-    } else if (response.statusCode == 400) {
-      // Registro no exitoso debido a duplicación de username (u otro error)
-      final jsonResponse = json.decode(response.body);
-      showAlert("ERROR", 'The username, email and phone must be unique!',
-          Colors.black);
-      final errors = jsonResponse['errors'];
-      final errorMessage = errors[0]['message'];
-      print("Error en el registro: $errorMessage");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginView(),
+            ),
+          );
 
-      // Puedes mostrar un mensaje de error o tomar otras medidas apropiadas
-    } else {
-      // Otra respuesta no esperada
-      print("Error en la solicitud. Código de estado: ${response.statusCode}");
-      print("Respuesta del servidor: ${response.body}");
-    }
+          final jsonResponse = json.decode(response.body);
+          final userData = jsonResponse['data']['insert_users_one'];
+          print("Registro exitoso: ${userData['name']}");
+
+          //Navigator.of(context).pushNamed("/feed");
+        } else if (response.statusCode == 400) {
+          // Registro no exitoso debido a duplicación de username (u otro error)
+          final jsonResponse = json.decode(response.body);
+          showAlert("ERROR", 'The username, email and phone must be unique!',
+              Colors.black);
+          final errors = jsonResponse['errors'];
+          final errorMessage = errors[0]['message'];
+          print("Error en el registro: $errorMessage");
+
+          // Puedes mostrar un mensaje de error o tomar otras medidas apropiadas
+        } else {
+          // Otra respuesta no esperada
+          print("Error en la solicitud. Código de estado: ${response.statusCode}");
+          print("Respuesta del servidor: ${response.body}");
+        }
+
+        }
+        else{
+
+      showAlert('Error', 'No Internet Connection', Colors.red);
+
+
+        }
+
   }
 }
