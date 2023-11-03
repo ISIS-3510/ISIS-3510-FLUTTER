@@ -188,7 +188,6 @@ dynamic daoSearchAlert() async {
       for (var alert in alerts) {
 
         print('User: ${alert['user']['username']} Date: ${alert['date']}');
-        print('Curren date: $getCurrentDate()');
         var difSec = calculateAbsoluteDateDifferenceInSeconds(alert['date'], getCurrentDate());
         if(difSec < 300){
 
@@ -309,7 +308,5 @@ Future<void> showNotificacion(String titulo, String body) async {
       titulo,
       body,
       notificationDetails);
-
-  print("NOTIFICACIONNNN");
 
 }
