@@ -15,6 +15,7 @@ class PostsRepository {
       final List<ProductDTO> products = postList.map((item) {
         final imageUrls = (item['urlsImages'] as String).split(';');
         return ProductDTO(
+          id: item['id'],
           degree: item['degree'],
           description: item['description'],
           isNew: item['new'],
@@ -96,6 +97,7 @@ class PostsRepository {
       for (final item in items.value) {
         loadedProducts.add(
           ProductDTO(
+            id: item['id'],
             title: item['name'],
             description: item['description'],
             price: Decimal.parse(item['price']
@@ -115,4 +117,48 @@ class PostsRepository {
     }
     return loadedProducts;
   }
+
+  static void addFavorite(
+      String postId) async {
+    final prefs = await SharedPreferences.getInstance();
+    daoAddFavorite(postId, prefs.getString('user_id'));
+  }
+
+  static void deleteFavorite(
+      String postId) async {
+    final prefs = await SharedPreferences.getInstance();
+    daoDeleteFavorite(postId, prefs.getString('user_id'));
+  }
+
+  static Future<List<ProductDTO>> getFavorites() async {
+    final prefs = await SharedPreferences.getInstance();
+    final queryParameters = {'user_id': prefs.getString('user_id')};
+    final Map<String, dynamic> listData =
+        await daoGetFavorites(queryParameters);
+    final List<ProductDTO> loadedProducts = [];
+    for (final items in listData.entries) {
+      for (final item in items.value) {
+        loadedProducts.add(
+          ProductDTO(
+            id: item['post']['id'],
+            title: item['post']['name'],
+            description: item['post']['description'],
+            price: Decimal.parse(item['post']['price']
+                .toString()
+                .substring(1)
+                .replaceAll(',', ''),
+                ),
+            isNew: item['post']['new'],
+            isRecycled: item['post']['recycled'],
+            degree: item['post']['degree'],
+            subject: item['post']['subject'],
+            image: [item['post']['urlsImages']],
+            user: item['post']['user'],
+          ),
+        );
+      }
+    }
+    return loadedProducts;
+  }
 }
+

@@ -203,7 +203,7 @@ class _LoginViewState extends State<LoginView> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeView(),
+            builder: (context) => HomeView(isHome: true),
           ),
         );
       } else {

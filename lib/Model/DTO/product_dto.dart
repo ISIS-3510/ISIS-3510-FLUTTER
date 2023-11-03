@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 
 class ProductDTO{
   const ProductDTO({
+    this.id,
     required this.title,
     required this.description,
     required this.price,
@@ -13,6 +14,7 @@ class ProductDTO{
     this.user,
   });
 
+  final String? id;
   final String title;
   final String description;
   final Decimal price;

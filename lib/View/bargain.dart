@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'package:unishop/widgets/footer.dart';
-import 'package:unishop/widgets/header.dart';
+import 'package:unishop/widgets/header_posts.dart';
 import 'package:unishop/widgets/product_catalog.dart';
 import 'package:unishop/Controller/bargain_Controller.dart';
 
@@ -20,7 +20,7 @@ class _BargainViewState extends State<BargainView> {
             toolbarHeight: 120,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
-            title: Header(currentIndex: 3),
+            title: HeaderPosts(currentIndex: 3),
           ),
           floatingActionButton: FloatingButton(),
           body: Padding(
@@ -41,7 +41,7 @@ class _BargainViewState extends State<BargainView> {
               },
             ),
           ),
-          bottomNavigationBar: Footer(currentIndex: 0),
+          bottomNavigationBar: Footer(currentIndex: 1),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked),
     );

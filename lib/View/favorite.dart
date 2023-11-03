@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:unishop/Controller/favorite_controller.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'package:unishop/widgets/footer.dart';
-import 'package:unishop/widgets/header_posts.dart';
+import 'package:unishop/widgets/header.dart';
 import 'package:unishop/widgets/product_catalog.dart';
-import 'package:unishop/Controller/recommended_controller.dart';
-class RecommendedView extends StatefulWidget {
+class FavoriteView extends StatefulWidget {
   @override
-  State<RecommendedView> createState() => _RecommendedViewState();
+  State<FavoriteView> createState() => _FavoriteViewState();
 }
 
-class _RecommendedViewState extends State<RecommendedView> {
+class _FavoriteViewState extends State<FavoriteView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +19,7 @@ class _RecommendedViewState extends State<RecommendedView> {
             toolbarHeight: 120,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
-            title: HeaderPosts(currentIndex: 2),
+            title: Header(),
           ),
           floatingActionButton: FloatingButton(),
           body: Padding(
@@ -40,15 +40,15 @@ class _RecommendedViewState extends State<RecommendedView> {
               },
             ),
           ),
-          bottomNavigationBar: Footer(currentIndex:1),
+          bottomNavigationBar: Footer(currentIndex: 3),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked),
     );
   }
 
   Future<List<ProductDTO>> fetchProducts() async {
-    RecomendedController controller= RecomendedController();
-    return controller.getRecommendations();
+    FavoriteController controller= FavoriteController();
+    return controller.getFavorites();
   }
 }
 

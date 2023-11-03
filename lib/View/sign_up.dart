@@ -361,7 +361,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomeView(),
+          builder: (context) => HomeView(isHome: true),
         ),
       );
 

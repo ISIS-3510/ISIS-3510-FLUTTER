@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:unishop/View/favorite.dart';
 import 'package:unishop/View/home.dart';
-import 'package:unishop/View/recommended.dart';
 
 class Footer extends StatefulWidget {
   const Footer({super.key, required this.currentIndex});
@@ -31,26 +31,25 @@ class _FooterState extends State<Footer> {
                 case 0:
                   //Navigate to the Home page.
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomeView()));
+                      MaterialPageRoute(builder: (context) => HomeView(isHome: true)));
                   break;
                 case 1:
-                  //Navigate to the Favorites page.
+                  //Navigate to the Recommended page.
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RecommendedView()));
+                          builder: (context) => HomeView(isHome: false)));
                   break;
                 case 2:
-                  //Navigate to the Map page.
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()));
                   break;
                 case 3:
-                //Navigate to the History page.
-                //Navigator.push(context,
-                //MaterialPageRoute(builder: (context) => UserPostsView()));
-                //break;
+                //Navigate to the Favorite page.
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FavoriteView()));
                 case 4:
-                  //Navigate to the Chat page.
+                  //Navigate to the Profile page.
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
                   break;
               }
