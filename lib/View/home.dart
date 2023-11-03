@@ -5,6 +5,7 @@ import 'package:unishop/widgets/footer.dart';
 import 'package:unishop/widgets/header.dart';
 import 'package:unishop/widgets/product_catalog.dart';
 import 'package:unishop/Controller/home_controller.dart';
+import 'dart:async';
 
 class HomeView extends StatefulWidget {
   @override
@@ -51,4 +52,41 @@ class _HomeViewState extends State<HomeView> {
     HomeController controller = HomeController();
     return controller.getListProducts();
   }
+
+  void showAlert(String title, String message, Color backgroundColor) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Container(
+            width: 100,
+            height: 40,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Text(message),
+                  // Aquí puedes agregar más widgets si es necesario
+                ],
+              ),
+            ),
+          ),
+          backgroundColor: backgroundColor,
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'OK',
+                style: TextStyle(
+                    color: Colors.white), // Cambia el color del texto a blanco
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }

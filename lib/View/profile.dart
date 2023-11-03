@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/View/login.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'dart:async';
 import 'package:unishop/widgets/footer.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:unishop/Controller/alert_controller.dart';
+import 'package:unishop/Model/DAO/dao.dart';
 
 
 class Profile extends StatefulWidget {
@@ -39,9 +43,72 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  Future<void> help() async {
+  Future<Position> help() async{
+
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if(permission == LocationPermission.denied){
+      permission = await Geolocator.requestPermission();
+      print(permission);
+      if(permission == LocationPermission.denied){
+        print("eeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrror");
+        openAppSettings();
+        return Future.error("error");
+      }
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void getCurrentLocation() async {
+    
+    Position position = await help();
+    print(position.latitude);
+    print(position.longitude);
+
+    var msj = "Latitude: ${position.latitude}, Longitude: ${position.longitude}";
+
+    showAlert("Alert sent", msj, Colors.red);
+
+    daoCreateAlert(position.latitude.toString(), position.latitude.toString(), userId);
 
   }
+
+    void showAlert(String title, String message, Color backgroundColor) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Container(
+            width: 100,
+            height: 40,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Text(message),
+                  // Aquí puedes agregar más widgets si es necesario
+                ],
+              ),
+            ),
+          ),
+          backgroundColor: backgroundColor,
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'OK',
+                style: TextStyle(
+                    color: Colors.white), // Cambia el color del texto a blanco
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +199,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: help, // Call the help function here
+                    onPressed: (){ getCurrentLocation();}, // Call the help function here
                     child: Text('HELP!'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.amber,
@@ -151,7 +218,7 @@ class _ProfileState extends State<Profile> {
             Padding(
               padding: EdgeInsets.all(20.0),
               child: GestureDetector(
-                onTap: showAlert, // Call the logout function here
+                onTap: showAlertLogOut, // Call the logout function here
                 child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(20.0),
@@ -174,7 +241,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void showAlert() {
+  void showAlertLogOut() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
