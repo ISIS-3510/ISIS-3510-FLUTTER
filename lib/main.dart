@@ -3,8 +3,9 @@ import 'firebase_options.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unishop/View/login.dart';
 import 'package:firebase_core/firebase_core.dart';
-//import 'package:unishop/views/user_posts.dart';
-//import 'package:unishop/views/new_post.dart';
+import 'package:unishop/Controller/alert_controller.dart';
+import 'package:unishop/Model/DAO/dao.dart';
+
 
 final colorScheme = ColorScheme.fromSeed(
   brightness: Brightness.light,
@@ -17,6 +18,13 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+
+  await initNotifications();
+
+  AlertController alertController = AlertController();
+  alertController.callSearchAlerts();
+
+  
   runApp(MaterialApp(
     title: 'Unishop',
     theme: ThemeData().copyWith(

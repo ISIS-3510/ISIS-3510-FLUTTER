@@ -51,9 +51,13 @@ class UsersRepository {
   static bool isValidDegree(String degree) {
     bool rta = false;
 
-    if (degree.trim().isNotEmpty) {
+    if(degree == 'Select your degree'){
+      rta == false;
+    }
+    if(degree.trim().isNotEmpty){
       rta = true;
     }
+    
 
     return rta;
   }
@@ -68,8 +72,7 @@ class UsersRepository {
   }
 
   static bool isValidEmail(String email) {
-    RegExp emailRegExp =
-        RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+    RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9._%+-]+@uniandes\.edu\.co$");
     return emailRegExp.hasMatch(email);
   }
 
@@ -92,4 +95,7 @@ class UsersRepository {
   static bool isValidConfirmPassword(String confirmPassword, String password) {
     return confirmPassword == password;
   }
+
+  
+
 }

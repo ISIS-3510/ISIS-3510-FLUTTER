@@ -40,7 +40,7 @@ class _RecommendedViewState extends State<RecommendedView> {
               },
             ),
           ),
-          bottomNavigationBar: Footer(currentIndex:1),
+          bottomNavigationBar: Footer(currentIndex:0),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked),
     );
