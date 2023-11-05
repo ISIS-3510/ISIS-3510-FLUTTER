@@ -61,7 +61,7 @@ class PostsRepository {
     return bargainProducts;
   }
 
-  static ProductDTO createPost(
+  static Future<ProductDTO> createPost(
       String enteredDegree,
       String enteredDescription,
       String enteredTitle,
@@ -70,8 +70,8 @@ class PostsRepository {
       bool enteredIsRecycled,
       String enteredSubject,
       String image,
-      String userId) {
-    daoCreatePost(enteredDegree, enteredDescription, enteredTitle, enteredIsNew,
+      String userId) async {
+    await daoCreatePost(enteredDegree, enteredDescription, enteredTitle, enteredIsNew,
         enteredPrice, enteredIsRecycled, enteredSubject, image, userId);
     List<String> images = [image];
     ProductDTO createdProduct = ProductDTO(

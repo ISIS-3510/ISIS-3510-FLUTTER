@@ -6,7 +6,6 @@ import 'package:unishop/widgets/floating_button.dart';
 import 'dart:async';
 import 'package:unishop/widgets/footer.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:unishop/Controller/alert_controller.dart';
 import 'package:unishop/Model/DAO/dao.dart';
 
 

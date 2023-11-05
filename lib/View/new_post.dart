@@ -1,8 +1,11 @@
+import 'dart:async';
+import 'package:cache_manager/cache_manager.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/Model/degree_relations.dart';
-import 'package:unishop/Model/DTO/product_dto.dart';
+import 'package:unishop/View/user_posts.dart';
 import 'package:unishop/widgets/image_input.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:unishop/Controller/new_post_controller.dart';
@@ -27,6 +30,91 @@ class _NewPostViewState extends State<NewPostView> {
   var _enteredIsRecycled = false;
   String _selectedDegree = DegreeRelations().degreeRelations['ALL']!.first;
   var _subjectController = TextEditingController();
+  var _firstime = true;
+  bool _isConnected = false;
+  StreamSubscription? listener2;
+  InternetConnectionChecker? customInstance2;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCache();
+    if (mounted) {
+      customInstance2 = InternetConnectionChecker.createInstance(
+        checkTimeout: const Duration(seconds: 1), // Custom check timeout
+        checkInterval: const Duration(seconds: 1), // Custom check interval
+      );
+      listener2 = customInstance2!.onStatusChange.listen((status) {
+      switch (status) {
+        case InternetConnectionStatus.connected:
+          print('Data connection is available.');
+          setState(() {
+              _isConnected = true;
+            });
+          if (_firstime){
+            setState(() {
+              _firstime = false;
+            });
+          } else {
+            ScaffoldMessenger.maybeOf(context)!.showSnackBar(
+              const SnackBar(
+                content: Text('You are connected to Internet.'),
+                duration: Duration(seconds: 10),
+              ),
+            );
+          }
+          break;
+        case InternetConnectionStatus.disconnected:
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('You are disconnected from Internet. You could try to fill this form and post it to save your information locally, and once you are connected you could save that on Internet by pressing Post again'),
+              duration: Duration(seconds: 10),
+            ),
+          );
+          setState(() {
+              _isConnected = false;
+              _firstime = false;
+            });
+          print('You are disconnected from internet.');
+          break;
+        }
+      });
+    }
+  }
+
+  @override
+  dispose() {
+    listener2!.cancel();
+    super.dispose();
+  }
+
+  void _loadCache () async {
+    String? title = await ReadCache.getString(key: "title");
+    String? description = await ReadCache.getString(key: "description");
+    String? degree = await ReadCache.getString(key: "degree");
+    String? price = await ReadCache.getString(key: "price");
+    String? subject = await ReadCache.getString(key: "subject");
+    bool? isNew = await ReadCache.getBool(key: "new");
+    bool? recycled= await ReadCache.getBool(key: "recycled");
+    String? image = await ReadCache.getString(key: "image");
+    if (title!=null || description!=null || degree!=null || price!=null || subject!=null || isNew!=null || recycled!=null) {
+      setState(() {
+        _titleController.text = title!;
+        _descriptionController.text = description!;
+        _selectedDegree = degree!;
+        _priceController.text = price!;
+        _subjectController.text = subject!;
+        _enteredIsNew = isNew!;
+        _enteredIsRecycled = recycled!;
+      });
+      if (image != null) {
+        setState(() {
+          _selectedImage = image;
+        });
+        print(_selectedImage);
+      }
+    }
+  }
 
   void _selectDegree() async {
     showMaterialRadioPicker<String>(
@@ -53,13 +141,24 @@ class _NewPostViewState extends State<NewPostView> {
     final userId =prefs.getString('user_id');
 
     if (_formKey.currentState!.validate() && _selectedImage.isNotEmpty) {
-      ProductDTO post = controller.createPost(enteredDegree.trim(), enteredDescription.trim(), enteredTitle.trim(), _enteredIsNew, enteredPrice, _enteredIsRecycled, enteredSubject.trim(), _selectedImage, userId.toString());
-      
+      await controller.createPost(enteredDegree.trim(), enteredDescription.trim(), enteredTitle.trim(), _enteredIsNew, enteredPrice, _enteredIsRecycled, enteredSubject.trim(), _selectedImage, userId.toString());
+      DeleteCache.deleteKey("title");
+      DeleteCache.deleteKey("description");
+      DeleteCache.deleteKey("degree");
+      DeleteCache.deleteKey("price");
+      DeleteCache.deleteKey("subject");
+      DeleteCache.deleteKey("new");
+      DeleteCache.deleteKey("recycled");
+      if (await ReadCache.getString(key: "image") != null) {
+        DeleteCache.deleteKey("image");
+      }
       if (!context.mounted) {
         return;
       }
-      Navigator.of(context).pop(
-        post
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (ctx) => const UserPostsView(),
+        )
       );
     } else if (_selectedImage.isEmpty) {
       if(!mounted) return;
@@ -82,11 +181,60 @@ class _NewPostViewState extends State<NewPostView> {
     }
   }
 
+  void _saveCache() async {
+    final enteredTitle = _titleController.text;
+    final enteredDescription = _descriptionController.text;
+    final enteredPrice = _priceController.text;
+    final enteredDegree = _selectedDegree;
+    var enteredSubject = _subjectController.text;
+
+    if (_formKey.currentState!.validate()) {
+      WriteCache.setString(key:"title", value: enteredTitle);
+      WriteCache.setString(key:"description", value: enteredDescription);
+      WriteCache.setString(key:"degree", value: enteredDegree);
+      WriteCache.setString(key:"price", value: enteredPrice);
+      WriteCache.setString(key:"subject", value: enteredSubject);
+      WriteCache.setBool(key: "new", value: _enteredIsNew);
+      WriteCache.setBool(key: "recycled", value: _enteredIsRecycled);
+      if (_selectedImage.isNotEmpty || _selectedImage != '') {
+        WriteCache.setString(key:"image", value: _selectedImage);
+      }
+      if(!mounted) return;
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Your data has been saved locally'),
+          content: const Text(
+              'Once there is connection to internet you can take the photo of the product, if you have not done it yet, and then post the data'),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Ok'))
+          ],
+        ),
+      );
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) => const UserPostsView(),
+                maintainState: false,
+              )
+            );
+          },
+        ),
         title: Text(
           'New Post',
           style: Theme.of(context).textTheme.titleLarge,
@@ -133,10 +281,14 @@ class _NewPostViewState extends State<NewPostView> {
                   keyboardType: TextInputType.text,
                 ),
                 const SizedBox(height: 10),
-                ImageInput(
-                  onPickImage: (image) {
-                    _selectedImage = image;
-                  },
+                AbsorbPointer(
+                  absorbing: !_isConnected,
+                  child: ImageInput(
+                    onPickImage: (image) {
+                      _selectedImage = image;
+                    },
+                    img: _selectedImage,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
@@ -289,7 +441,13 @@ class _NewPostViewState extends State<NewPostView> {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: _saveItem,
+                  onPressed: () {
+                    if (_isConnected) {
+                      _saveItem();
+                    } else {
+                      _saveCache();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50),
                     backgroundColor: Color.fromARGB(255, 255, 198, 0),
