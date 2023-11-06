@@ -129,9 +129,9 @@ class _ProfileState extends State<Profile> {
                         'https://www.w3schools.com/howto/img_avatar.png'), // Add your image URL here
                   ),
                   SizedBox(width: 20),
-                  Text(
+                   Text(
                     userName,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                 ],
               ),
@@ -139,7 +139,7 @@ class _ProfileState extends State<Profile> {
             SizedBox(height: 20),
             Text(
               'Personal Information',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             SizedBox(height: 10),
             SizedBox(height: 5),
@@ -148,9 +148,14 @@ class _ProfileState extends State<Profile> {
               children: [
                 Text(
                   'Username: ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                  color: Colors.black,),
+                  
                 ),
-                Text(userUsername),
+                Text(userUsername,
+                style: TextStyle(
+                  color: Colors.black,
+                ),),
               ],
             ),
             SizedBox(height: 5),
@@ -158,9 +163,13 @@ class _ProfileState extends State<Profile> {
               children: [
                 Text(
                   'Email: ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                  color: Colors.black),
                 ),
-                Text(userEmail),
+                Text(userEmail,
+                style: TextStyle(
+                  color: Colors.black,
+                ),),
               ],
             ),
             SizedBox(height: 5),
@@ -168,9 +177,13 @@ class _ProfileState extends State<Profile> {
               children: [
                 Text(
                   'Phone: ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                  color: Colors.black,),
                 ),
-                Text(userPhone),
+                Text(userPhone,
+                style: TextStyle(
+                  color: Colors.black,
+                ),),
               ],
             ),
             SizedBox(height: 5),
@@ -178,20 +191,26 @@ class _ProfileState extends State<Profile> {
               children: [
                 Text(
                   'Degree: ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                  color: Colors.black,),
                 ),
-                Text(userDegree),
+                Text(userDegree,
+                style: TextStyle(
+                  color: Colors.black,
+                ),),
               ],
             ),
             SizedBox(height: 20),
             Text(
               'In Trouble?',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,
+              color: Colors.black,),
             ),
             SizedBox(height: 10),
             Text(
               'Ask for help!',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16,
+              color: Colors.black,),
             ),
             SizedBox(height: 10),
             Row(
@@ -201,8 +220,8 @@ class _ProfileState extends State<Profile> {
                     onPressed: (){ getCurrentLocation();}, // Call the help function here
                     child: Text('HELP!'),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.amber,
-                      onPrimary: Colors.black,
+                      backgroundColor: Colors.amber,
+                      foregroundColor: Colors.black,
                       padding: EdgeInsets.symmetric(vertical: 15),
                     ),
                   ),
@@ -212,7 +231,9 @@ class _ProfileState extends State<Profile> {
             SizedBox(height: 10),
             Text(
               '* You must allow UniShop to access your location',
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 12,
+              color: Colors.black,),
+    
             ),
             Padding(
               padding: EdgeInsets.all(20.0),
