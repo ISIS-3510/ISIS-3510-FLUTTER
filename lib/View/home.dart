@@ -106,40 +106,41 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
-}
-  // void showAlert(String title, String message, Color backgroundColor) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text(title),
-  //         content: Container(
-  //           width: 100,
-  //           height: 40,
-  //           child: SingleChildScrollView(
-  //             child: Column(
-  //               children: <Widget>[
-  //                 Text(message),
-  //                 // Aquí puedes agregar más widgets si es necesario
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //         backgroundColor: backgroundColor,
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: Text(
-  //               'OK',
-  //               style: TextStyle(
-  //                   color: Colors.white), // Cambia el color del texto a blanco
-  //             ),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
+  void showAlert(String title, String message, Color backgroundColor) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Container(
+            width: 100,
+            height: 40,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Text(message),
+                  // Aquí puedes agregar más widgets si es necesario
+                ],
+              ),
+            ),
+          ),
+          backgroundColor: backgroundColor,
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'OK',
+                style: TextStyle(
+                    color: Colors.white), // Cambia el color del texto a blanco
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+}

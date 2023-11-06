@@ -116,8 +116,7 @@ class _HeaderPostsState extends State<HeaderPosts> {
   }
 
   void redBargain() {
-    Navigator.pushReplacement(
-      context,
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => BargainView(),
       ),
@@ -125,8 +124,7 @@ class _HeaderPostsState extends State<HeaderPosts> {
   }
 
   void redRecommended(){
-    Navigator.pushReplacement(
-            context,
+    Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => RecommendedView(),
             ),
@@ -134,8 +132,7 @@ class _HeaderPostsState extends State<HeaderPosts> {
   }
 
   void redAllProducts(){
-    Navigator.pushReplacement(
-            context,
+    Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => HomeView(isHome: false),
             ),

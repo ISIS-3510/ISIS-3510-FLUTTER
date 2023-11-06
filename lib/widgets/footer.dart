@@ -31,27 +31,25 @@ class _FooterState extends State<Footer> {
         switch (index) {
           case 0:
             //Navigate to the Home page.
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                    builder: (context) => HomeView(isHome: true)));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => HomeView(isHome: true)));
             break;
           case 1:
             //Navigate to the Posts page.
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HomeView(isHome: false)));
+             Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) => const HomeView(isHome: false)));
             break;
           case 2:
             break;
           case 3:
             //Navigate to the Favorite page.
-            Navigator.pushReplacement(context,
+            Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => FavoriteView()));
           case 4:
             //Navigate to the profile page.
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Profile()));
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => Profile()));
           // break;
         }
       },
