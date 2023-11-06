@@ -5,6 +5,7 @@ import 'package:decimal/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
+import 'package:unishop/View/home.dart';
 import 'package:unishop/View/new_post.dart';
 import 'package:unishop/Controller/user_posts_controller.dart';
 
@@ -230,11 +231,25 @@ class _UserPostsViewState extends State<UserPostsView> {
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) => HomeView(isHome: true),
+                maintainState: false,
+              )
+            );
+          },
+        ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         title: Text(
           'Your Publications',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            fontSize: 22
+          ),
         ),
         actions: [
           IconButton(

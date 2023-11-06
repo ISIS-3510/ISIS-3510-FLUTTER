@@ -36,21 +36,21 @@ void main() async{
           fontSize: 28,
           color: Colors.black
         ),
-      bodySmall: GoogleFonts.archivo(
-        fontWeight: FontWeight.w400,
-        fontSize: 20,
-        color: Color.fromARGB(255, 152, 162, 172)
-      ),
-      labelLarge: GoogleFonts.outfit(
-        fontWeight: FontWeight.w400,
-        fontSize: 18,
-        color: Colors.black
-      ),
-      labelSmall: GoogleFonts.archivo(
-        fontWeight: FontWeight.w400,
-        fontSize: 20,
-        color: Colors.black
-      ),
+        bodySmall: GoogleFonts.archivo(
+          fontWeight: FontWeight.w400,
+          fontSize: 20,
+          color: Color.fromARGB(255, 152, 162, 172)
+        ),
+        labelLarge: GoogleFonts.outfit(
+          fontWeight: FontWeight.w400,
+          fontSize: 18,
+          color: Colors.black
+        ),
+        labelSmall: GoogleFonts.archivo(
+          fontWeight: FontWeight.w400,
+          fontSize: 20,
+          color: Colors.black
+        ),
       ),
     ),
     home: LoginView(),

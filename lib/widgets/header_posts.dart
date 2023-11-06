@@ -4,28 +4,24 @@ import 'package:unishop/View/bargain.dart';
 import 'package:unishop/View/home.dart';
 import 'package:unishop/View/recommended.dart';
 
-class HeaderPosts extends StatefulWidget {
-  const HeaderPosts({super.key, required this.currentIndex});
+class HeaderPosts extends StatelessWidget {
+  const HeaderPosts({super.key, required this.currentIndex, required this.contextHeader});
   final int currentIndex;
-
-  @override
-  State<HeaderPosts> createState() {
-    return _HeaderPostsState();
-  }
-}
-
-class _HeaderPostsState extends State<HeaderPosts> {
-  Color? color1 = Colors.grey[300];
-  Color? color2 = Colors.grey[300];
-  Color? color3 = Colors.grey[300];
+  final BuildContext contextHeader;
 
   @override
   Widget build(BuildContext context) {
-    if (widget.currentIndex == 1) {
+    Color? color1 = Colors.grey[300];
+
+    Color? color2 = Colors.grey[300];
+
+    Color? color3 = Colors.grey[300];
+
+    if (currentIndex == 1) {
       color1 = Colors.orange;
-    } else if (widget.currentIndex == 2) {
+    } else if (currentIndex == 2) {
       color2 = Colors.orange;
-    } else if (widget.currentIndex == 3) {
+    } else if (currentIndex == 3) {
       color3 = Colors.orange;
     }
     return Column(
@@ -116,28 +112,25 @@ class _HeaderPostsState extends State<HeaderPosts> {
   }
 
   void redBargain() {
-    Navigator.pushReplacement(
-      context,
+    Navigator.of(contextHeader).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => BargainView(),
+        builder: (ctx) => BargainView(),
       ),
     );
   }
 
   void redRecommended(){
-    Navigator.pushReplacement(
-            context,
+    Navigator.of(contextHeader).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => RecommendedView(),
+              builder: (ctx) => RecommendedView(),
             ),
           );
   }
 
   void redAllProducts(){
-    Navigator.pushReplacement(
-            context,
+    Navigator.of(contextHeader).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => HomeView(isHome: false),
+              builder: (ctx) => HomeView(isHome: false),
             ),
           );
   }
