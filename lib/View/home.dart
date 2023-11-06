@@ -3,11 +3,15 @@ import 'package:unishop/Model/DTO/product_dto.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'package:unishop/widgets/footer.dart';
 import 'package:unishop/widgets/header.dart';
+import 'package:unishop/widgets/header_posts.dart';
 import 'package:unishop/widgets/product_catalog.dart';
 import 'package:unishop/Controller/home_controller.dart';
 import 'dart:async';
 
 class HomeView extends StatefulWidget {
+  final bool isHome;
+  HomeView({super.key, required this.isHome});
+
   @override
   _HomeViewState createState() => _HomeViewState();
 }
@@ -21,7 +25,7 @@ class _HomeViewState extends State<HomeView> {
             toolbarHeight: 120,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
-            title: Header(currentIndex: 1),
+            title: widget.isHome ? Header() : HeaderPosts(currentIndex: 1),
           ),
           floatingActionButton: FloatingButton(),
           body: Padding(
@@ -30,7 +34,7 @@ class _HomeViewState extends State<HomeView> {
               future: fetchProducts(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (!snapshot.hasData) {
@@ -42,7 +46,7 @@ class _HomeViewState extends State<HomeView> {
               },
             ),
           ),
-          bottomNavigationBar: Footer(currentIndex: 0),
+          bottomNavigationBar: widget.isHome ? Footer(currentIndex: 0) : Footer(currentIndex: 1),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked),
     );

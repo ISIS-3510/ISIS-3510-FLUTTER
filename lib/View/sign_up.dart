@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
-import 'package:unishop/View/home.dart';
 import 'package:unishop/Controller/sign_up_controller.dart';
 import 'package:unishop/View/login.dart';
 import 'package:connectivity/connectivity.dart';

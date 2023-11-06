@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:unishop/Model/DTO/user_dto.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -309,4 +308,65 @@ Future<void> showNotificacion(String titulo, String body) async {
       body,
       notificationDetails);
 
+}
+
+dynamic daoAddFavorite(
+    String postId,
+    String? userId) async {
+  final url = Uri.https('creative-mole-46.hasura.app', 'api/rest/favorites/add');
+  final headers = {
+    'content-type': 'application/json',
+    'x-hasura-admin-secret':
+        'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
+  };
+  final Map<String, dynamic> requestBody = {
+    "object": {
+      "post_id": postId,
+      "user_id": userId,
+    }
+  };
+
+  final response = await http.post(
+    url,
+    headers: headers,
+    body: jsonEncode(requestBody),
+  );
+  print(response.body);
+  return json.decode(response.body);
+}
+
+dynamic daoDeleteFavorite(
+    String postId,
+    String? userId) async {
+  final url = Uri.https('creative-mole-46.hasura.app', 'api/rest/favorites/delete');
+  final headers = {
+    'content-type': 'application/json',
+    'x-hasura-admin-secret':
+        'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
+  };
+  final Map<String, dynamic> requestBody = {
+      "post_id": postId,
+      "user_id": userId,
+  };
+
+  final response = await http.post(
+    url,
+    headers: headers,
+    body: jsonEncode(requestBody),
+  );
+  print(response.body);
+  return json.decode(response.body);
+}
+
+dynamic daoGetFavorites(queryParameters) async {
+  final url = Uri.https(
+      'creative-mole-46.hasura.app', 'api/rest/favorites/user', queryParameters);
+
+  final headers = {
+    'Content-Type': 'application/json',
+    'x-hasura-admin-secret':
+        'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
+  };
+  final response = await http.get(url, headers: headers);
+  return json.decode(response.body);
 }

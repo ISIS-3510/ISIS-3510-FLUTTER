@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:unishop/Controller/favorite_controller.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'package:unishop/widgets/footer.dart';
-import 'package:unishop/widgets/header_posts.dart';
+import 'package:unishop/widgets/header.dart';
 import 'package:unishop/widgets/product_catalog.dart';
-import 'package:unishop/Controller/bargain_Controller.dart';
-
-class BargainView extends StatefulWidget {
+class FavoriteView extends StatefulWidget {
   @override
-  State<BargainView> createState() => _BargainViewState();
+  State<FavoriteView> createState() => _FavoriteViewState();
 }
 
-class _BargainViewState extends State<BargainView> {
+class _FavoriteViewState extends State<FavoriteView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,7 +19,7 @@ class _BargainViewState extends State<BargainView> {
             toolbarHeight: 120,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
-            title: HeaderPosts(currentIndex: 3),
+            title: Header(),
           ),
           floatingActionButton: FloatingButton(),
           body: Padding(
@@ -41,14 +40,15 @@ class _BargainViewState extends State<BargainView> {
               },
             ),
           ),
-          bottomNavigationBar: Footer(currentIndex: 1),
+          bottomNavigationBar: Footer(currentIndex: 3),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked),
     );
   }
 
   Future<List<ProductDTO>> fetchProducts() async {
-    BargainController controller = BargainController();
-    return controller.getBargains();
+    FavoriteController controller= FavoriteController();
+    return controller.getFavorites();
   }
 }
+

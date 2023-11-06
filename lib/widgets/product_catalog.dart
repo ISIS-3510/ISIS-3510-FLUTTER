@@ -4,9 +4,77 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
+import 'package:unishop/Controller/favorite_controller.dart';
 
-class ProductCatalog extends StatelessWidget {
+class ProductCatalog extends StatefulWidget {
   final List<ProductDTO> products;
+  ProductCatalog({super.key, required this.products});
+
+  @override
+  State<ProductCatalog> createState() => _ProductCatalogState();
+}
+
+class _ProductCatalogState extends State<ProductCatalog> {
+  FavoriteController controller = FavoriteController();
+
+  Future<List<ProductDTO>> _loadFavorites() async {
+    final loadedFavorites = await controller.getFavorites();
+    return loadedFavorites;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<ProductDTO>>(
+      future: _loadFavorites(),
+      builder: (BuildContext context, AsyncSnapshot<List<ProductDTO>> snapshot) {
+        if (snapshot.hasData) {
+          return GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 0.0,
+            mainAxisSpacing: 0.0,
+            childAspectRatio: 0.7,
+          ),
+          itemCount: widget.products.length,
+          itemBuilder: (BuildContext context, int index) {
+            final product = widget.products[index];
+            return ProductCard(product: product, favorites: snapshot.data!);
+          },
+        );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      }
+    );
+  }
+}
+
+class ProductCard extends StatefulWidget {
+  final ProductDTO product;
+  final List<ProductDTO> favorites;
+  ProductCard({super.key, required this.product, required this.favorites});
+
+  @override
+  State<ProductCard> createState() => _ProductCardState();
+
+}
+
+
+class _ProductCardState extends State<ProductCard> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    for (final favorite in widget.favorites) {
+          if (favorite.id == widget.product.id) {
+            setState(() {
+              _isFavorite = true;
+            });
+          }
+        }
+  }
+
   bool _isValidImageUrl(String imageUrl) {
     return imageUrl.startsWith('h'.trim());
   }
@@ -24,21 +92,9 @@ class ProductCatalog extends StatelessWidget {
     }
   }
 
-  ProductCatalog({required this.products});
-
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 0.0,
-        mainAxisSpacing: 0.0,
-        childAspectRatio: 0.7,
-      ),
-      itemCount: products.length,
-      itemBuilder: (BuildContext context, int index) {
-        final product = products[index];
-        return Container(
+    return Container(
           color: Colors.white, // Set the background color of the container
           child: Card(
             elevation: 5,
@@ -50,7 +106,7 @@ class ProductCatalog extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    if (_isValidImageUrl(product.image.first))
+                    if (_isValidImageUrl(widget.product.image.first))
                       Padding(
                         padding: EdgeInsets.only(
                             top:
@@ -58,7 +114,7 @@ class ProductCatalog extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child: Image.network(
-                            product.image.first,
+                            widget.product.image.first,
                             fit: BoxFit.cover,
                             height: 150,
                             width: 150,
@@ -82,7 +138,7 @@ class ProductCatalog extends StatelessWidget {
                       ),
                     ListTile(
                       title: Text(
-                        product.title,
+                        widget.product.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -96,7 +152,7 @@ class ProductCatalog extends StatelessWidget {
                             top:
                                 13.0), // Adjust the top padding value as needed
                         child: Text(
-                          "\$ ${formatMoney(product.price.toString())}",
+                          "\$ ${formatMoney(widget.product.price.toString())}",
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -112,12 +168,22 @@ class ProductCatalog extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: IconButton(
                       icon: FaIcon(
-                        FontAwesomeIcons.heart,
+                        _isFavorite ? FontAwesomeIcons.solidHeart : FontAwesomeIcons.heart,
                         color: Colors.black,
                         size: 20,
                       ),
-                      onPressed: () {
-                        // Handle the icon tap here
+                      onPressed: () async {
+                        if (_isFavorite) {
+                          await FavoriteController().deleteFavorite(widget.product.id);
+                          setState(() {
+                            _isFavorite = false;
+                          });  
+                        } else{
+                          await FavoriteController().addFavorite(widget.product.id);
+                          setState(() {
+                            _isFavorite = true;
+                          });
+                        }
                       },
                     )),
                 Padding(
@@ -127,7 +193,7 @@ class ProductCatalog extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: Text(
-                      product.getUsername(),
+                      widget.product.getUsername(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -140,8 +206,6 @@ class ProductCatalog extends StatelessWidget {
               ],
             ),
           ),
-        );
-      },
-    );
+        ); 
   }
 }
