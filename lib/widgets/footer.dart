@@ -4,52 +4,45 @@ import 'package:unishop/View/favorite.dart';
 import 'package:unishop/View/home.dart';
 import 'package:unishop/View/profile.dart';
 
-class Footer extends StatefulWidget {
-  const Footer({super.key, required this.currentIndex});
+class Footer extends StatelessWidget {
+  const Footer({super.key, required this.currentIndex, required this.contextFooter});
   final int currentIndex;
+  final BuildContext contextFooter;
 
   @override
-  State<Footer> createState() {
-    return _FooterState();
-  }
-}
-
-class _FooterState extends State<Footer> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return BottomNavigationBar(
-      currentIndex: widget.currentIndex,
+      currentIndex: currentIndex,
       type: BottomNavigationBarType
           .fixed, // To display all items, even if there are more than 3.
       selectedItemColor: Colors.orange, // Color for the selected item.
       unselectedItemColor: Colors.grey,
       selectedLabelStyle:
           TextStyle(color: Colors.orange), // Color for unselected items.
-
       onTap: (index) {
         //Perform navigation based on the tapped item.
         switch (index) {
           case 0:
             //Navigate to the Home page.
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => HomeView(isHome: true)));
+            Navigator.of(contextFooter).pushReplacement(MaterialPageRoute(
+                builder: (ctx) => HomeView(isHome: true)));
             break;
           case 1:
             //Navigate to the Posts page.
-             Navigator.of(context).pushReplacement(
+             Navigator.of(contextFooter).pushReplacement(
               MaterialPageRoute(
-                builder: (ctx) => const HomeView(isHome: false)));
+                builder: (ctx) => HomeView(isHome: false)));
             break;
           case 2:
             break;
           case 3:
             //Navigate to the Favorite page.
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => FavoriteView()));
+            Navigator.of(contextFooter).pushReplacement(
+                MaterialPageRoute(builder: (ctx) => FavoriteView()));
           case 4:
             //Navigate to the profile page.
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Profile()));
+            Navigator.of(contextFooter).pushReplacement(
+                MaterialPageRoute(builder: (ctx) => Profile()));
           // break;
         }
       },

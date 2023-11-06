@@ -17,22 +17,21 @@ class FavoriteView extends StatefulWidget {
 }
 
 class _FavoriteViewState extends State<FavoriteView> {
-  @override
- List<ProductDTO> _products = [];
+  List<ProductDTO> _products = [];
   FavoriteController favController = FavoriteController();
-  StreamSubscription? listener;
-  InternetConnectionChecker? customInstance;
+  StreamSubscription? listenerFavorite;
+  InternetConnectionChecker? customInstanceFavorite;
   bool? isInternet;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    customInstance = InternetConnectionChecker.createInstance(
+    customInstanceFavorite = InternetConnectionChecker.createInstance(
       checkTimeout: const Duration(seconds: 1), // Custom check timeout
       checkInterval: const Duration(seconds: 1), // Custom check interval
     );
-    listener = customInstance!.onStatusChange.listen((status) async {
+    listenerFavorite = customInstanceFavorite!.onStatusChange.listen((status) async {
       switch (status) {
         case InternetConnectionStatus.connected:
           await _loadProducts();
@@ -56,7 +55,8 @@ class _FavoriteViewState extends State<FavoriteView> {
 
   @override
   dispose() {
-    listener!.cancel();
+    listenerFavorite!.cancel();
+    print('Favorite');
     super.dispose();
   }
 
@@ -92,13 +92,13 @@ class _FavoriteViewState extends State<FavoriteView> {
           backgroundColor: Colors.white,
           title: Header(),
         ),
-        floatingActionButton: FloatingButton(),
+        floatingActionButton: FloatingButton(contextButton: context),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: content,
         ),
         bottomNavigationBar:
-            Footer(currentIndex: 3),
+            Footer(currentIndex: 3, contextFooter: context),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );

@@ -18,19 +18,19 @@ class BargainView extends StatefulWidget {
 class _BargainViewState extends State<BargainView> {
   List<ProductDTO> _products = [];
   BargainController bargainController = BargainController();
-  StreamSubscription? listener;
-  InternetConnectionChecker? customInstance;
+  StreamSubscription? listenerBargain;
+  InternetConnectionChecker? customInstanceBargain;
   bool? isInternet;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    customInstance = InternetConnectionChecker.createInstance(
+    customInstanceBargain = InternetConnectionChecker.createInstance(
       checkTimeout: const Duration(seconds: 1), // Custom check timeout
       checkInterval: const Duration(seconds: 1), // Custom check interval
     );
-    listener = customInstance!.onStatusChange.listen((status) async {
+    listenerBargain = customInstanceBargain!.onStatusChange.listen((status) async {
       switch (status) {
         case InternetConnectionStatus.connected:
           await _loadProducts();
@@ -54,7 +54,8 @@ class _BargainViewState extends State<BargainView> {
 
   @override
   dispose() {
-    listener!.cancel();
+    listenerBargain!.cancel();
+    print('Bargain');
     super.dispose();
   }
 
@@ -88,14 +89,14 @@ class _BargainViewState extends State<BargainView> {
           toolbarHeight: 120,
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
-          title: HeaderPosts(currentIndex: 3),
+          title: HeaderPosts(currentIndex: 3, contextHeader: context),
         ),
-        floatingActionButton: FloatingButton(),
+        floatingActionButton: FloatingButton(contextButton: context),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: content,
         ),
-        bottomNavigationBar: Footer(currentIndex: 1),
+        bottomNavigationBar: Footer(currentIndex: 1, contextFooter: context),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );

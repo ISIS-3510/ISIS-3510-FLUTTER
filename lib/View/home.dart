@@ -17,25 +17,25 @@ class HomeView extends StatefulWidget {
   HomeView({super.key, required this.isHome});
 
   @override
-  _HomeViewState createState() => _HomeViewState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
   List<ProductDTO> _products = [];
   HomeController homeController = HomeController();
-  StreamSubscription? listener;
-  InternetConnectionChecker? customInstance;
+  StreamSubscription? listenerHome;
+  InternetConnectionChecker? customInstanceHome;
   bool? isInternet;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    customInstance = InternetConnectionChecker.createInstance(
+    customInstanceHome = InternetConnectionChecker.createInstance(
       checkTimeout: const Duration(seconds: 1), // Custom check timeout
       checkInterval: const Duration(seconds: 1), // Custom check interval
     );
-    listener = customInstance!.onStatusChange.listen((status) async {
+    listenerHome = customInstanceHome!.onStatusChange.listen((status) async {
       switch (status) {
         case InternetConnectionStatus.connected:
           await _loadProducts();
@@ -59,7 +59,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   dispose() {
-    listener!.cancel();
+    listenerHome!.cancel();
+    print('Home');
     super.dispose();
   }
 
@@ -93,15 +94,15 @@ class _HomeViewState extends State<HomeView> {
           toolbarHeight: 120,
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
-          title: widget.isHome ? Header() : HeaderPosts(currentIndex: 1),
+          title: widget.isHome ? Header() : HeaderPosts(currentIndex: 1, contextHeader: context),
         ),
-        floatingActionButton: FloatingButton(),
+        floatingActionButton: FloatingButton(contextButton: context),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: content,
         ),
         bottomNavigationBar:
-            widget.isHome ? Footer(currentIndex: 0) : Footer(currentIndex: 1),
+            widget.isHome ? Footer(currentIndex: 0, contextFooter: context) : Footer(currentIndex: 1, contextFooter: context),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
@@ -113,7 +114,7 @@ class _HomeViewState extends State<HomeView> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Container(
+          content: SizedBox(
             width: 100,
             height: 40,
             child: SingleChildScrollView(

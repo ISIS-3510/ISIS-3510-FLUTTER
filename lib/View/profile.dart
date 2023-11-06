@@ -112,7 +112,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingButton(),
+      floatingActionButton: FloatingButton(contextButton: context),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -234,7 +234,7 @@ class _ProfileState extends State<Profile> {
           ],
         ),
       ),
-      bottomNavigationBar: Footer(currentIndex: 4),
+      bottomNavigationBar: Footer(currentIndex: 4, contextFooter: context),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked
     );
@@ -253,7 +253,7 @@ class _ProfileState extends State<Profile> {
               child: Text('Log out', style: TextStyle(color: Colors.red),),
               onPressed: () {
                 // Aquí puedes agregar la lógica para cerrar la sesión
-                Navigator.push(
+                Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => LoginView())); // Cierra la alerta

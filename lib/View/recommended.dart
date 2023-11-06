@@ -17,19 +17,19 @@ class RecommendedView extends StatefulWidget {
 class _RecommendedViewState extends State<RecommendedView> {
    List<ProductDTO> _products = [];
   RecomendedController recController = RecomendedController();
-  StreamSubscription? listener;
-  InternetConnectionChecker? customInstance;
+  StreamSubscription? listenerRecommended;
+  InternetConnectionChecker? customInstanceRecommended;
   bool? isInternet;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    customInstance = InternetConnectionChecker.createInstance(
+    customInstanceRecommended = InternetConnectionChecker.createInstance(
       checkTimeout: const Duration(seconds: 1), // Custom check timeout
       checkInterval: const Duration(seconds: 1), // Custom check interval
     );
-    listener = customInstance!.onStatusChange.listen((status) async {
+    listenerRecommended = customInstanceRecommended!.onStatusChange.listen((status) async {
       switch (status) {
         case InternetConnectionStatus.connected:
           await _loadProducts();
@@ -53,7 +53,8 @@ class _RecommendedViewState extends State<RecommendedView> {
 
   @override
   dispose() {
-    listener!.cancel();
+    listenerRecommended!.cancel();
+    print('Recommended');
     super.dispose();
   }
 
@@ -87,15 +88,15 @@ class _RecommendedViewState extends State<RecommendedView> {
           toolbarHeight: 120,
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
-          title: HeaderPosts(currentIndex: 2),
+          title: HeaderPosts(currentIndex: 2, contextHeader: context),
         ),
-        floatingActionButton: FloatingButton(),
+        floatingActionButton: FloatingButton(contextButton: context),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: content,
         ),
         bottomNavigationBar:
-            Footer(currentIndex: 1),
+            Footer(currentIndex: 1, contextFooter: context),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
