@@ -112,7 +112,6 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingButton(contextButton: context),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -256,8 +255,8 @@ class _ProfileState extends State<Profile> {
         ),
       ),
       bottomNavigationBar: Footer(currentIndex: 4, contextFooter: context),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked
+      floatingActionButton: FloatingButton(contextButton: context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
     );
   }
 

@@ -15,10 +15,11 @@ class FloatingButton extends StatelessWidget{
             Navigator.of(contextButton).pushReplacement(
                 MaterialPageRoute(builder: (ctx) => UserPostsView()));
           },
+          shape: CircleBorder(),
           tooltip: 'Increment',
           backgroundColor: Colors.black,
           elevation: 4.0,
-          child: Icon(Icons.add)),
+          child: Icon(Icons.add, color: Colors.white)),
     );
   }
 }
