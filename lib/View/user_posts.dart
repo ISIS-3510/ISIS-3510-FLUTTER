@@ -1,8 +1,11 @@
+import 'dart:async';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:decimal/decimal.dart';
 import 'package:decimal/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
+import 'package:unishop/View/home.dart';
 import 'package:unishop/View/new_post.dart';
 import 'package:unishop/Controller/user_posts_controller.dart';
 
@@ -18,23 +21,56 @@ class UserPostsView extends StatefulWidget {
 class _UserPostsViewState extends State<UserPostsView> {
   List<ProductDTO> _products = [];
   UserPostController controller = UserPostController();
+  StreamSubscription? listener;
+  InternetConnectionChecker? customInstance;
+  bool? isInternet;
+  bool isLoading = true;
+  
 
   @override
   void initState() {
     super.initState();
-    _loadProducts();
+    customInstance = InternetConnectionChecker.createInstance(
+      checkTimeout: const Duration(seconds: 1), // Custom check timeout
+      checkInterval: const Duration(seconds: 1), // Custom check interval
+    );
+    listener = customInstance!.onStatusChange.listen((status) async {
+    switch (status) {
+      case InternetConnectionStatus.connected:
+        await _loadProducts();
+        print('Data connection is available.');
+        setState(() {
+          isInternet = true;
+          isLoading = false;
+        });
+        break;
+      case InternetConnectionStatus.disconnected:
+        setState(() {
+          _products = [];
+          isInternet = false;
+          isLoading = false;
+        });
+        print('You are disconnected from the internet.');
+        break;
+      }
+    });
+  }
+
+  @override
+  dispose() {
+    listener!.cancel();
+    super.dispose();
   }
 
   Future<void> _loadProducts() async {
     final loadedProducts = await controller.loadProducts();
     setState(() {
       _products = loadedProducts;
-      _loading = false;
     });
   }
 
   void _addProduct() async {
-    final newProduct = await Navigator.of(context).push<ProductDTO>(
+    final newProduct = await Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (ctx) => const NewPostView(),
       ),
@@ -48,8 +84,6 @@ class _UserPostsViewState extends State<UserPostsView> {
       _products.add(newProduct);
     });
   }
-
-  bool _loading = true;
 
   String formatMoney(String money) {
     if (money.isEmpty) {
@@ -66,13 +100,9 @@ class _UserPostsViewState extends State<UserPostsView> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = Center(
-      child: CircularProgressIndicator(
-        color: Colors.black,
-      ),
-    );
+    Widget? content;
 
-    if (_products.isEmpty && !_loading) {
+    if (_products.isEmpty && isInternet == true && isLoading == false) {
       content = Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -87,13 +117,48 @@ class _UserPostsViewState extends State<UserPostsView> {
             Text(
               'Try adding a post',
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Colors.black,
                   ),
             ),
           ],
         ),
       );
-    } else if (_products.isNotEmpty) {
+    } else if (_products.isEmpty && isInternet == false && isLoading == false) {
+      content = Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10,0,10,0),
+              child: Text(
+                'Uh oh! Check if you have internet connection',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 20
+                    )
+                ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Text(
+                'Once you have internet connection, your products will be loaded again',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: Colors.black,
+                      fontSize: 15
+                    ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    else if (_products.isNotEmpty && isLoading == false) {
       content = ListView.builder(
         padding: EdgeInsets.all(8),
         itemCount: _products.length,
@@ -156,15 +221,35 @@ class _UserPostsViewState extends State<UserPostsView> {
           ),
         ),
       );
+    } else if (isLoading == true && isInternet == null){
+      content = Center(
+      child: CircularProgressIndicator(
+        color: Colors.black,
+        ),
+      );
     }
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) => HomeView(isHome: true),
+                maintainState: false,
+              )
+            );
+          },
+        ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         title: Text(
           'Your Publications',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            fontSize: 22
+          ),
         ),
         actions: [
           IconButton(

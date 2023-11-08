@@ -6,9 +6,11 @@ import 'package:permission_handler/permission_handler.dart';
 
 
 class ImageInput extends StatefulWidget {
-  const ImageInput({super.key, required this.onPickImage});
+  const ImageInput({super.key, required this.onPickImage, required this.img});
 
   final void Function (String image) onPickImage;
+
+  final String img;
 
   @override
   State<ImageInput> createState() {
@@ -63,6 +65,18 @@ class _ImageInputState extends State<ImageInput> {
         ),
       );
     }
+
+    if (widget.img != '') {
+        content = GestureDetector(
+          onTap: _takePicture,
+          child: Image.network(
+            widget.img,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+        );
+      }
 
     return Container(
       decoration: BoxDecoration(

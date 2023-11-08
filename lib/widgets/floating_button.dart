@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:unishop/View/user_posts.dart';
 
 class FloatingButton extends StatelessWidget{
+  const FloatingButton ({super.key, required this.contextButton});
+  final BuildContext contextButton;
+
   @override
   Widget build(BuildContext context) { 
     bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
@@ -9,13 +12,14 @@ class FloatingButton extends StatelessWidget{
       visible: !keyboardIsOpen,
       child: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => UserPostsView()));
+            Navigator.of(contextButton).pushReplacement(
+                MaterialPageRoute(builder: (ctx) => UserPostsView()));
           },
+          shape: CircleBorder(),
           tooltip: 'Increment',
           backgroundColor: Colors.black,
           elevation: 4.0,
-          child: Icon(Icons.add)),
+          child: Icon(Icons.add, color: Colors.white)),
     );
   }
 }

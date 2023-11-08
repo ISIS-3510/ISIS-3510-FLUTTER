@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:unishop/Controller/favorite_controller.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'package:unishop/widgets/footer.dart';
-import 'package:unishop/widgets/header_posts.dart';
+import 'package:unishop/widgets/header.dart';
 import 'package:unishop/widgets/product_catalog.dart';
-import 'package:unishop/Controller/bargain_Controller.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:unishop/widgets/noposts.dart';
 import 'package:unishop/widgets/noconnection.dart';
 import 'dart:async';
 
-class BargainView extends StatefulWidget {
+
+class FavoriteView extends StatefulWidget {
   @override
-  State<BargainView> createState() => _BargainViewState();
+  State<FavoriteView> createState() => _FavoriteViewState();
 }
 
-class _BargainViewState extends State<BargainView> {
+class _FavoriteViewState extends State<FavoriteView> {
   List<ProductDTO> _products = [];
-  BargainController bargainController = BargainController();
-  StreamSubscription? listenerBargain;
-  InternetConnectionChecker? customInstanceBargain;
+  FavoriteController favController = FavoriteController();
+  StreamSubscription? listenerFavorite;
+  InternetConnectionChecker? customInstanceFavorite;
   bool? isInternet;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    customInstanceBargain = InternetConnectionChecker.createInstance(
+    customInstanceFavorite = InternetConnectionChecker.createInstance(
       checkTimeout: const Duration(seconds: 1), // Custom check timeout
       checkInterval: const Duration(seconds: 1), // Custom check interval
     );
-    listenerBargain = customInstanceBargain!.onStatusChange.listen((status) async {
+    listenerFavorite = customInstanceFavorite!.onStatusChange.listen((status) async {
       switch (status) {
         case InternetConnectionStatus.connected:
           await _loadProducts();
@@ -54,13 +55,13 @@ class _BargainViewState extends State<BargainView> {
 
   @override
   dispose() {
-    listenerBargain!.cancel();
-    print('Bargain');
+    listenerFavorite!.cancel();
+    print('Favorite');
     super.dispose();
   }
 
   Future<void> _loadProducts() async {
-    final loadedProducts = await bargainController.getBargains();
+    final loadedProducts = await favController.getFavorites();
     setState(() {
       _products = loadedProducts;
     });
@@ -89,14 +90,15 @@ class _BargainViewState extends State<BargainView> {
           toolbarHeight: 120,
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
-          title: HeaderPosts(currentIndex: 3, contextHeader: context),
+          title: Header(),
         ),
         floatingActionButton: FloatingButton(contextButton: context),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: content,
         ),
-        bottomNavigationBar: Footer(currentIndex: 1, contextFooter: context),
+        bottomNavigationBar:
+            Footer(currentIndex: 3, contextFooter: context),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );

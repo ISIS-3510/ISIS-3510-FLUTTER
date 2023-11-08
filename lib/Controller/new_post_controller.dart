@@ -2,7 +2,7 @@ import 'package:unishop/Model/Repository/posts_repository.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
 
 class NewPostController {
-  ProductDTO createPost(
+  Future<ProductDTO> createPost(
       String enteredDegree,
       String enteredDescription,
       String enteredTitle,
@@ -11,8 +11,8 @@ class NewPostController {
       bool enteredIsRecycled,
       String enteredSubject,
       String image,
-      String userId) {
-    return PostsRepository.createPost(
+      String userId) async{
+    return await PostsRepository.createPost(
         enteredDegree,
         enteredDescription,
         enteredTitle,
