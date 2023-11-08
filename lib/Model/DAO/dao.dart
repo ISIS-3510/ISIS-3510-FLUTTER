@@ -92,7 +92,6 @@ dynamic daoCreatePost(
   };
   final Map<String, dynamic> requestBody = {
     "object": {
-      "date": DateTime.now().toIso8601String(),
       "degree": enteredDegree ?? "",
       "description": enteredDescription ?? "",
       "name": enteredTitle,
@@ -146,7 +145,6 @@ dynamic daoCreateAlert(String latitude, String longitude, String id) async {
 
   final Map<String, dynamic> requestBody = {
     "object": {
-      "date": DateTime.now().toIso8601String(),
       "danger": 5,
       "latitude": latitude,
       "longitude": longitude,
@@ -233,7 +231,7 @@ double calculateAbsoluteDateDifferenceInSeconds(String startDate, String endDate
 
 
 String getCurrentDate() {
-  DateTime now = DateTime.now();
+  DateTime now = DateTime.now().toUtc();
   String formattedDate =
       '${now.year}-${_addLeadingZero(now.month)}-${_addLeadingZero(now.day)}T${_addLeadingZero(now.hour)}:${_addLeadingZero(now.minute)}:${_addLeadingZero(now.second)}.${_addLeadingZero(now.millisecond)}+00:00';
   return formattedDate;
