@@ -421,7 +421,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
         else{
 
-      showAlert('Error', 'No Internet Connection', Colors.red);
+      showAlert('Error', 'Connection error, check your wifi or mobile data network and try again.', Colors.grey);
 
 
         }
