@@ -46,17 +46,34 @@ class _ImageInputState extends State<ImageInput> {
     widget.onPickImage(_selectedImagen!);
   }
 
+  void _selectPicture() async {
+    final imagePicker = ImagePicker();
+    final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery, maxWidth: 600);
+
+    if (pickedImage == null) {
+      return;
+    }
+
+    final imageUrl = await daoSaveImage(pickedImage);
+
+    setState(() {
+      _selectedImagen = imageUrl;
+    });
+
+    widget.onPickImage(_selectedImagen!);
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content = TextButton.icon(
         icon: const Icon(Icons.add, color: Color.fromARGB(255, 152, 162, 172),),
         label: Text('Add', style: Theme.of(context).textTheme.bodySmall,),
-        onPressed:_takePicture,
+        onPressed:_showDialogPictureorGallery,
       );
 
     if (_selectedImagen != null) {
       content = GestureDetector(
-        onTap: _takePicture,
+        onTap: _showDialogPictureorGallery,
         child: Image.network(
           _selectedImagen!,
           fit: BoxFit.cover,
@@ -68,7 +85,7 @@ class _ImageInputState extends State<ImageInput> {
 
     if (widget.img != '') {
         content = GestureDetector(
-          onTap: _takePicture,
+          onTap: _showDialogPictureorGallery,
           child: Image.network(
             widget.img,
             fit: BoxFit.cover,
@@ -89,6 +106,33 @@ class _ImageInputState extends State<ImageInput> {
       width: double.infinity,
       alignment: Alignment.center,
       child: content,
+    );
+  }
+  void _showDialogPictureorGallery() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select the origin of the picture'),
+          content: Text('Choose one of the following options'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _selectPicture();
+                Navigator.of(context).pop();
+              },
+              child: Text('Gallery'),
+            ),
+            TextButton(
+              onPressed: () {
+                _takePicture();
+                Navigator.of(context).pop();
+              },
+              child: Text('Camera'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
