@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
 import 'package:unishop/View/new_post.dart';
 import 'package:unishop/Controller/user_posts_controller.dart';
+import 'package:unishop/View/home.dart';
 
 class UserPostsView extends StatefulWidget {
   const UserPostsView({super.key});
@@ -442,14 +443,30 @@ class _UserPostsViewState extends State<UserPostsView> {
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) => HomeView(isHome: true),
+                maintainState: false,
+              )
+            );
+          },
+        ),
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           title: Text(
             'Your Publications',
-            style: Theme.of(context).textTheme.titleLarge,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+              fontSize: 25,
+            )
           ),
           bottom: TabBar(
-            labelStyle: Theme.of(context).textTheme.titleLarge,
+            labelStyle: Theme.of(context).textTheme.titleMedium,
             labelColor: Colors.black,
             tabs: [
               Tab(

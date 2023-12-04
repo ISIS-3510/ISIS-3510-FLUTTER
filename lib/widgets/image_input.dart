@@ -4,11 +4,10 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:unishop/Model/DAO/dao.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 class ImageInput extends StatefulWidget {
   const ImageInput({super.key, required this.onPickImage, required this.img});
 
-  final void Function (String image) onPickImage;
+  final void Function(String image) onPickImage;
 
   final String img;
 
@@ -23,7 +22,8 @@ class _ImageInputState extends State<ImageInput> {
 
   void _takePicture() async {
     final imagePicker = ImagePicker();
-    final pickedImage = await imagePicker.pickImage(source: ImageSource.camera, maxWidth: 600);
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.camera, maxWidth: 600);
 
     if (pickedImage == null) {
       return;
@@ -48,7 +48,8 @@ class _ImageInputState extends State<ImageInput> {
 
   void _selectPicture() async {
     final imagePicker = ImagePicker();
-    final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery, maxWidth: 600);
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery, maxWidth: 600);
 
     if (pickedImage == null) {
       return;
@@ -66,10 +67,16 @@ class _ImageInputState extends State<ImageInput> {
   @override
   Widget build(BuildContext context) {
     Widget content = TextButton.icon(
-        icon: const Icon(Icons.add, color: Color.fromARGB(255, 152, 162, 172),),
-        label: Text('Add', style: Theme.of(context).textTheme.bodySmall,),
-        onPressed:_showDialogPictureorGallery,
-      );
+      icon: const Icon(
+        Icons.add,
+        color: Color.fromARGB(255, 152, 162, 172),
+      ),
+      label: Text(
+        'Add',
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+      onPressed: _showDialogPictureorGallery,
+    );
 
     if (_selectedImagen != null) {
       content = GestureDetector(
@@ -84,16 +91,16 @@ class _ImageInputState extends State<ImageInput> {
     }
 
     if (widget.img != '') {
-        content = GestureDetector(
-          onTap: _showDialogPictureorGallery,
-          child: Image.network(
-            widget.img,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-        );
-      }
+      content = GestureDetector(
+        onTap: _showDialogPictureorGallery,
+        child: Image.network(
+          widget.img,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+        ),
+      );
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -108,27 +115,48 @@ class _ImageInputState extends State<ImageInput> {
       child: content,
     );
   }
+
   void _showDialogPictureorGallery() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select the origin of the picture'),
-          content: Text('Choose one of the following options'),
+          title: Text(
+            'Select the origin of the picture',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          content: Text(
+            'Choose one of the following options',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 _selectPicture();
                 Navigator.of(context).pop();
               },
-              child: Text('Gallery'),
+              child: Text(
+                'Gallery',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
             ),
             TextButton(
               onPressed: () {
                 _takePicture();
                 Navigator.of(context).pop();
               },
-              child: Text('Camera'),
+              child: Text(
+                'Camera',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
             ),
           ],
         );

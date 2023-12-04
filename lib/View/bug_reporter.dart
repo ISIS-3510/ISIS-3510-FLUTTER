@@ -105,15 +105,30 @@ class _BugReporterViewState extends State<BugReporterView> {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text('Your data has been saved locally'),
+          title: const Text(
+            'Your data has been saved locally',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
           content: const Text(
-              'Once there is connection to internet you can report your bug, if you have not done it yet'),
+            'Once there is connection to internet you can report your bug, if you have not done it yet',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
           actions: [
             TextButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                },
-                child: const Text('Ok'))
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text(
+                'Ok',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            )
           ],
         ),
       );
@@ -127,10 +142,12 @@ class _BugReporterViewState extends State<BugReporterView> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        title: Text(
-          'Bug Reporter',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        title: Text('Bug Reporter',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+              fontSize: 25,
+            )),
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -156,21 +173,28 @@ class _BugReporterViewState extends State<BugReporterView> {
                     .labelSmall!
                     .copyWith(fontSize: 15),
                 decoration: InputDecoration(
-                  filled: true,
-                  fillColor:
-                      Color.fromARGB(255, 217, 217, 217).withOpacity(0.11),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  label: Text(
-                    'Bug Description',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(fontSize: 15),
-                  ),
-                ),
+                    filled: true,
+                    fillColor:
+                        Color.fromARGB(255, 217, 217, 217).withOpacity(0.11),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    label: Text(
+                      'Bug Description',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(fontSize: 15),
+                    ),
+                    errorStyle: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                    ),
+                    counterStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    )),
                 keyboardType: TextInputType.text,
               ),
               const SizedBox(height: 10),
