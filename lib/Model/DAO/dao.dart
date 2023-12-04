@@ -423,3 +423,19 @@ dynamic daoUnsoldProduct(String postId,
   final response = await http.post(url, headers: headers, body: jsonEncode(requestBody));
   return json.decode(response.body);
 }
+
+dynamic daoAddBugReport(String bug, String userId) async {
+  final url = Uri.https(
+      'image-repository-53ee3-default-rtdb.firebaseio.com', 'bug-list.json');
+
+  final headers = {
+    'Content-Type': 'application/json',
+  };
+
+  final Map<String, dynamic> requestBody = {
+      userId : bug,
+  };
+
+  final response = await http.post(url, headers: headers, body: jsonEncode(requestBody));
+  return json.decode(response.body);
+}

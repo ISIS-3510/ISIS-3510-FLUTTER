@@ -48,6 +48,7 @@ class _UserPostsViewState extends State<UserPostsView> {
         case InternetConnectionStatus.disconnected:
           setState(() {
             _products = [];
+            _soldProducts = [];
             isInternet = false;
             isLoading = false;
           });

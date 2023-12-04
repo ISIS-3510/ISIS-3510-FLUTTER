@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unishop/View/bug_reporter.dart';
 import 'package:unishop/View/login.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'dart:async';
@@ -200,6 +201,25 @@ class _ProfileState extends State<Profile> {
                   child: ElevatedButton(
                     onPressed: (){ getCurrentLocation();}, // Call the help function here
                     child: Text('HELP!'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.amber,
+                      onPrimary: Colors.black,
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: (){
+                      Navigator.push(context,
+                      MaterialPageRoute(
+                        builder: (context) => BugReporterView()));},
+                    child: Text('Report a problem'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.amber,
                       onPrimary: Colors.black,
