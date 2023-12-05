@@ -9,7 +9,7 @@ import 'package:connectivity/connectivity.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
@@ -295,7 +295,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Color(0xFFFFC600),
+                    backgroundColor: Color(0xFFFFC600),
                     fixedSize: Size(330, 50),
                   ),
                   child: Text(
@@ -342,7 +342,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Container(
+          content: SizedBox(
             width: 100,
             height: 30,
             child: SingleChildScrollView(
@@ -390,12 +390,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
           // Registro exitoso
           showAlert("Good", "Account Created!", Color(0xFFFFC600));
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoginView(),
-            ),
-          );
+          if (context.mounted){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginView(),
+              ),
+            );
+          }
 
           final jsonResponse = json.decode(response.body);
           final userData = jsonResponse['data']['insert_users_one'];
@@ -421,7 +423,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
         else{
 
-      showAlert('Error', 'No Internet Connection', Colors.red);
+      showAlert('Error', 'Connection error, check your wifi or mobile data network and try again.', Colors.grey);
 
 
         }

@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unishop/View/bug_reporter.dart';
 import 'package:unishop/View/login.dart';
-import 'package:unishop/widgets/floating_button.dart';
-import 'dart:async';
-import 'package:unishop/widgets/footer.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:unishop/Model/DAO/dao.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
-class Profile extends StatefulWidget {
+class Seller extends StatefulWidget {
   @override
-  State<Profile> createState() => _ProfileState();
+  _SellerState createState() => _SellerState();
 }
 
-class _ProfileState extends State<Profile> {
+class _SellerState extends State<Seller> {
   String userDegree = "";
   String userEmail = "";
   String userId = "";
@@ -31,46 +25,26 @@ class _ProfileState extends State<Profile> {
   }
 
   _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
+
+    //var seller_username = prefs.getString('seller_username') ?? "";
+    var seller_username = "Lizeth";
+    var infoSeller = await daoSearchUserByUsername(seller_username);
+
     setState(() {
-      userDegree = prefs.getString('user_degree') ?? "";
-      userEmail = prefs.getString('user_email') ?? "";
-      userId = prefs.getString('user_id') ?? "";
-      userName = prefs.getString('user_name') ?? "";
-      userPassword = prefs.getString('user_password') ?? "";
-      userPhone = prefs.getString('user_phone') ?? "";
-      userUsername = prefs.getString('user_username') ?? "";
+
+      userDegree = infoSeller["degree"];
+      userEmail = infoSeller["email"];
+      userId = infoSeller["id"];
+      userName = infoSeller["name"];
+      userPassword = infoSeller["password"];
+      userPhone = infoSeller["phone"];
+      userUsername = infoSeller["username"];
     });
   }
 
-  Future<Position> help() async{
-
-    LocationPermission permission;
-    permission = await Geolocator.checkPermission();
-    if(permission == LocationPermission.denied){
-      permission = await Geolocator.requestPermission();
-      print(permission);
-      if(permission == LocationPermission.denied){
-        print("eeeeeeeeeeeeeeeerrrrrrrrrrrrrrrrrrrrrror");
-        openAppSettings();
-        return Future.error("error");
-      }
-    }
-    return await Geolocator.getCurrentPosition();
-  }
-
-  void getCurrentLocation() async {
-    
-    Position position = await help();
-    print(position.latitude);
-    print(position.longitude);
-
-    var msj = "Latitude: ${position.latitude}, Longitude: ${position.longitude}";
-
-    showAlert("Alert sent", msj, Colors.red);
-
-    daoCreateAlert(position.latitude.toString(), position.latitude.toString(), userId);
-
+  void call() async {
+    var phoneNumber = '+57' + userPhone;
+    launch('tel://$phoneNumber');
   }
 
     void showAlert(String title, String message, Color backgroundColor) {
@@ -79,7 +53,7 @@ class _ProfileState extends State<Profile> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: SizedBox(
+          content: Container(
             width: 100,
             height: 40,
             child: SingleChildScrollView(
@@ -108,7 +82,6 @@ class _ProfileState extends State<Profile> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -201,82 +174,26 @@ class _ProfileState extends State<Profile> {
               ],
             ),
             SizedBox(height: 20),
-            Text(
-              'In Trouble?',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,
-              color: Colors.black,),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Ask for help!',
-              style: TextStyle(fontSize: 16,
-              color: Colors.black,),
-            ),
             SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: (){ getCurrentLocation();}, // Call the help function here
+                    onPressed: (){ call();}, // Call the help function here
+                    child: Text('Contact Seller'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber,
                       foregroundColor: Colors.black,
                       padding: EdgeInsets.symmetric(vertical: 15),
                     ),
-                    child: Text('HELP!'),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){
-                      Navigator.push(context,
-                      MaterialPageRoute(
-                        builder: (context) => BugReporterView()));},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amber,
-                      foregroundColor: Colors.black,
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text('Report a problem'),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            Text(
-              '* You must allow UniShop to access your location',
-              style: TextStyle(fontSize: 12,
-              color: Colors.black,),
-    
-            ),
-            Padding(
-              padding: EdgeInsets.all(20.0),
-              child: GestureDetector(
-                onTap: showAlertLogOut, // Call the logout function here
-                child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  'Log out',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-            ),
           ],
         ),
       ),
-      bottomNavigationBar: Footer(currentIndex: 4, contextFooter: context),
-      floatingActionButton: FloatingButton(contextButton: context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
     );
   }
 
@@ -285,8 +202,8 @@ class _ProfileState extends State<Profile> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Log out", style: TextStyle(color: Colors.black)),
-          content: Text("Are you sure you want to log out?", style: TextStyle(color: Colors.black)),
+          title: Text("Log out"),
+          content: Text("Are you sure you want to log out?"),
           backgroundColor: Colors.white, // Establece el color de fondo
           actions: <Widget>[
             TextButton(
@@ -300,7 +217,7 @@ class _ProfileState extends State<Profile> {
               },
             ),
             TextButton(
-              child: Text('Cancel', style: TextStyle(color: Colors.black)),
+              child: Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop(); // Cierra la alerta
               },

@@ -8,7 +8,7 @@ import 'package:connectivity/connectivity.dart';
 
 class LoginView extends StatefulWidget {
   @override
-  _LoginViewState createState() => _LoginViewState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
@@ -98,7 +98,7 @@ class _LoginViewState extends State<LoginView> {
                     child: ElevatedButton(
                       onPressed: _handleLogin,
                       style: ElevatedButton.styleFrom(
-                        primary: Color(0xFFFFC600),
+                        backgroundColor: Color(0xFFFFC600),
                         fixedSize: Size(330,
                             50), // Establece el color de fondo del botón a FFC600
                       ),
@@ -187,8 +187,7 @@ class _LoginViewState extends State<LoginView> {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||
         connectivityResult == ConnectivityResult.wifi) {
-
-          try {
+      try {
       final response = await controller.logIn();
 
       if (response.statusCode == 200) {
@@ -206,12 +205,14 @@ class _LoginViewState extends State<LoginView> {
         // Authentication successful, show a success alert
         showAlert('Success', 'Authentication successful', Colors.green);
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeView(isHome: true),
-          ),
-        );
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeView(isHome: true),
+            ),
+          );
+        }
       } else {
         // Handle other HTTP status codes as needed
         showAlert('Error', 'Failed to fetch data', Colors.red);
@@ -223,7 +224,7 @@ class _LoginViewState extends State<LoginView> {
 
 
     } else {
-      showAlert('Error', 'No Internet Connection', Colors.red);
+      showAlert('Error', 'Connection error, check your wifi or mobile data network and try again.', Colors.grey);
       
     }
 
