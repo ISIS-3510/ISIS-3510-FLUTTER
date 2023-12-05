@@ -9,13 +9,14 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:unishop/widgets/noposts.dart';
 import 'package:unishop/widgets/noconnection.dart';
 import 'dart:async';
+
 class RecommendedView extends StatefulWidget {
   @override
   State<RecommendedView> createState() => _RecommendedViewState();
 }
 
 class _RecommendedViewState extends State<RecommendedView> {
-   List<ProductDTO> _products = [];
+  List<ProductDTO> _products = [];
   RecomendedController recController = RecomendedController();
   StreamSubscription? listenerRecommended;
   InternetConnectionChecker? customInstanceRecommended;
@@ -29,7 +30,8 @@ class _RecommendedViewState extends State<RecommendedView> {
       checkTimeout: const Duration(seconds: 1), // Custom check timeout
       checkInterval: const Duration(seconds: 1), // Custom check interval
     );
-    listenerRecommended = customInstanceRecommended!.onStatusChange.listen((status) async {
+    listenerRecommended =
+        customInstanceRecommended!.onStatusChange.listen((status) async {
       switch (status) {
         case InternetConnectionStatus.connected:
           await _loadProducts();
@@ -45,7 +47,7 @@ class _RecommendedViewState extends State<RecommendedView> {
             isInternet = false;
             isLoading = false;
           });
-          print('You are disconnected from the internet.') ;
+          print('You are disconnected from the internet.');
           break;
       }
     });
@@ -73,7 +75,7 @@ class _RecommendedViewState extends State<RecommendedView> {
     } else if (_products.isEmpty && isInternet == false && isLoading == false) {
       content = NoInternet();
     } else if (_products.isNotEmpty && isLoading == false) {
-      content = ProductCatalog(products: _products);
+      content = ProductCatalog(products: _products, footNum: 1);
     } else if (isLoading == true && isInternet == null) {
       content = Center(
         child: CircularProgressIndicator(
@@ -95,11 +97,9 @@ class _RecommendedViewState extends State<RecommendedView> {
           padding: const EdgeInsets.all(16.0),
           child: content,
         ),
-        bottomNavigationBar:
-            Footer(currentIndex: 1, contextFooter: context),
+        bottomNavigationBar: Footer(currentIndex: 1, contextFooter: context),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
 }
-
