@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unishop/View/login.dart';
-import 'package:unishop/widgets/floating_button.dart';
-import 'dart:async';
-import 'package:unishop/widgets/footer.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:unishop/Model/DAO/dao.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -32,7 +25,6 @@ class _SellerState extends State<Seller> {
   }
 
   _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
 
     //var seller_username = prefs.getString('seller_username') ?? "";
     var seller_username = "Lizeth";

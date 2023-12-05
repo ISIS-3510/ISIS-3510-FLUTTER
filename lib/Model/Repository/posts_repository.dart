@@ -24,6 +24,7 @@ class PostsRepository {
               .substring(1)
               .replaceAll(',', '')),
           isRecycled: item['recycled'],
+          isSold: item['sold'],
           subject: item['subject'],
           image: imageUrls,
           title: item['name'],
@@ -107,6 +108,7 @@ class PostsRepository {
                 ),
             isNew: item['new'],
             isRecycled: item['recycled'],
+            isSold: item['sold'],
             degree: item['degree'],
             subject: item['subject'],
             image: [item['urlsImages']],
@@ -150,6 +152,7 @@ class PostsRepository {
                 ),
             isNew: item['post']['new'],
             isRecycled: item['post']['recycled'],
+            isSold: item['post']['sold'],
             degree: item['post']['degree'],
             subject: item['post']['subject'],
             image: [item['post']['urlsImages']],
@@ -159,6 +162,16 @@ class PostsRepository {
       }
     }
     return loadedProducts;
+  }
+
+  static void soldProduct(String postId) async {
+    final prefs = await SharedPreferences.getInstance();
+    daoSoldProduct(postId, prefs.getString('user_id')!);
+  }
+
+  static void unsoldProduct(String postId) async {
+    final prefs = await SharedPreferences.getInstance();
+    daoUnsoldProduct(postId, prefs.getString('user_id')!);
   }
 }
 

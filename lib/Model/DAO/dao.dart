@@ -116,7 +116,6 @@ dynamic daoCreatePost(
   };
   final Map<String, dynamic> requestBody = {
     "object": {
-      "date": DateTime.now().toIso8601String(),
       "degree": enteredDegree ?? "",
       "description": enteredDescription ?? "",
       "name": enteredTitle,
@@ -391,5 +390,75 @@ dynamic daoGetFavorites(queryParameters) async {
         'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
   };
   final response = await http.get(url, headers: headers);
+  return json.decode(response.body);
+}
+
+dynamic daoGetUser(queryParameters) async {
+  final url = Uri.https(
+      'creative-mole-46.hasura.app', 'api/rest/users/user', queryParameters);
+
+  final headers = {
+    'Content-Type': 'application/json',
+    'x-hasura-admin-secret':
+    'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
+  };
+  final response = await http.get(url, headers: headers);
+  return json.decode(response.body);
+}
+
+dynamic daoSoldProduct(String postId,
+    String userId) async {
+  final url = Uri.https(
+      'creative-mole-46.hasura.app', 'api/rest/sold');
+
+  final headers = {
+    'Content-Type': 'application/json',
+    'x-hasura-admin-secret':
+    'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
+  };
+
+  final Map<String, dynamic> requestBody = {
+    "post_id": postId,
+    "user_id": userId,
+    "soldDate": DateTime.now().toIso8601String(),
+  };
+
+  final response = await http.post(url, headers: headers, body: jsonEncode(requestBody));
+  return json.decode(response.body);
+}
+
+dynamic daoUnsoldProduct(String postId,
+    String userId) async {
+  final url = Uri.https(
+      'creative-mole-46.hasura.app', 'api/rest/notsold');
+
+  final headers = {
+    'Content-Type': 'application/json',
+    'x-hasura-admin-secret':
+    'mmjEW9L3cf3SZ0cr5pb6hnnnFp1ud4CB4M6iT1f0xYons16k2468G9SqXS9KgdAZ',
+  };
+
+  final Map<String, dynamic> requestBody = {
+    "post_id": postId,
+    "user_id": userId,
+  };
+
+  final response = await http.post(url, headers: headers, body: jsonEncode(requestBody));
+  return json.decode(response.body);
+}
+
+dynamic daoAddBugReport(String bug, String userId) async {
+  final url = Uri.https(
+      'image-repository-53ee3-default-rtdb.firebaseio.com', 'bug-list.json');
+
+  final headers = {
+    'Content-Type': 'application/json',
+  };
+
+  final Map<String, dynamic> requestBody = {
+      userId : bug,
+  };
+
+  final response = await http.post(url, headers: headers, body: jsonEncode(requestBody));
   return json.decode(response.body);
 }
