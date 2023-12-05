@@ -24,7 +24,7 @@ void main() async{
   AlertController alertController = AlertController();
   alertController.callSearchAlerts();
 
-  
+
   runApp(MaterialApp(
     title: 'Unishop',
     theme: ThemeData().copyWith(

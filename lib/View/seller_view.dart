@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unishop/View/login.dart';
 import 'package:unishop/Model/DAO/dao.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Seller extends StatefulWidget {
   @override
@@ -25,13 +25,11 @@ class _SellerState extends State<Seller> {
   }
 
   _loadUserData() async {
-
-    //var seller_username = prefs.getString('seller_username') ?? "";
-    var seller_username = "Lizeth";
-    var infoSeller = await daoSearchUserByUsername(seller_username);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sellerUsername = prefs.getString('seller_username') ?? "";
+    var infoSeller = await daoSearchUserByUsername(sellerUsername);
 
     setState(() {
-
       userDegree = infoSeller["degree"];
       userEmail = infoSeller["email"];
       userId = infoSeller["id"];
@@ -47,7 +45,7 @@ class _SellerState extends State<Seller> {
     launch('tel://$phoneNumber');
   }
 
-    void showAlert(String title, String message, Color backgroundColor) {
+  void showAlert(String title, String message, Color backgroundColor) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -86,8 +84,36 @@ class _SellerState extends State<Seller> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 80, // Custom toolbar height
+        automaticallyImplyLeading:
+            false, // We will manually add a leading button
+        backgroundColor: Colors.white,
+        title: Text(
+          userName,
+          style: TextStyle(
+              color: Colors.black, // Title text color
+              fontWeight: FontWeight.bold,
+              fontSize: 28),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios, // Use the iOS style back icon
+            color: Colors.blue, // Icon color
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.only(
+          top: 0, // No padding at the top
+          left: 20, // 20 pixels of padding on the left
+          right: 20, // 20 pixels of padding on the right
+          bottom: 20, // 20 pixels of padding at the bottom
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -102,9 +128,12 @@ class _SellerState extends State<Seller> {
                         'https://www.w3schools.com/howto/img_avatar.png'), // Add your image URL here
                   ),
                   SizedBox(width: 20),
-                   Text(
+                  Text(
                     userName,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -112,7 +141,10 @@ class _SellerState extends State<Seller> {
             SizedBox(height: 20),
             Text(
               'Personal Information',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
             SizedBox(height: 10),
             SizedBox(height: 5),
@@ -121,14 +153,17 @@ class _SellerState extends State<Seller> {
               children: [
                 Text(
                   'Username: ',
-                  style: TextStyle(fontWeight: FontWeight.bold,
-                  color: Colors.black,),
-                  
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
-                Text(userUsername,
-                style: TextStyle(
-                  color: Colors.black,
-                ),),
+                Text(
+                  userUsername,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 5),
@@ -136,13 +171,15 @@ class _SellerState extends State<Seller> {
               children: [
                 Text(
                   'Email: ',
-                  style: TextStyle(fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
                 ),
-                Text(userEmail,
-                style: TextStyle(
-                  color: Colors.black,
-                ),),
+                Text(
+                  userEmail,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 5),
@@ -150,13 +187,17 @@ class _SellerState extends State<Seller> {
               children: [
                 Text(
                   'Phone: ',
-                  style: TextStyle(fontWeight: FontWeight.bold,
-                  color: Colors.black,),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
-                Text(userPhone,
-                style: TextStyle(
-                  color: Colors.black,
-                ),),
+                Text(
+                  userPhone,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 5),
@@ -164,13 +205,17 @@ class _SellerState extends State<Seller> {
               children: [
                 Text(
                   'Degree: ',
-                  style: TextStyle(fontWeight: FontWeight.bold,
-                  color: Colors.black,),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
-                Text(userDegree,
-                style: TextStyle(
-                  color: Colors.black,
-                ),),
+                Text(
+                  userDegree,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 20),
@@ -179,7 +224,9 @@ class _SellerState extends State<Seller> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: (){ call();}, // Call the help function here
+                    onPressed: () {
+                      call();
+                    }, // Call the help function here
                     child: Text('Contact Seller'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber,
@@ -207,13 +254,16 @@ class _SellerState extends State<Seller> {
           backgroundColor: Colors.white, // Establece el color de fondo
           actions: <Widget>[
             TextButton(
-              child: Text('Log out', style: TextStyle(color: Colors.red),),
+              child: Text(
+                'Log out',
+                style: TextStyle(color: Colors.red),
+              ),
               onPressed: () {
                 // Aquí puedes agregar la lógica para cerrar la sesión
                 Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LoginView())); // Cierra la alerta
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LoginView())); // Cierra la alerta
               },
             ),
             TextButton(
@@ -227,5 +277,4 @@ class _SellerState extends State<Seller> {
       },
     );
   }
-
 }
