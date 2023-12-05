@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:unishop/Model/DTO/product_dto.dart';
 import 'package:unishop/Controller/favorite_controller.dart';
+import 'package:unishop/View/seller_view.dart';
 
 class ProductDetail extends StatefulWidget {
   final ProductDTO product;
@@ -15,7 +16,6 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
- 
   String formatMoney(String money) {
     if (money.isEmpty) {
       return money;
@@ -118,14 +118,17 @@ class _ProductDetailState extends State<ProductDetail> {
               ),
             ),
             SizedBox(height: 30), // Spacing between subject/degree and location
-           
+
             SizedBox(height: 10), // Spacing between subject/degree and location
             SizedBox(
               width: double.infinity, // As wide as the parent container
               height: 60, // Fixed height of 50
               child: ElevatedButton(
                 onPressed: () {
-                  print('Added to Favorites');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Seller()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromRGBO(
