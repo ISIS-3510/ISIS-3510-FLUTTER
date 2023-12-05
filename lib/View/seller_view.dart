@@ -26,9 +26,8 @@ class _SellerState extends State<Seller> {
 
   _loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var seller_username = prefs.getString('seller_username') ?? "";
-
-    var infoSeller = await daoSearchUserByUsername(seller_username);
+    var sellerUsername = prefs.getString('seller_username') ?? "";
+    var infoSeller = await daoSearchUserByUsername(sellerUsername);
 
     setState(() {
       userDegree = infoSeller["degree"];
