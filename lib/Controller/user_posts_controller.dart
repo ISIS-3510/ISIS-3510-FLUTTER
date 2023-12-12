@@ -5,4 +5,12 @@ class UserPostController {
   Future<List<ProductDTO>> loadProducts() async {
     return await PostsRepository.loadProducts();
   }
+
+  Future<void> soldProduct(String postId) async {
+    return PostsRepository.soldProduct(postId);
+  }
+
+  Future<void> unsoldProduct(String postId) async {
+    return PostsRepository.unsoldProduct(postId);
+  }
 }

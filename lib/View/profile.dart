@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unishop/View/bug_reporter.dart';
 import 'package:unishop/View/login.dart';
 import 'package:unishop/widgets/floating_button.dart';
 import 'dart:async';
@@ -11,7 +12,7 @@ import 'package:unishop/Model/DAO/dao.dart';
 
 class Profile extends StatefulWidget {
   @override
-  _ProfileState createState() => _ProfileState();
+  State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
@@ -78,7 +79,7 @@ class _ProfileState extends State<Profile> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Container(
+          content: SizedBox(
             width: 100,
             height: 40,
             child: SingleChildScrollView(
@@ -217,12 +218,31 @@ class _ProfileState extends State<Profile> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: (){ getCurrentLocation();}, // Call the help function here
-                    child: Text('HELP!'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber,
                       foregroundColor: Colors.black,
                       padding: EdgeInsets.symmetric(vertical: 15),
                     ),
+                    child: Text('HELP!'),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: (){
+                      Navigator.push(context,
+                      MaterialPageRoute(
+                        builder: (context) => BugReporterView()));},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.amber,
+                      foregroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                    ),
+                    child: Text('Report a problem'),
                   ),
                 ),
               ],
@@ -265,8 +285,8 @@ class _ProfileState extends State<Profile> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Log out"),
-          content: Text("Are you sure you want to log out?"),
+          title: Text("Log out", style: TextStyle(color: Colors.black)),
+          content: Text("Are you sure you want to log out?", style: TextStyle(color: Colors.black)),
           backgroundColor: Colors.white, // Establece el color de fondo
           actions: <Widget>[
             TextButton(
@@ -280,7 +300,7 @@ class _ProfileState extends State<Profile> {
               },
             ),
             TextButton(
-              child: Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(color: Colors.black)),
               onPressed: () {
                 Navigator.of(context).pop(); // Cierra la alerta
               },

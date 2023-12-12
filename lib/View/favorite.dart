@@ -75,7 +75,7 @@ class _FavoriteViewState extends State<FavoriteView> {
     } else if (_products.isEmpty && isInternet == false && isLoading == false) {
       content = NoInternet();
     } else if (_products.isNotEmpty && isLoading == false) {
-      content = ProductCatalog(products: _products);
+      content = ProductCatalog(products: _products, footNum: 3);
     } else if (isLoading == true && isInternet == null) {
       content = Center(
         child: CircularProgressIndicator(

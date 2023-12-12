@@ -15,7 +15,6 @@ class HomeView extends StatefulWidget {
   final bool isHome;
 
   HomeView({super.key, required this.isHome});
-
   @override
   State<HomeView> createState() => _HomeViewState();
 }
@@ -79,7 +78,8 @@ class _HomeViewState extends State<HomeView> {
     } else if (_products.isEmpty && isInternet == false && isLoading == false) {
       content = NoInternet();
     } else if (_products.isNotEmpty && isLoading == false) {
-      content = ProductCatalog(products: _products);
+      content =
+          ProductCatalog(products: _products, footNum: widget.isHome ? 0 : 1);
     } else if (isLoading == true && isInternet == null) {
       content = Center(
         child: CircularProgressIndicator(
@@ -94,15 +94,18 @@ class _HomeViewState extends State<HomeView> {
           toolbarHeight: 120,
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
-          title: widget.isHome ? Header() : HeaderPosts(currentIndex: 1, contextHeader: context),
+          title: widget.isHome
+              ? Header()
+              : HeaderPosts(currentIndex: 1, contextHeader: context),
         ),
         floatingActionButton: FloatingButton(contextButton: context),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: content,
         ),
-        bottomNavigationBar:
-            widget.isHome ? Footer(currentIndex: 0, contextFooter: context) : Footer(currentIndex: 1, contextFooter: context),
+        bottomNavigationBar: widget.isHome
+            ? Footer(currentIndex: 0, contextFooter: context)
+            : Footer(currentIndex: 1, contextFooter: context),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
@@ -121,7 +124,6 @@ class _HomeViewState extends State<HomeView> {
               child: Column(
                 children: <Widget>[
                   Text(message),
-                  // Aquí puedes agregar más widgets si es necesario
                 ],
               ),
             ),
@@ -143,5 +145,4 @@ class _HomeViewState extends State<HomeView> {
       },
     );
   }
-
 }

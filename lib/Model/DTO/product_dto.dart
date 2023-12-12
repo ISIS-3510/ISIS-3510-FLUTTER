@@ -1,13 +1,14 @@
 import 'package:decimal/decimal.dart';
 
 class ProductDTO{
-  const ProductDTO({
+  ProductDTO({
     this.id,
     required this.title,
     required this.description,
     required this.price,
     required this.isNew,
     required this.isRecycled,
+    this.isSold,
     required this.degree,
     required this.subject,
     required this.image,
@@ -20,6 +21,7 @@ class ProductDTO{
   final Decimal price;
   final bool isNew;
   final bool isRecycled;
+  bool? isSold;
   final String degree;
   final String subject;
   final List<String> image;
